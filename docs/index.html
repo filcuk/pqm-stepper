@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PQM Stepper</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Power Query M Stepper</h1>
+      <p class="tagline">
+        <em>Step up</em> your game by improving your M code readability - no more
+        <code>#"&hellip;"</code> escaping!
+      </p>
+    </header>
+
+    <main>
+      <div id="banner" class="banner hidden" role="status"></div>
+
+      <div class="toolbar">
+        <button type="button" id="example-btn" class="btn">
+          Load example
+        </button>
+        <button type="button" id="copy-btn" class="btn btn-primary" disabled>
+          Copy output
+        </button>
+        <span id="mapping-info" class="mapping-info"></span>
+        <span class="legend">
+          <span class="legend-swatch hl-blue">Definition</span>
+          <span class="legend-swatch hl-green">New Definiton</span>
+          <span class="legend-swatch hl-amber">Reference</span>
+          <span class="legend-swatch hl-red">New Reference</span>
+        </span>
+      </div>
+
+      <div class="panes">
+        <label class="pane">
+          <span class="pane-label">Input</span>
+          <div class="code-editor">
+            <pre
+              id="input-highlight"
+              class="code-highlight"
+              aria-hidden="true"
+            ></pre>
+            <textarea
+              id="input"
+              class="code-input"
+              spellcheck="false"
+              placeholder="Paste your let ... in block here"
+            ></textarea>
+          </div>
+        </label>
+        <label class="pane">
+          <span class="pane-label">Output</span>
+          <div class="code-editor code-editor-readonly">
+            <pre
+              id="output-highlight"
+              class="code-highlight"
+              aria-hidden="true"
+            ></pre>
+            <textarea
+              id="output"
+              class="code-input code-input-readonly"
+              spellcheck="false"
+              readonly
+              placeholder="Transformed M code appears here automatically"
+            ></textarea>
+          </div>
+        </label>
+      </div>
+    </main>
+
+    <footer>
+      <p>
+        transformation <a href="mapping.json" target="_blank">mapping</a> ·
+        report an <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a> ·
+        see <a href="https://github.com/filcuk/pqm-stepper" target="_blank">repo</a>
+      </p>
+    </footer>
+
+    <script type="module">
+      import { transform } from "./transform.js";
+      import { renderHighlighted } from "./highlight.js";
+      import { DEFAULT_EXAMPLE } from "./example.js";
+
+      const inputEl = document.getElementById("input");
+      const outputEl = document.getElementById("output");
+      const inputHighlightEl = document.getElementById("input-highlight");
+      const outputHighlightEl = document.getElementById("output-highlight");
+      const exampleBtn = document.getElementById("example-btn");
+      const copyBtn = document.getElementById("copy-btn");
+      const bannerEl = document.getElementById("banner");
+      const mappingInfoEl = document.getElementById("mapping-info");
+
+      let mapping = {};
+      let lastRenames = null;
+
+      function showBanner(messages, type = "warning") {
+        if (!messages.length) {
+          bannerEl.classList.add("hidden");
+          bannerEl.textContent = "";
+          return;
+        }
+        bannerEl.className = `banner banner-${type}`;
+        bannerEl.textContent = messages.join(" ");
+        bannerEl.classList.remove("hidden");
+      }
+
+      function filterLiveWarnings(warnings, text) {
+        if (!text.trim()) return [];
+        const complete = /\blet\b/i.test(text) && /\bin\b/i.test(text);
+        return warnings.filter((w) => {
+          if (w.includes("collision")) return true;
+          if (!complete) return false;
+          if (w === "Input is empty.") return false;
+          return true;
+        });
+      }
+
+      function syncScroll(source, target) {
+        target.scrollTop = source.scrollTop;
+        target.scrollLeft = source.scrollLeft;
+      }
+
+      function updateInputHighlight() {
+        inputHighlightEl.innerHTML = renderHighlighted(
+          inputEl.value,
+          "input",
+          lastRenames
+        );
+        syncScroll(inputEl, inputHighlightEl);
+      }
+
+      function updateOutputHighlight() {
+        outputHighlightEl.innerHTML = renderHighlighted(
+          outputEl.value,
+          "output",
+          lastRenames
+        );
+        syncScroll(outputEl, outputHighlightEl);
+      }
+
+      async function loadMapping() {
+        try {
+          const res = await fetch("mapping.json");
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          mapping = await res.json();
+          const count = Object.keys(mapping).length;
+          mappingInfoEl.textContent = `${count} mappings loaded`;
+          runTransform();
+        } catch (err) {
+          mappingInfoEl.textContent = "Failed to load mapping";
+          showBanner(
+            [`Could not load mapping.json: ${err.message}. Run from a local server or deploy to GitHub Pages.`],
+            "error"
+          );
+        }
+      }
+
+      function runTransform() {
+        const result = transform(inputEl.value, mapping);
+        lastRenames = result.renames;
+        outputEl.value = result.output;
+        copyBtn.disabled = !result.output;
+        updateInputHighlight();
+        updateOutputHighlight();
+        const warnings = filterLiveWarnings(result.warnings, inputEl.value);
+        showBanner(
+          warnings,
+          warnings.some((w) => w.includes("collision")) ? "error" : "warning"
+        );
+      }
+
+      async function copyOutput() {
+        try {
+          await navigator.clipboard.writeText(outputEl.value);
+          copyBtn.textContent = "Copied!";
+          setTimeout(() => {
+            copyBtn.textContent = "Copy output";
+          }, 1500);
+        } catch {
+          outputEl.select();
+          document.execCommand("copy");
+        }
+      }
+
+      copyBtn.addEventListener("click", copyOutput);
+
+      exampleBtn.addEventListener("click", () => {
+        inputEl.value = DEFAULT_EXAMPLE;
+        runTransform();
+      });
+
+      inputEl.addEventListener("input", runTransform);
+
+      inputEl.addEventListener("scroll", () => {
+        syncScroll(inputEl, inputHighlightEl);
+      });
+
+      outputEl.addEventListener("scroll", () => {
+        syncScroll(outputEl, outputHighlightEl);
+      });
+
+      loadMapping();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,215 @@
+import { parseSteps } from "./transform.js";
+
+const STEP_DECL_RE =
+  /(?:^|\n)\s*(?:(#"([^"]+)")|([A-Za-z_][A-Za-z0-9_]*))\s*=/gm;
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function escapeRegExp(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Collect step names for highlighting.
+ */
+function collectStepNames(mCode) {
+  const steps = parseSteps(mCode);
+  const quoted = new Set();
+  const regular = new Set();
+
+  for (const step of steps) {
+    if (step.isQuoted) quoted.add(step.name);
+    else regular.add(step.name);
+  }
+
+  for (const match of mCode.matchAll(/#"([^"]+)"/g)) {
+    quoted.add(match[1]);
+  }
+
+  return { quoted, regular };
+}
+
+function getDeclarationRanges(text) {
+  const ranges = [];
+
+  STEP_DECL_RE.lastIndex = 0;
+  let match;
+  while ((match = STEP_DECL_RE.exec(text)) !== null) {
+    const token = match[1] || match[3];
+    const tokenStart = match.index + match[0].indexOf(token);
+    ranges.push({ start: tokenStart, end: tokenStart + token.length });
+  }
+
+  return ranges;
+}
+
+function overlapsDeclaration(start, end, declRanges) {
+  return declRanges.some((d) => start < d.end && end > d.start);
+}
+
+/** Valid characters immediately before/after a step reference (not a definition). */
+const REF_BEFORE = /[(,\[\{\s=]/;
+const REF_AFTER = /[),\]\}\s,=]/;
+
+function isInsideString(text, index) {
+  let inString = false;
+  let i = 0;
+  while (i < index) {
+    if (text[i] === "#" && text[i + 1] === '"') {
+      i += 2;
+      while (i < text.length && text[i] !== '"') i++;
+      if (i < text.length) i++;
+      continue;
+    }
+    if (text[i] === '"') {
+      inString = !inString;
+    }
+    i++;
+  }
+  return inString;
+}
+
+/**
+ * True when a regular identifier match is a step reference, not e.g. Int64.Type or #date.
+ */
+function isStepReference(text, start, end, declRanges) {
+  if (overlapsDeclaration(start, end, declRanges)) {
+    return true;
+  }
+
+  const before = start > 0 ? text[start - 1] : "";
+  const after = end < text.length ? text[end] : "";
+
+  if (before === "." || after === ".") return false;
+  if (before === "#") return false;
+  if (isInsideString(text, start)) return false;
+
+  const validBefore = start === 0 || REF_BEFORE.test(before);
+  const validAfter = end === text.length || REF_AFTER.test(after);
+  return validBefore && validAfter;
+}
+
+function addRegularMatches(text, name, isRenamed, declRanges, ranges) {
+  const re = new RegExp(`\\b${escapeRegExp(name)}\\b`, "g");
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    const start = match.index;
+    const end = start + match[0].length;
+    if (!isStepReference(text, start, end, declRanges)) continue;
+    ranges.push({
+      start,
+      end,
+      class: classForOccurrence(start, end, isRenamed, declRanges),
+    });
+  }
+}
+
+function classForOccurrence(start, end, isRenamed, declRanges) {
+  const isDefinition = overlapsDeclaration(start, end, declRanges);
+  if (isRenamed) {
+    return isDefinition ? "hl-green" : "hl-red";
+  }
+  return isDefinition ? "hl-blue" : "hl-amber";
+}
+
+/**
+ * Build highlight ranges for step names.
+ * @param {"input"|"output"} mode
+ */
+function buildHighlightRanges(text, mode, renames) {
+  const { quoted, regular } = collectStepNames(text);
+  const declRanges = getDeclarationRanges(text);
+  const ranges = [];
+
+  const quotedAmber = mode === "input" ? renames?.fromQuoted : null;
+  const regularAmber = mode === "input" ? renames?.fromRegular : renames?.to;
+  const outputAmber = mode === "output" ? renames?.to : null;
+
+  for (const match of text.matchAll(/#"([^"]+)"/g)) {
+    const inner = match[1];
+    const start = match.index;
+    const end = start + match[0].length;
+    const isAmber = mode === "input" ? quotedAmber?.has(inner) : false;
+
+    ranges.push({
+      start,
+      end,
+      class: classForOccurrence(start, end, isAmber, declRanges),
+    });
+  }
+
+  const names = [...regular].sort((a, b) => b.length - a.length);
+  for (const name of names) {
+    const isRenamed =
+      mode === "input"
+        ? regularAmber?.has(name)
+        : outputAmber?.has(name);
+
+    addRegularMatches(text, name, isRenamed, declRanges, ranges);
+  }
+
+  if (mode === "output" && outputAmber) {
+    for (const name of [...outputAmber].sort((a, b) => b.length - a.length)) {
+      if (regular.has(name)) continue;
+      addRegularMatches(text, name, true, declRanges, ranges);
+    }
+  }
+
+  return mergeRanges(ranges, text.length);
+}
+
+function mergeRanges(ranges, textLength) {
+  if (ranges.length === 0 || textLength === 0) return [];
+
+  const classes = new Array(textLength).fill(null);
+
+  for (const tier of ["hl-amber", "hl-blue", "hl-green", "hl-red"]) {
+    for (const range of ranges) {
+      if (range.class !== tier) continue;
+      for (let i = range.start; i < range.end && i < textLength; i++) {
+        classes[i] = tier;
+      }
+    }
+  }
+
+  const merged = [];
+  let i = 0;
+  while (i < textLength) {
+    if (!classes[i]) {
+      i++;
+      continue;
+    }
+    const cls = classes[i];
+    const start = i;
+    while (i < textLength && classes[i] === cls) i++;
+    merged.push({ start, end: i, class: cls });
+  }
+
+  return merged;
+}
+
+function renderHighlighted(text, mode, renames) {
+  if (!text) return "";
+
+  const ranges = buildHighlightRanges(text, mode, renames);
+  let html = "";
+  let pos = 0;
+
+  for (const range of ranges) {
+    if (range.start > pos) {
+      html += escapeHtml(text.slice(pos, range.start));
+    }
+    html += `<span class="${range.class}">${escapeHtml(text.slice(range.start, range.end))}</span>`;
+    pos = range.end;
+  }
+
+  html += escapeHtml(text.slice(pos));
+  return html;
+}
+
+export { renderHighlighted, collectStepNames };
