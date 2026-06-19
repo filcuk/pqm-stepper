@@ -70,7 +70,7 @@ function extractInvokeFunctionName(body) {
 
 /**
  * Detect source-navigation steps from the step expression.
- * @returns {"Workbook"|"Sheet"|"Table"|null}
+ * @returns {"Workbook"|"Sheet"|"Table"|"Navigate"|null}
  */
 function detectNavigationType(body) {
   if (!body) return null;
@@ -81,6 +81,10 @@ function detectNavigationType(body) {
 
   if (/\{[^}]*Kind\s*=\s*"Sheet"[^}]*\}\s*\[Data\]/i.test(body)) {
     return "Sheet";
+  }
+
+  if (/\{[^}]*Schema\s*=/.test(body) && /\{[^}]*Item\s*=/.test(body)) {
+    return "Navigate";
   }
 
   if (/\{[^}]*entity\s*=/.test(body)) {

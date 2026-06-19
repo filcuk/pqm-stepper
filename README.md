@@ -47,7 +47,7 @@ Numbering follows step order in the `let` block, not Power Query's original suff
 
 ## Configuring mappings
 
-Edit [`docs/mapping.json`](docs/mapping.json). Keys are the inner quoted step name (without `#"..."`); values are the target identifier:
+Edit [`app/mapping.json`](app/mapping.json). Keys are the inner quoted step name (without `#"..."`); values are the target identifier:
 
 ```json
 {
@@ -93,6 +93,7 @@ Some steps are detected automatically from their M expression (no mapping entry 
 |---------|-----------|---------|
 | `Excel.Workbook(...)` | `Workbook` | Opening an Excel file |
 | `{[..., Kind="Sheet"]}[Data]` | `Sheet` | Selecting a worksheet |
+| `{[..., Schema=..., Item=...]}[Data]` | `Navigate` | Selecting a lakehouse / SQL schema table |
 | `{[..., entity=...]}[Data]` | `Table` | Selecting a dataflow / entity table |
 
 **Dataflow example:**
@@ -120,32 +121,29 @@ Duplicate navigation steps use the same numbering rules (`Sheet1`, `Sheet2`).
 ES modules require a local server (opening `index.html` directly will block `fetch` of `mapping.json`):
 
 ```bash
-npx serve docs
+npx serve app
 ```
 
 Then open `http://localhost:3000`.
 
 ## GitHub Pages deployment
 
-The site lives in [`docs/`](docs/). If Pages is set to deploy the **repository root**, GitHub/Jekyll will render `README.md` instead of the app.
+The site lives in [`app/`](app/). If Pages is set to deploy the **repository root**, GitHub/Jekyll will render `README.md` instead of the app.
 
-**Recommended (GitHub Actions):**
+**GitHub Actions (required):**
 
 1. Push to `main` (includes [`.github/workflows/pages.yml`](.github/workflows/pages.yml)).
-2. In repo **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**.
+2. In repo **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”).
 3. After the workflow runs, the site is at `https://<username>.github.io/pqm-stepper/`.
 
-**Alternative (branch deploy):**
+If the live site shows this README, Pages is almost certainly pointed at the repo root or the wrong folder — switch the source to **GitHub Actions** and re-run the workflow from the **Actions** tab.
 
-1. In **Settings → Pages**, set **Source** to **Deploy from branch**.
-2. Choose branch `main` and folder **`/docs`** (not `/ (root)`).
-
-No build step required — the workflow only publishes the `docs/` folder as-is.
+No build step required — the workflow only publishes the `app/` folder as-is.
 
 ## Project structure
 
 ```
-docs/
+app/
   index.html      # UI
   styles.css      # Layout and theme
   transform.js    # Rename logic (pure, no DOM)
