@@ -26,8 +26,8 @@ in
 ```powerquery
 let
     Source = Excel.CurrentWorkbook(){[Name="Sheet1"]}[Content],
-    ChangedType = Table.TransformColumnTypes(Source,{{"Col", type text}}),
-    Rename = Table.RenameColumns(ChangedType,{{"Col", "Name"}}),
+    Type = Table.TransformColumnTypes(Source,{{"Col", type text}}),
+    Rename = Table.RenameColumns(Type,{{"Col", "Name"}}),
     Filter1 = Table.SelectRows(Rename, each true),
     Filter2 = Table.SelectRows(Filter1, each true)
 in
@@ -51,6 +51,7 @@ Edit [`app/mapping.json`](app/mapping.json). Keys are the inner quoted step name
 
 ```json
 {
+  "Changed Type": "Type",
   "Renamed Columns": "Rename",
   "Filter Rows": "Filter",
   "Filtered Rows": "Filter"
@@ -59,7 +60,14 @@ Edit [`app/mapping.json`](app/mapping.json). Keys are the inner quoted step name
 
 Power Query uses past-tense names (`Renamed Columns`, `Filtered Rows`) — include both variants if your queries use either. Commit and push to update the live site.
 
-Steps not in the mapping are left unchanged.
+**Rename rules for quoted steps defined in the query:**
+
+| Situation | Result |
+|-----------|--------|
+| Key in `mapping.json` | Mapped name (e.g. `Filter`) |
+| Navigation pattern detected | `Workbook`, `Sheet`, `Navigate`, or `Table` |
+| No mapping, defined in query | Auto-sanitized PascalCase (e.g. `My Custom Step` → `MyCustomStep`) |
+| External reference (not defined here) | Left as `#"..."` unchanged |
 
 ### Dynamic mappings (`*` wildcard)
 
@@ -121,37 +129,43 @@ Duplicate navigation steps use the same numbering rules (`Sheet1`, `Sheet2`).
 ES modules require a local server (opening `index.html` directly will block `fetch` of `mapping.json`):
 
 ```bash
-npx serve app
+npx serve .
 ```
 
 Then open `http://localhost:3000`.
 
 ## GitHub Pages deployment
 
-The site lives in [`app/`](app/). If Pages is set to deploy the **repository root**, GitHub/Jekyll will render `README.md` instead of the app.
+The site entry point is [`index.html`](index.html) at the repo root; app code lives in [`app/`](app/). GitHub Pages serves `index.html` as the homepage — if you see this README instead, Pages is misconfigured.
 
-**GitHub Actions (required):**
+**GitHub Actions (recommended):**
 
 1. Push to `main` (includes [`.github/workflows/pages.yml`](.github/workflows/pages.yml)).
-2. In repo **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”).
+2. In repo **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**.
 3. After the workflow runs, the site is at `https://<username>.github.io/pqm-stepper/`.
 
-If the live site shows this README, Pages is almost certainly pointed at the repo root or the wrong folder — switch the source to **GitHub Actions** and re-run the workflow from the **Actions** tab.
+**Deploy from branch (alternative):**
 
-No build step required — the workflow only publishes the `app/` folder as-is.
+1. In **Settings → Pages**, set **Source** to **Deploy from a branch**.
+2. Choose branch `main` and folder **`/ (root)`** — `index.html` at the repo root is served instead of this README.
+
+The workflow stages `index.html` plus the `app/` folder into a clean artifact (README and other repo files are not published).
 
 ## Project structure
 
 ```
+index.html        # Site entry point (GitHub Pages homepage)
+.nojekyll         # Skip Jekyll processing
 app/
-  index.html      # UI
+  main.js         # UI wiring and event handlers
+  m-utils.js      # Shared M regex helpers
   styles.css      # Layout and theme
   transform.js    # Rename logic (pure, no DOM)
   highlight.js    # Prism M syntax + step highlighting
+  editor.js       # Contenteditable caret helpers
   example.js      # Sample query for "Load example"
   mapping.json    # Step name schema
   vendor/prism/   # Prism.js + Power Query grammar (vendored)
-  .nojekyll       # Skip Jekyll processing on GitHub Pages
 ```
 
 ## License

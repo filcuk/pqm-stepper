@@ -24,10 +24,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare site
+        run: |
+          mkdir -p _site/app
+          cp index.html _site/
+          cp .nojekyll _site/
+          cp -r app/* _site/app/
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: app
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment

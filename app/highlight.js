@@ -1,17 +1,11 @@
 import { parseSteps } from "./transform.js";
-
-const STEP_DECL_RE =
-  /(?:^|\n)\s*(?:(#"([^"]+)")|([A-Za-z_][A-Za-z0-9_]*))\s*=/gm;
+import { QUOTED_TOKEN_RE, STEP_DECL_RE, escapeRegExp } from "./m-utils.js";
 
 function escapeHtml(text) {
   return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
-}
-
-function escapeRegExp(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function getPrism() {
@@ -31,7 +25,7 @@ function collectStepNames(mCode) {
     else regular.add(step.name);
   }
 
-  for (const match of mCode.matchAll(/#"([^"]+)"/g)) {
+  for (const match of mCode.matchAll(QUOTED_TOKEN_RE)) {
     quoted.add(match[1]);
   }
 
@@ -130,7 +124,7 @@ function buildStepRanges(text, mode, renames) {
   const regularAmber = mode === "input" ? renames?.fromRegular : renames?.to;
   const outputAmber = mode === "output" ? renames?.to : null;
 
-  for (const match of text.matchAll(/#"([^"]+)"/g)) {
+  for (const match of text.matchAll(QUOTED_TOKEN_RE)) {
     const inner = match[1];
     const start = match.index;
     const end = start + match[0].length;
@@ -305,4 +299,4 @@ function renderStepOnlyHtml(text, stepRanges) {
   return html;
 }
 
-export { renderHighlighted, collectStepNames };
+export { renderHighlighted };

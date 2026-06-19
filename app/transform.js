@@ -2,9 +2,7 @@
  * PQM Stepper — transform Power Query M step names using a mapping schema.
  */
 
-const QUOTED_TOKEN_RE = /#"([^"]+)"/g;
-const STEP_DECL_RE =
-  /(?:^|\n)\s*(?:(#"([^"]+)")|([A-Za-z_][A-Za-z0-9_]*))\s*=/gm;
+import { STEP_DECL_RE, escapeRegExp } from "./m-utils.js";
 
 const OBJECT_EXTRACTORS = {
   "Added Custom": extractAddColumnName,
@@ -26,10 +24,6 @@ function parseQuotedName(innerName) {
     return { base: gluedSuffix[1], suffix: gluedSuffix[2] };
   }
   return { base: innerName, suffix: null };
-}
-
-function escapeRegExp(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 /**
@@ -152,14 +146,13 @@ function sanitizeQuotedName(innerName) {
   return toIdentifierPart(innerName) || "Step";
 }
 
-function resolveMappedTargetName(step, mapping, mCode, warnings) {
+function resolveMappedTargetName(step, mapping, stepBody, warnings) {
   const { base } = parseQuotedName(step.name);
   const template = mapping[base];
   if (!template) return sanitizeQuotedName(step.name);
 
   if (!isDynamicTemplate(template)) return template;
 
-  const stepBody = getStepBody(mCode, step);
   const objectName = extractObjectName(base, stepBody);
 
   if (!objectName) {
@@ -182,7 +175,7 @@ function resolveStepTargetName(step, mapping, mCode, warnings) {
   if (navigationType) return navigationType;
 
   if (step.isQuoted) {
-    return resolveMappedTargetName(step, mapping, mCode, warnings);
+    return resolveMappedTargetName(step, mapping, stepBody, warnings);
   }
 
   return null;
@@ -327,14 +320,4 @@ function transform(mCode, mapping) {
   };
 }
 
-export {
-  transform,
-  parseQuotedName,
-  parseSteps,
-  detectNavigationType,
-  resolveDynamicName,
-  toIdentifierPart,
-  sanitizeQuotedName,
-  extractObjectName,
-  getStepBody,
-};
+export { transform, parseSteps };

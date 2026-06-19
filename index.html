@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PQM Stepper</title>
+    <link
+      rel="stylesheet"
+      href="app/vendor/prism/prism.min.css"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="stylesheet"
+      href="app/vendor/prism/prism-tomorrow.min.css"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="stylesheet" href="app/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Power Query M Stepper</h1>
+      <p class="tagline">
+        <em>Step up</em> your game by improving your M code readability - no more
+        <code>#"&hellip;"</code> escaping!
+      </p>
+    </header>
+
+    <main>
+      <div id="banner" class="banner hidden" role="status"></div>
+
+      <div class="toolbar">
+        <button type="button" id="example-btn" class="btn">Load example</button>
+        <button type="button" id="clear-btn" class="btn">Clear</button>
+        <button type="button" id="copy-btn" class="btn btn-primary" disabled>
+          Copy output
+        </button>
+        <span id="mapping-info" class="mapping-info"></span>
+        <span class="legend">
+          <span class="legend-swatch hl-blue">Definition</span>
+          <span class="legend-swatch hl-green">New Definition</span>
+          <span class="legend-swatch hl-amber">Reference</span>
+          <span class="legend-swatch hl-red">New Reference</span>
+        </span>
+      </div>
+
+      <div class="panes">
+        <label class="pane">
+          <span class="pane-label">Input</span>
+          <div class="code-editor">
+            <div class="code-editor-scroll">
+              <div id="input-gutter" class="line-gutter" aria-hidden="true">1</div>
+              <pre
+                id="input"
+                class="code-input-editable language-powerquery"
+                contenteditable="true"
+                spellcheck="false"
+                role="textbox"
+                aria-multiline="true"
+                data-placeholder="Paste your let ... in block here"
+              ></pre>
+            </div>
+          </div>
+        </label>
+
+        <label class="pane">
+          <span class="pane-label">Output</span>
+          <div class="code-editor code-editor-readonly">
+            <div class="code-editor-scroll">
+              <div id="output-gutter" class="line-gutter" aria-hidden="true">1</div>
+              <pre
+                id="output-highlight"
+                class="code-output language-powerquery"
+                tabindex="0"
+                data-placeholder="Transformed M code appears here automatically"
+              ></pre>
+            </div>
+          </div>
+        </label>
+      </div>
+    </main>
+
+    <footer>
+      <p>
+        transformation <a href="app/mapping.json" target="_blank">mapping</a> ·
+        report an
+        <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
+        · see
+        <a href="https://github.com/filcuk/pqm-stepper" target="_blank">repo</a>
+      </p>
+    </footer>
+
+    <script src="app/vendor/prism/prism.min.js"></script>
+    <script src="app/vendor/prism/prism-powerquery.min.js"></script>
+    <script type="module" src="app/main.js"></script>
+  </body>
+</html>

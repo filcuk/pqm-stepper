@@ -1,7 +1,4 @@
-/**
- * Sample Power Query M demonstrating navigation, mappings, dynamic names, and duplicates.
- */
-export const EXAMPLE_M = `let
+export const DEFAULT_EXAMPLE = `let
     Source = Excel.Workbook(File.Contents("C:\\Data\\Employees.xlsx"), null, true),
     Employees_Sheet = Source{[Item="Employees",Kind="Sheet"]}[Data],
     #"Promoted Headers" = Table.PromoteHeaders(Employees_Sheet, [PromoteAllScalars=true]),
@@ -18,15 +15,3 @@ export const EXAMPLE_M = `let
     Buffer = Table.Buffer(#"Invoked Custom Function")
 in
     Buffer`;
-
-export const EXAMPLE_DATAFLOW_M = `let
-    Source = PayrollAgency_DF,
-    #"Agency Payroll - Neuven_" = Source{[entity="Agency Payroll - Neuven",version=""]}[Data],
-    #"Changed Type" = Table.TransformColumnTypes(#"Agency Payroll - Neuven_",{{"Pay Date", type date}, {"Amount", Currency.Type}}),
-    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [Amount] > 0),
-    #"Grouped Rows" = Table.Group(#"Filtered Rows", {"Pay Date"}, {{"Total", each List.Sum([Amount]), type number}})
-in
-    #"Grouped Rows"`;
-
-/** Default example loaded by the UI button. */
-export const DEFAULT_EXAMPLE = EXAMPLE_M;
