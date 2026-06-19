@@ -97,6 +97,7 @@
       import { DEFAULT_EXAMPLE } from "./example.js";
       import {
         saveCaretOffset,
+        getSelectionOffsets,
         restoreCaretOffset,
         readPlainText,
         lineNumbersText,
@@ -276,10 +277,9 @@
         e.preventDefault();
         skipNextInput = true;
         const pasted = e.clipboardData.getData("text/plain");
-        const caret = saveCaretOffset(inputEl);
-        inputText =
-          inputText.slice(0, caret) + pasted + inputText.slice(caret);
-        runTransform(caret + pasted.length);
+        const { start, end } = getSelectionOffsets(inputEl);
+        inputText = inputText.slice(0, start) + pasted + inputText.slice(end);
+        runTransform(start + pasted.length);
       });
 
       loadMapping();

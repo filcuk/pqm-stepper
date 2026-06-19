@@ -3,13 +3,26 @@
  */
 
 export function saveCaretOffset(root) {
+  return getSelectionOffsets(root).start;
+}
+
+export function getSelectionOffsets(root) {
   const sel = window.getSelection();
-  if (!sel?.rangeCount) return 0;
+  if (!sel?.rangeCount) return { start: 0, end: 0 };
+
   const range = sel.getRangeAt(0);
-  if (!root.contains(range.startContainer)) return 0;
+  if (!root.contains(range.startContainer)) return { start: 0, end: 0 };
+
+  const start = measureOffset(root, range.startContainer, range.startOffset);
+  const end = measureOffset(root, range.endContainer, range.endOffset);
+
+  return start <= end ? { start, end } : { start: end, end: start };
+}
+
+function measureOffset(root, container, offset) {
   const pre = document.createRange();
   pre.selectNodeContents(root);
-  pre.setEnd(range.startContainer, range.startOffset);
+  pre.setEnd(container, offset);
   return pre.toString().length;
 }
 
