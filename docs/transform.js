@@ -144,10 +144,14 @@ function extractObjectName(baseStepName, stepBody) {
   return extractor(stepBody);
 }
 
+function sanitizeQuotedName(innerName) {
+  return toIdentifierPart(innerName) || "Step";
+}
+
 function resolveMappedTargetName(step, mapping, mCode, warnings) {
   const { base } = parseQuotedName(step.name);
   const template = mapping[base];
-  if (!template) return null;
+  if (!template) return sanitizeQuotedName(step.name);
 
   if (!isDynamicTemplate(template)) return template;
 
@@ -291,18 +295,20 @@ function transform(mCode, mapping) {
   );
   const output = applyReplacements(mCode, quotedMap, regularMap);
 
-  const allQuoted = [...mCode.matchAll(QUOTED_TOKEN_RE)].map((m) => m[1]);
-  const unmapped = [...new Set(allQuoted)].filter(
+  const definedQuoted = new Set(
+    steps.filter((s) => s.isQuoted).map((s) => s.name)
+  );
+  const unmappedDefined = [...definedQuoted].filter(
     (name) => !quotedMap.has(name)
   );
-  if (unmapped.length > 0) {
+  if (unmappedDefined.length > 0) {
     warnings.push(
-      `${unmapped.length} quoted step(s) left unchanged: ${unmapped.map((n) => `#"${n}"`).join(", ")}`
+      `${unmappedDefined.length} quoted step(s) left unchanged: ${unmappedDefined.map((n) => `#"${n}"`).join(", ")}`
     );
   }
 
   const renamed = quotedMap.size + regularMap.size;
-  if (renamed === 0 && unmapped.length === 0 && !/\blet\b/i.test(mCode)) {
+  if (renamed === 0 && unmappedDefined.length === 0 && !/\blet\b/i.test(mCode)) {
     warnings.push("No step identifiers found.");
   }
 
@@ -324,6 +330,7 @@ export {
   detectNavigationType,
   resolveDynamicName,
   toIdentifierPart,
+  sanitizeQuotedName,
   extractObjectName,
   getStepBody,
 };

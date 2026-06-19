@@ -231,82 +231,145 @@ main {
   outline-offset: -1px;
 }
 
-.code-editor-readonly .code-input-readonly {
-  cursor: text;
-  user-select: text;
-  -webkit-user-select: text;
-  caret-color: transparent;
-}
-
-.code-highlight {
+.code-editor-scroll {
   position: absolute;
   inset: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  overflow: auto;
+}
+
+.line-gutter {
+  flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0.75rem 0.625rem 0.75rem 0.5rem;
+  min-width: 2.25rem;
+  text-align: right;
+  user-select: none;
+  white-space: pre;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+.code-input-editable,
+.code-output {
+  flex: 1;
+  min-width: 0;
+  display: block;
   margin: 0;
   padding: 0.75rem;
-  overflow: hidden;
-  pointer-events: none;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  white-space: pre;
+  overflow: visible;
   font-family: var(--mono);
   font-size: 0.8125rem;
   line-height: 1.5;
   color: var(--text);
   background: transparent;
   border: none;
+  text-shadow: none;
+  tab-size: 4;
 }
 
-.code-highlight .hl-blue {
-  background: var(--hl-blue);
-  border-radius: 2px;
-}
-
-.code-highlight .hl-green {
-  background: var(--hl-green);
-  border-radius: 2px;
-}
-
-.code-highlight .hl-amber {
-  background: var(--hl-amber);
-  border-radius: 2px;
-}
-
-.code-highlight .hl-red {
-  background: var(--hl-red);
-  border-radius: 2px;
-}
-
-.code-input {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
+/* Beat Prism global pre/code rules inside editors */
+.code-editor pre.code-input-editable,
+.code-editor pre.code-output {
+  white-space: pre;
   padding: 0.75rem;
-  overflow: auto;
-  resize: none;
+  margin: 0;
+  overflow: visible;
   font-family: var(--mono);
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: transparent;
-  caret-color: var(--text);
   background: transparent;
-  border: none;
 }
 
-.code-input::placeholder {
+.code-editor [class*="language-"],
+.code-editor [class*="language-"] .token {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-shadow: none;
+}
+
+.code-input-editable {
+  cursor: text;
+  outline: none;
+}
+
+.code-editor-readonly .code-output {
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+  pointer-events: auto;
+}
+
+.code-input-editable.is-empty::before,
+.code-output.is-empty::before {
+  content: attr(data-placeholder);
   color: var(--muted);
   opacity: 0.7;
+  pointer-events: none;
 }
 
-.code-input::selection {
+.code-input-editable::selection,
+.code-input-editable *::selection,
+.code-output::selection,
+.code-output *::selection {
   background: rgba(9, 105, 218, 0.28);
 }
 
 @media (prefers-color-scheme: dark) {
-  .code-input::selection {
+  .code-input-editable::selection,
+  .code-input-editable *::selection,
+  .code-output::selection,
+  .code-output *::selection {
     background: rgba(88, 166, 255, 0.35);
   }
+}
+
+/* Prism tokens inside editors — backgrounds from step highlights remain visible */
+.code-input-editable .token,
+.code-output .token {
+  background: transparent;
+}
+
+.code-input-editable .hl-blue,
+.code-input-editable .hl-green,
+.code-input-editable .hl-amber,
+.code-input-editable .hl-red,
+.code-output .hl-blue,
+.code-output .hl-green,
+.code-output .hl-amber,
+.code-output .hl-red {
+  border-radius: 2px;
+}
+
+.code-input-editable .hl-blue,
+.code-output .hl-blue {
+  background: var(--hl-blue);
+}
+
+.code-input-editable .hl-green,
+.code-output .hl-green {
+  background: var(--hl-green);
+}
+
+.code-input-editable .hl-amber,
+.code-output .hl-amber {
+  background: var(--hl-amber);
+}
+
+.code-input-editable .hl-red,
+.code-output .hl-red {
+  background: var(--hl-red);
 }
 
 footer {

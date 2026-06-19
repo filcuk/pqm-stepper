@@ -14,6 +14,10 @@ function escapeRegExp(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function getPrism() {
+  return typeof globalThis.Prism !== "undefined" ? globalThis.Prism : null;
+}
+
 /**
  * Collect step names for highlighting.
  */
@@ -52,7 +56,6 @@ function overlapsDeclaration(start, end, declRanges) {
   return declRanges.some((d) => start < d.end && end > d.start);
 }
 
-/** Valid characters immediately before/after a step reference (not a definition). */
 const REF_BEFORE = /[(,\[\{\s=]/;
 const REF_AFTER = /[),\]\}\s,=]/;
 
@@ -74,9 +77,6 @@ function isInsideString(text, index) {
   return inString;
 }
 
-/**
- * True when a regular identifier match is a step reference, not e.g. Int64.Type or #date.
- */
 function isStepReference(text, start, end, declRanges) {
   if (overlapsDeclaration(start, end, declRanges)) {
     return true;
@@ -121,7 +121,7 @@ function classForOccurrence(start, end, isRenamed, declRanges) {
  * Build highlight ranges for step names.
  * @param {"input"|"output"} mode
  */
-function buildHighlightRanges(text, mode, renames) {
+function buildStepRanges(text, mode, renames) {
   const { quoted, regular } = collectStepNames(text);
   const declRanges = getDeclarationRanges(text);
   const ranges = [];
@@ -134,12 +134,12 @@ function buildHighlightRanges(text, mode, renames) {
     const inner = match[1];
     const start = match.index;
     const end = start + match[0].length;
-    const isAmber = mode === "input" ? quotedAmber?.has(inner) : false;
+    const isRenamed = mode === "input" ? quotedAmber?.has(inner) : false;
 
     ranges.push({
       start,
       end,
-      class: classForOccurrence(start, end, isAmber, declRanges),
+      class: classForOccurrence(start, end, isRenamed, declRanges),
     });
   }
 
@@ -160,10 +160,10 @@ function buildHighlightRanges(text, mode, renames) {
     }
   }
 
-  return mergeRanges(ranges, text.length);
+  return mergeStepRanges(ranges, text.length);
 }
 
-function mergeRanges(ranges, textLength) {
+function mergeStepRanges(ranges, textLength) {
   if (ranges.length === 0 || textLength === 0) return [];
 
   const classes = new Array(textLength).fill(null);
@@ -193,14 +193,107 @@ function mergeRanges(ranges, textLength) {
   return merged;
 }
 
+function tokenClassName(token) {
+  const types = [token.type];
+  if (token.alias) {
+    const aliases = Array.isArray(token.alias) ? token.alias : [token.alias];
+    types.push(...aliases);
+  }
+  return types.map((type) => `token ${type}`).join(" ");
+}
+
+/**
+ * Map Prism tokenize output to character ranges with CSS classes.
+ */
+function prismSyntaxRanges(text) {
+  const Prism = getPrism();
+  const grammar = Prism?.languages?.powerquery;
+  if (!grammar) return [];
+
+  const ranges = [];
+  let pos = 0;
+
+  function walk(tokens) {
+    for (const token of tokens) {
+      if (typeof token === "string") {
+        pos += token.length;
+        continue;
+      }
+
+      const content = token.content;
+      if (Array.isArray(content)) {
+        walk(content);
+        continue;
+      }
+
+      ranges.push({
+        start: pos,
+        end: pos + content.length,
+        class: tokenClassName(token),
+      });
+      pos += content.length;
+    }
+  }
+
+  walk(Prism.tokenize(text, grammar));
+  return ranges;
+}
+
+function buildCombinedHtml(text, syntaxRanges, stepRanges) {
+  const length = text.length;
+  const syntax = new Array(length).fill("");
+  const steps = new Array(length).fill("");
+
+  for (const range of syntaxRanges) {
+    for (let i = range.start; i < range.end && i < length; i++) {
+      syntax[i] = range.class;
+    }
+  }
+  for (const range of stepRanges) {
+    for (let i = range.start; i < range.end && i < length; i++) {
+      steps[i] = range.class;
+    }
+  }
+
+  let html = "";
+  let i = 0;
+  while (i < length) {
+    const syn = syntax[i];
+    const stp = steps[i];
+    let j = i + 1;
+    while (j < length && syntax[j] === syn && steps[j] === stp) j++;
+
+    const chunk = escapeHtml(text.slice(i, j));
+    const classes = [syn, stp].filter(Boolean).join(" ");
+    html += classes ? `<span class="${classes}">${chunk}</span>` : chunk;
+    i = j;
+  }
+
+  return html;
+}
+
 function renderHighlighted(text, mode, renames) {
   if (!text) return "";
 
-  const ranges = buildHighlightRanges(text, mode, renames);
+  const stepRanges = buildStepRanges(text, mode, renames);
+  const syntaxRanges = prismSyntaxRanges(text);
+
+  if (syntaxRanges.length === 0 && stepRanges.length === 0) {
+    return escapeHtml(text);
+  }
+
+  if (syntaxRanges.length === 0) {
+    return renderStepOnlyHtml(text, stepRanges);
+  }
+
+  return buildCombinedHtml(text, syntaxRanges, stepRanges);
+}
+
+function renderStepOnlyHtml(text, stepRanges) {
   let html = "";
   let pos = 0;
 
-  for (const range of ranges) {
+  for (const range of stepRanges) {
     if (range.start > pos) {
       html += escapeHtml(text.slice(pos, range.start));
     }

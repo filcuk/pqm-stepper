@@ -127,11 +127,20 @@ Then open `http://localhost:3000`.
 
 ## GitHub Pages deployment
 
-1. Push the `docs/` folder to the `main` branch.
-2. In repo **Settings → Pages**, set source to **Deploy from branch `main`, folder `/docs`**.
-3. Site will be available at `https://<username>.github.io/pqm-stepper/`.
+The site lives in [`docs/`](docs/). If Pages is set to deploy the **repository root**, GitHub/Jekyll will render `README.md` instead of the app.
 
-No build step required.
+**Recommended (GitHub Actions):**
+
+1. Push to `main` (includes [`.github/workflows/pages.yml`](.github/workflows/pages.yml)).
+2. In repo **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**.
+3. After the workflow runs, the site is at `https://<username>.github.io/pqm-stepper/`.
+
+**Alternative (branch deploy):**
+
+1. In **Settings → Pages**, set **Source** to **Deploy from branch**.
+2. Choose branch `main` and folder **`/docs`** (not `/ (root)`).
+
+No build step required — the workflow only publishes the `docs/` folder as-is.
 
 ## Project structure
 
@@ -140,7 +149,10 @@ docs/
   index.html      # UI
   styles.css      # Layout and theme
   transform.js    # Rename logic (pure, no DOM)
+  highlight.js    # Prism M syntax + step highlighting
+  example.js      # Sample query for "Load example"
   mapping.json    # Step name schema
+  vendor/prism/   # Prism.js + Power Query grammar (vendored)
   .nojekyll       # Skip Jekyll processing on GitHub Pages
 ```
 
