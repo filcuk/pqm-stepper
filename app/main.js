@@ -26,6 +26,10 @@ const clearBtn = document.getElementById("clear-btn");
 const copyBtn = document.getElementById("copy-btn");
 const bannerEl = document.getElementById("banner");
 const mappingInfoEl = document.getElementById("mapping-info");
+const stepHighlightToggle = document.getElementById("step-highlight-toggle");
+const stepHighlightLegend = document.getElementById("step-highlight-legend");
+
+const STEP_HIGHLIGHT_STORAGE_KEY = "pqm-step-highlight";
 
 let mapping = {};
 let examples = [];
@@ -36,6 +40,17 @@ let inputText = "";
 let outputText = "";
 let isComposing = false;
 let skipNextInput = false;
+
+function getStepHighlightEnabled() {
+  const stored = localStorage.getItem(STEP_HIGHLIGHT_STORAGE_KEY);
+  return stored !== "false";
+}
+
+function setStepHighlightEnabled(enabled) {
+  localStorage.setItem(STEP_HIGHLIGHT_STORAGE_KEY, enabled ? "true" : "false");
+  stepHighlightToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+  stepHighlightLegend.classList.toggle("is-disabled", !enabled);
+}
 
 function showBanner(messages, type = "warning") {
   if (!messages.length) {
@@ -69,7 +84,12 @@ function updateInputDisplay(caret) {
   }
 
   inputEl.classList.remove("is-empty");
-  inputEl.innerHTML = renderHighlighted(inputText, "input", lastRenames);
+  inputEl.innerHTML = renderHighlighted(
+    inputText,
+    "input",
+    lastRenames,
+    getStepHighlightEnabled()
+  );
 
   if (caret !== undefined) {
     restoreCaretOffset(inputEl, caret);
@@ -89,7 +109,8 @@ function updateOutputHighlight() {
   outputHighlightEl.innerHTML = renderHighlighted(
     outputText,
     "output",
-    lastRenames
+    lastRenames,
+    getStepHighlightEnabled()
   );
 }
 
@@ -161,6 +182,17 @@ async function copyOutput() {
 }
 
 copyBtn.addEventListener("click", copyOutput);
+
+setStepHighlightEnabled(getStepHighlightEnabled());
+
+stepHighlightToggle.addEventListener("click", () => {
+  const enabled = stepHighlightToggle.getAttribute("aria-pressed") !== "true";
+  setStepHighlightEnabled(enabled);
+  const caret =
+    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
+  updateInputDisplay(caret);
+  updateOutputHighlight();
+});
 
 function setExampleControlsEnabled(enabled) {
   exampleBtn.disabled = !enabled;

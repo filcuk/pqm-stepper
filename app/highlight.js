@@ -266,10 +266,12 @@ function buildCombinedHtml(text, syntaxRanges, stepRanges) {
   return html;
 }
 
-function renderHighlighted(text, mode, renames) {
+function renderHighlighted(text, mode, renames, stepHighlightEnabled = true) {
   if (!text) return "";
 
-  const stepRanges = buildStepRanges(text, mode, renames);
+  const stepRanges = stepHighlightEnabled
+    ? buildStepRanges(text, mode, renames)
+    : [];
   const syntaxRanges = prismSyntaxRanges(text);
 
   if (syntaxRanges.length === 0 && stepRanges.length === 0) {

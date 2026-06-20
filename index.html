@@ -53,7 +53,22 @@
           Copy output
         </button>
         <span id="mapping-info" class="mapping-info"></span>
-        <span class="legend">
+        <button
+          type="button"
+          id="step-highlight-toggle"
+          class="btn btn-icon"
+          aria-pressed="true"
+          aria-label="Step highlighting"
+          title="Toggle step highlighting"
+        >
+          <svg class="btn-icon-svg highlight-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <rect class="highlight-icon-swatch hl-blue" x="2" y="2" width="7" height="7" rx="1.5" />
+            <rect class="highlight-icon-swatch hl-green" x="11" y="2" width="7" height="7" rx="1.5" />
+            <rect class="highlight-icon-swatch hl-amber" x="2" y="11" width="7" height="7" rx="1.5" />
+            <rect class="highlight-icon-swatch hl-red" x="11" y="11" width="7" height="7" rx="1.5" />
+          </svg>
+        </button>
+        <span id="step-highlight-legend" class="legend">
           <span class="legend-swatch hl-blue">Definition</span>
           <span class="legend-swatch hl-green">New Definition</span>
           <span class="legend-swatch hl-amber">Reference</span>
