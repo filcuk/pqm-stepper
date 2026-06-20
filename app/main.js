@@ -13,6 +13,12 @@ import {
   lineNumbersText,
 } from "./editor.js";
 import { initTheme, initThemeToggle } from "./theme.js";
+import {
+  getEffectiveMapping,
+  loadDefaultMapping,
+  wasStoredMappingInvalid,
+} from "./mapping-store.js";
+import { initMappingDialog, isMappingDialogOpen } from "./mapping-dialog.js";
 
 const inputEl = document.getElementById("input");
 const inputGutterEl = document.getElementById("input-gutter");
@@ -165,9 +171,16 @@ function setInputText(text, caret) {
 
 async function loadMapping() {
   try {
-    const res = await fetch("app/mapping.json");
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    mapping = await res.json();
+    await loadDefaultMapping();
+    mapping = getEffectiveMapping();
+
+    if (wasStoredMappingInvalid()) {
+      showBanner(
+        ["Stored mapping was invalid and has been ignored. Using default mapping."],
+        "warning"
+      );
+    }
+
     runTransform(0);
   } catch (err) {
     showBanner(
@@ -177,6 +190,13 @@ async function loadMapping() {
       "error"
     );
   }
+}
+
+function setMapping(nextMapping) {
+  mapping = nextMapping;
+  const caret =
+    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
+  runTransform(caret);
 }
 
 async function copyOutput() {
@@ -318,6 +338,7 @@ document.addEventListener("click", (e) => {
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
+    if (isMappingDialogOpen()) return;
     closeExampleMenu();
   }
 });
@@ -353,7 +374,9 @@ inputEl.addEventListener("paste", (e) => {
   runTransform(start + pasted.length);
 });
 
-loadMapping();
+loadMapping().then(() => {
+  initMappingDialog({ onMappingChange: setMapping });
+});
 loadExamples();
 initTheme();
 initThemeToggle(document.getElementById("theme-toggle"));

@@ -143,8 +143,9 @@
     <footer>
       <p class="footer-meta">
         <span>
-          transformation <a href="app/mapping.json" target="_blank">mapping</a> ·
-          report an
+          edit
+          <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button>
+          · report an
           <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
           · microapp by
         </span>
@@ -212,6 +213,39 @@
         </button>
       </div>
     </footer>
+
+    <div
+      id="mapping-dialog"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mapping-dialog-title"
+    >
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-panel">
+        <header class="modal-header">
+          <h2 id="mapping-dialog-title">Step mapping</h2>
+          <button type="button" class="modal-close" aria-label="Close">&times;</button>
+        </header>
+        <p class="modal-hint">Keys are Power Query step names; values are target identifiers.</p>
+        <div id="mapping-dialog-error" class="modal-error hidden" role="alert"></div>
+        <pre
+          id="mapping-editor"
+          class="mapping-editor language-json"
+          contenteditable="true"
+          spellcheck="false"
+          role="textbox"
+          aria-multiline="true"
+        ></pre>
+        <footer class="modal-footer">
+          <button type="button" id="mapping-reset-btn" class="btn">Reset to default</button>
+          <div class="modal-footer-actions">
+            <button type="button" id="mapping-cancel-btn" class="btn">Cancel</button>
+            <button type="button" id="mapping-apply-btn" class="btn btn-primary">Apply</button>
+          </div>
+        </footer>
+      </div>
+    </div>
 
     <script src="app/vendor/prism/prism.min.js"></script>
     <script src="app/vendor/prism/prism-powerquery.min.js"></script>
