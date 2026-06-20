@@ -1,5 +1,5 @@
-export const DEFAULT_EXAMPLE = `let
-    Source = Excel.Workbook(File.Contents("C:\\Data\\Employees.xlsx"), null, true),
+let
+    Source = Excel.Workbook(File.Contents("C:\Data\Employees.xlsx"), null, true),
     Employees_Sheet = Source{[Item="Employees",Kind="Sheet"]}[Data],
     #"Promoted Headers" = Table.PromoteHeaders(Employees_Sheet, [PromoteAllScalars=true]),
     #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"EmployeeID", Int64.Type}, {"HireDate", type date}, {"Salary", Currency.Type}}),
@@ -14,4 +14,4 @@ export const DEFAULT_EXAMPLE = `let
     #"Invoked Custom Function" = NormalizeEmployeeID(#"Removed Duplicates"),
     Buffer = Table.Buffer(#"Invoked Custom Function")
 in
-    Buffer`;
+    Buffer

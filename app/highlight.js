@@ -88,7 +88,8 @@ function isStepReference(text, start, end, declRanges) {
   return validBefore && validAfter;
 }
 
-function addRegularMatches(text, name, isRenamed, declRanges, ranges) {
+function addRegularMatches(text, name, mode, renamedTargets, declRanges, ranges) {
+  const isRenamed = mode === "output" && renamedTargets.has(name);
   const re = new RegExp(`\\b${escapeRegExp(name)}\\b`, "g");
   let match;
   while ((match = re.exec(text)) !== null) {
@@ -98,17 +99,17 @@ function addRegularMatches(text, name, isRenamed, declRanges, ranges) {
     ranges.push({
       start,
       end,
-      class: classForOccurrence(start, end, isRenamed, declRanges),
+      class: classForOccurrence(start, end, mode, declRanges, isRenamed),
     });
   }
 }
 
-function classForOccurrence(start, end, isRenamed, declRanges) {
+function classForOccurrence(start, end, mode, declRanges, isRenamed = false) {
   const isDefinition = overlapsDeclaration(start, end, declRanges);
-  if (isRenamed) {
-    return isDefinition ? "hl-green" : "hl-red";
+  if (mode === "input" || !isRenamed) {
+    return isDefinition ? "hl-blue" : "hl-amber";
   }
-  return isDefinition ? "hl-blue" : "hl-amber";
+  return isDefinition ? "hl-green" : "hl-red";
 }
 
 /**
@@ -116,41 +117,30 @@ function classForOccurrence(start, end, isRenamed, declRanges) {
  * @param {"input"|"output"} mode
  */
 function buildStepRanges(text, mode, renames) {
-  const { quoted, regular } = collectStepNames(text);
+  const { regular } = collectStepNames(text);
   const declRanges = getDeclarationRanges(text);
   const ranges = [];
-
-  const quotedAmber = mode === "input" ? renames?.fromQuoted : null;
-  const regularAmber = mode === "input" ? renames?.fromRegular : renames?.to;
-  const outputAmber = mode === "output" ? renames?.to : null;
+  const renamedTargets = renames?.to ?? new Set();
 
   for (const match of text.matchAll(QUOTED_TOKEN_RE)) {
-    const inner = match[1];
     const start = match.index;
     const end = start + match[0].length;
-    const isRenamed = mode === "input" ? quotedAmber?.has(inner) : false;
-
     ranges.push({
       start,
       end,
-      class: classForOccurrence(start, end, isRenamed, declRanges),
+      class: classForOccurrence(start, end, mode, declRanges, false),
     });
   }
 
   const names = [...regular].sort((a, b) => b.length - a.length);
   for (const name of names) {
-    const isRenamed =
-      mode === "input"
-        ? regularAmber?.has(name)
-        : outputAmber?.has(name);
-
-    addRegularMatches(text, name, isRenamed, declRanges, ranges);
+    addRegularMatches(text, name, mode, renamedTargets, declRanges, ranges);
   }
 
-  if (mode === "output" && outputAmber) {
-    for (const name of [...outputAmber].sort((a, b) => b.length - a.length)) {
+  if (mode === "output") {
+    for (const name of [...renamedTargets].sort((a, b) => b.length - a.length)) {
       if (regular.has(name)) continue;
-      addRegularMatches(text, name, true, declRanges, ranges);
+      addRegularMatches(text, name, mode, renamedTargets, declRanges, ranges);
     }
   }
 
@@ -266,11 +256,16 @@ function buildCombinedHtml(text, syntaxRanges, stepRanges) {
   return html;
 }
 
-function renderHighlighted(text, mode, renames) {
+function renderHighlighted(text, mode, renames, options = {}) {
+  const stepHighlightEnabled = options.stepHighlightEnabled !== false;
+  const syntaxHighlightEnabled = options.syntaxHighlightEnabled !== false;
+
   if (!text) return "";
 
-  const stepRanges = buildStepRanges(text, mode, renames);
-  const syntaxRanges = prismSyntaxRanges(text);
+  const stepRanges = stepHighlightEnabled
+    ? buildStepRanges(text, mode, renames)
+    : [];
+  const syntaxRanges = syntaxHighlightEnabled ? prismSyntaxRanges(text) : [];
 
   if (syntaxRanges.length === 0 && stepRanges.length === 0) {
     return escapeHtml(text);

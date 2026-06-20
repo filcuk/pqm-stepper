@@ -4,24 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PQM Stepper</title>
+    <link rel="icon" href="app/res/icon/icon.svg" type="image/svg+xml" />
+    <link rel="icon" href="app/res/icon/icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="app/res/icon/icon.png" />
     <link
+      id="prism-light"
       rel="stylesheet"
       href="app/vendor/prism/prism.min.css"
-      media="(prefers-color-scheme: light)"
     />
     <link
+      id="prism-dark"
       rel="stylesheet"
       href="app/vendor/prism/prism-tomorrow.min.css"
-      media="(prefers-color-scheme: dark)"
+      disabled
     />
+    <script src="app/theme-init.js"></script>
     <link rel="stylesheet" href="app/styles.css" />
   </head>
   <body>
     <header>
-      <h1>Power Query M Stepper</h1>
+      <div class="site-brand">
+        <img
+          src="app/res/icon/icon.svg"
+          alt=""
+          class="site-logo"
+          width="40"
+          height="40"
+        />
+        <h1>Power Query M Stepper</h1>
+      </div>
       <p class="tagline">
-        <em>Step up</em> your game by improving your M code readability - no more
-        <code>#"&hellip;"</code> escaping!
+        <em>Step up</em> your game! Improved <code>M</code> readability and maintainability.
       </p>
     </header>
 
@@ -29,13 +42,61 @@
       <div id="banner" class="banner hidden" role="status"></div>
 
       <div class="toolbar">
-        <button type="button" id="example-btn" class="btn">Load example</button>
+        <div class="combo-btn" id="example-combo">
+          <button type="button" id="example-btn" class="btn combo-btn-main">
+            Load example
+          </button>
+          <button
+            type="button"
+            id="example-menu-btn"
+            class="btn combo-btn-toggle"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="example-menu"
+            aria-label="Choose example"
+          >
+            <span class="combo-btn-chevron" aria-hidden="true"></span>
+          </button>
+          <ul id="example-menu" class="combo-menu hidden" role="menu"></ul>
+        </div>
         <button type="button" id="clear-btn" class="btn">Clear</button>
         <button type="button" id="copy-btn" class="btn btn-primary" disabled>
           Copy output
         </button>
-        <span id="mapping-info" class="mapping-info"></span>
-        <span class="legend">
+        <button
+          type="button"
+          id="syntax-highlight-toggle"
+          class="btn btn-icon toolbar-spacer"
+          aria-pressed="true"
+          aria-label="Syntax highlighting"
+          title="Toggle syntax highlighting"
+        >
+          <svg class="btn-icon-svg syntax-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <path
+              d="M4 6h12M4 10h12M4 14h8"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+        <button
+          type="button"
+          id="step-highlight-toggle"
+          class="btn btn-icon"
+          aria-pressed="true"
+          aria-label="Step highlighting"
+          title="Toggle step highlighting"
+        >
+          <svg class="btn-icon-svg highlight-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <rect class="highlight-icon-swatch hl-blue" x="2" y="2" width="7" height="7" rx="1.5" />
+            <rect class="highlight-icon-swatch hl-green" x="11" y="2" width="7" height="7" rx="1.5" />
+            <rect class="highlight-icon-swatch hl-amber" x="2" y="11" width="7" height="7" rx="1.5" />
+            <rect class="highlight-icon-swatch hl-red" x="11" y="11" width="7" height="7" rx="1.5" />
+          </svg>
+        </button>
+        <span id="step-highlight-legend" class="legend">
           <span class="legend-swatch hl-blue">Definition</span>
           <span class="legend-swatch hl-green">New Definition</span>
           <span class="legend-swatch hl-amber">Reference</span>
@@ -80,13 +141,76 @@
     </main>
 
     <footer>
-      <p>
-        transformation <a href="app/mapping.json" target="_blank">mapping</a> ·
-        report an
-        <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
-        · see
-        <a href="https://github.com/filcuk/pqm-stepper" target="_blank">repo</a>
+      <p class="footer-meta">
+        <span>
+          transformation <a href="app/mapping.json" target="_blank">mapping</a> ·
+          report an
+          <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
+          · microapp by
+        </span>
+        <a class="footer-brand" href="https://github.com/filcuk" target="_blank">
+          <img src="app/res/icon/fi.svg" alt="Filcuk" width="26" height="26" />
+        </a>
       </p>
+      <div
+        id="theme-toggle"
+        class="theme-toggle"
+        role="group"
+        aria-label="Color theme"
+      >
+        <button
+          type="button"
+          class="theme-toggle-btn"
+          data-theme-mode="light"
+          aria-label="Light theme"
+          aria-pressed="false"
+        >
+          <svg class="theme-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <path
+              d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.4 4.4l1.4 1.4M14.2 14.2l1.4 1.4M4.4 15.6l1.4-1.4M14.2 5.8l1.4-1.4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="theme-toggle-btn"
+          data-theme-mode="dark"
+          aria-label="Dark theme"
+          aria-pressed="false"
+        >
+          <svg class="theme-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <path
+              d="M10 3.5a6.5 6.5 0 1 0 6.5 6.5A5.5 5.5 0 0 1 10 3.5Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="theme-toggle-btn"
+          data-theme-mode="auto"
+          aria-label="System theme"
+          aria-pressed="false"
+        >
+          <svg class="theme-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <path d="M10 3.5v13" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <path
+              d="M10 3.5a6.5 6.5 0 0 1 0 13Z"
+              fill="currentColor"
+              opacity="0.35"
+            />
+          </svg>
+        </button>
+      </div>
     </footer>
 
     <script src="app/vendor/prism/prism.min.js"></script>

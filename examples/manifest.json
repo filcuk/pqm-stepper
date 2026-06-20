@@ -1,0 +1,12 @@
+[
+  { "file": "readme_classic.pq", "label": "Readme Classic" },
+  { "file": "minimal_orders.pq", "label": "Minimal Orders" },
+  { "file": "example_1.pq", "label": "Employee Pipeline" },
+  { "file": "csv_sales.pq", "label": "CSV Sales Report" },
+  { "file": "dataflow_entity.pq", "label": "Dataflow Entity" },
+  { "file": "lakehouse_navigate.pq", "label": "Lakehouse Table" },
+  { "file": "merge_customers.pq", "label": "Merge Sheets" },
+  { "file": "text_cleanup.pq", "label": "Text Cleanup" },
+  { "file": "unpivot_pivot.pq", "label": "Unpivot & Pivot" },
+  { "file": "invoke_and_index.pq", "label": "Index & Invoke" }
+]
