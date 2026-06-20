@@ -154,6 +154,79 @@ main {
   border-color: var(--accent-hover);
 }
 
+.combo-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.combo-btn-main {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+}
+
+.combo-btn-toggle {
+  padding: 0.5rem 0.625rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 1px solid var(--border);
+}
+
+.combo-btn-toggle:hover:not(:disabled),
+.combo-btn-main:hover:not(:disabled) + .combo-btn-toggle:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.combo-btn-chevron {
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+}
+
+.combo-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 10;
+  min-width: 100%;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(31, 35, 40, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  .combo-menu {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+}
+
+.combo-menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.combo-menu-item:hover,
+.combo-menu-item:focus-visible {
+  background: var(--code-bg);
+  outline: none;
+}
+
 @media (prefers-color-scheme: dark) {
   .btn-primary {
     color: #0d1117;

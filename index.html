@@ -29,7 +29,23 @@
       <div id="banner" class="banner hidden" role="status"></div>
 
       <div class="toolbar">
-        <button type="button" id="example-btn" class="btn">Load example</button>
+        <div class="combo-btn" id="example-combo">
+          <button type="button" id="example-btn" class="btn combo-btn-main">
+            Load example
+          </button>
+          <button
+            type="button"
+            id="example-menu-btn"
+            class="btn combo-btn-toggle"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="example-menu"
+            aria-label="Choose example"
+          >
+            <span class="combo-btn-chevron" aria-hidden="true"></span>
+          </button>
+          <ul id="example-menu" class="combo-menu hidden" role="menu"></ul>
+        </div>
         <button type="button" id="clear-btn" class="btn">Clear</button>
         <button type="button" id="copy-btn" class="btn btn-primary" disabled>
           Copy output

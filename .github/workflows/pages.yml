@@ -26,10 +26,12 @@ jobs:
 
       - name: Prepare site
         run: |
-          mkdir -p _site/app
+          mkdir -p _site/app _site/examples
           cp index.html _site/
           cp .nojekyll _site/
           cp -r app/* _site/app/
+          find examples -maxdepth 1 -name '*.pq' -exec cp {} _site/examples/ \;
+          cp examples/manifest.json _site/examples/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

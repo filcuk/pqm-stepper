@@ -1,6 +1,10 @@
 import { transform } from "./transform.js";
 import { renderHighlighted } from "./highlight.js";
-import { DEFAULT_EXAMPLE } from "./example.js";
+import {
+  fetchExample,
+  fetchExampleManifest,
+  pickRandomExample,
+} from "./examples.js";
 import {
   saveCaretOffset,
   getSelectionOffsets,
@@ -13,13 +17,19 @@ const inputEl = document.getElementById("input");
 const inputGutterEl = document.getElementById("input-gutter");
 const outputHighlightEl = document.getElementById("output-highlight");
 const outputGutterEl = document.getElementById("output-gutter");
+const exampleCombo = document.getElementById("example-combo");
 const exampleBtn = document.getElementById("example-btn");
+const exampleMenuBtn = document.getElementById("example-menu-btn");
+const exampleMenu = document.getElementById("example-menu");
 const clearBtn = document.getElementById("clear-btn");
 const copyBtn = document.getElementById("copy-btn");
 const bannerEl = document.getElementById("banner");
 const mappingInfoEl = document.getElementById("mapping-info");
 
 let mapping = {};
+let examples = [];
+let lastLoadedExampleFile = null;
+let exampleMenuOpen = false;
 let lastRenames = null;
 let inputText = "";
 let outputText = "";
@@ -151,9 +161,105 @@ async function copyOutput() {
 
 copyBtn.addEventListener("click", copyOutput);
 
+function setExampleControlsEnabled(enabled) {
+  exampleBtn.disabled = !enabled;
+  exampleMenuBtn.disabled = !enabled;
+}
+
+function closeExampleMenu() {
+  if (!exampleMenuOpen) return;
+  exampleMenuOpen = false;
+  exampleMenu.classList.add("hidden");
+  exampleMenuBtn.setAttribute("aria-expanded", "false");
+}
+
+function openExampleMenu() {
+  if (!examples.length) return;
+  exampleMenuOpen = true;
+  exampleMenu.classList.remove("hidden");
+  exampleMenuBtn.setAttribute("aria-expanded", "true");
+}
+
+function toggleExampleMenu() {
+  if (exampleMenuOpen) {
+    closeExampleMenu();
+  } else {
+    openExampleMenu();
+  }
+}
+
+function renderExampleMenu() {
+  exampleMenu.replaceChildren(
+    ...examples.map(({ file, label }) => {
+      const item = document.createElement("li");
+      item.setAttribute("role", "none");
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "combo-menu-item";
+      button.setAttribute("role", "menuitem");
+      button.textContent = label;
+      button.addEventListener("click", () => {
+        closeExampleMenu();
+        loadExampleByName(file);
+      });
+
+      item.appendChild(button);
+      return item;
+    })
+  );
+}
+
+async function loadExampleByName(filename) {
+  try {
+    const text = await fetchExample(filename);
+    lastLoadedExampleFile = filename;
+    setInputText(text);
+    inputEl.focus();
+  } catch (err) {
+    showBanner([`Could not load example "${filename}": ${err.message}.`], "error");
+  }
+}
+
+async function loadRandomExample() {
+  const example = pickRandomExample(examples, lastLoadedExampleFile);
+  if (!example) return;
+  await loadExampleByName(example.file);
+}
+
+async function loadExamples() {
+  try {
+    examples = await fetchExampleManifest();
+    renderExampleMenu();
+    setExampleControlsEnabled(examples.length > 0);
+    if (!examples.length) {
+      showBanner(["No examples found in examples/."], "warning");
+    }
+  } catch (err) {
+    setExampleControlsEnabled(false);
+    showBanner([`Could not load examples: ${err.message}.`], "error");
+  }
+}
+
 exampleBtn.addEventListener("click", () => {
-  setInputText(DEFAULT_EXAMPLE);
-  inputEl.focus();
+  loadRandomExample();
+});
+
+exampleMenuBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  toggleExampleMenu();
+});
+
+document.addEventListener("click", (e) => {
+  if (!exampleCombo.contains(e.target)) {
+    closeExampleMenu();
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeExampleMenu();
+  }
 });
 
 clearBtn.addEventListener("click", () => {
@@ -188,3 +294,4 @@ inputEl.addEventListener("paste", (e) => {
 });
 
 loadMapping();
+loadExamples();
