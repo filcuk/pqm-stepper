@@ -10,6 +10,7 @@
   --surface: #ffffff;
   --text: #1f2328;
   --muted: #656d76;
+  --legend-text: #424a53;
   --border: #d0d7de;
   --accent: #0969da;
   --accent-hover: #0550ae;
@@ -38,6 +39,7 @@
   --surface: #161b22;
   --text: #e6edf3;
   --muted: #8b949e;
+  --legend-text: #c3ccd5;
   --border: #30363d;
   --accent: #58a6ff;
   --accent-hover: #79b8ff;
@@ -303,7 +305,7 @@ main {
   display: flex;
   gap: 0.5rem;
   font-size: 0.75rem;
-  color: var(--muted);
+  color: var(--legend-text);
 }
 
 .legend.is-disabled {
