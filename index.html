@@ -34,8 +34,7 @@
         <h1>Power Query M Stepper</h1>
       </div>
       <p class="tagline">
-        <em>Step up</em> your game by improving your M code readability - no more
-        <code>#"&hellip;"</code> escaping!
+        <em>Step up</em> your game! Improved <code>M</code> readability and maintainability.
       </p>
     </header>
 
@@ -64,11 +63,10 @@
         <button type="button" id="copy-btn" class="btn btn-primary" disabled>
           Copy output
         </button>
-        <span id="mapping-info" class="mapping-info"></span>
         <button
           type="button"
           id="syntax-highlight-toggle"
-          class="btn btn-icon"
+          class="btn btn-icon toolbar-spacer"
           aria-pressed="true"
           aria-label="Syntax highlighting"
           title="Toggle syntax highlighting"
@@ -143,12 +141,16 @@
     </main>
 
     <footer>
-      <p>
-        transformation <a href="app/mapping.json" target="_blank">mapping</a> ·
-        report an
-        <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
-        · see
-        <a href="https://github.com/filcuk/pqm-stepper" target="_blank">repo</a>
+      <p class="footer-meta">
+        <span>
+          transformation <a href="app/mapping.json" target="_blank">mapping</a> ·
+          report an
+          <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
+          · microapp by
+        </span>
+        <a class="footer-brand" href="https://github.com/filcuk" target="_blank">
+          <img src="app/res/icon/fi.svg" alt="Filcuk" width="26" height="26" />
+        </a>
       </p>
       <div
         id="theme-toggle"

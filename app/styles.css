@@ -295,9 +295,7 @@ main {
   color: #0d1117;
 }
 
-.mapping-info {
-  color: var(--muted);
-  font-size: 0.875rem;
+.toolbar-spacer {
   margin-left: auto;
 }
 
@@ -520,8 +518,25 @@ footer {
   font-size: 0.875rem;
 }
 
-footer p {
+.footer-meta {
   margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  line-height: 1;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.footer-brand img {
+  display: block;
+  width: 1.625rem;
+  height: 1.625rem;
 }
 
 footer a {

@@ -25,7 +25,6 @@ const exampleMenu = document.getElementById("example-menu");
 const clearBtn = document.getElementById("clear-btn");
 const copyBtn = document.getElementById("copy-btn");
 const bannerEl = document.getElementById("banner");
-const mappingInfoEl = document.getElementById("mapping-info");
 const stepHighlightToggle = document.getElementById("step-highlight-toggle");
 const stepHighlightLegend = document.getElementById("step-highlight-legend");
 const syntaxHighlightToggle = document.getElementById("syntax-highlight-toggle");
@@ -169,10 +168,8 @@ async function loadMapping() {
     const res = await fetch("app/mapping.json");
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     mapping = await res.json();
-    mappingInfoEl.textContent = `${Object.keys(mapping).length} mappings loaded`;
     runTransform(0);
   } catch (err) {
-    mappingInfoEl.textContent = "Failed to load mapping";
     showBanner(
       [
         `Could not load mapping.json: ${err.message}. Run from a local server or deploy to GitHub Pages.`,
