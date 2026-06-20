@@ -35,6 +35,7 @@
       </div>
       <p class="tagline">
         <em>Step up</em> your game! Improved <code>M</code> readability and maintainability.
+        <button type="button" id="about-open-btn" class="btn btn-link tagline-link">What?</button>
       </p>
     </header>
 
@@ -143,9 +144,12 @@
     <footer>
       <p class="footer-meta">
         <span>
-          transformation <a href="app/mapping.json" target="_blank">mapping</a> ·
-          report an
+          edit
+          <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button>
+          · report an
           <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
+          · star on
+          <a href="https://github.com/filcuk/pqm-stepper" target="_blank">GitHub</a>
           · microapp by
         </span>
         <a class="footer-brand" href="https://github.com/filcuk" target="_blank">
@@ -212,6 +216,75 @@
         </button>
       </div>
     </footer>
+
+    <div
+      id="mapping-dialog"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mapping-dialog-title"
+    >
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-panel">
+        <header class="modal-header">
+          <h2 id="mapping-dialog-title">Step mapping</h2>
+          <button type="button" class="modal-close" aria-label="Close">&times;</button>
+        </header>
+        <p class="modal-hint">Keys are Power Query step names; values are target identifiers.</p>
+        <div id="mapping-dialog-error" class="modal-error hidden" role="alert"></div>
+        <pre
+          id="mapping-editor"
+          class="mapping-editor language-json"
+          contenteditable="true"
+          spellcheck="false"
+          role="textbox"
+          aria-multiline="true"
+        ></pre>
+        <footer class="modal-footer">
+          <button type="button" id="mapping-reset-btn" class="btn">Reset to default</button>
+          <div class="modal-footer-actions">
+            <button type="button" id="mapping-cancel-btn" class="btn">Cancel</button>
+            <button type="button" id="mapping-apply-btn" class="btn btn-primary">Apply</button>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <div
+      id="about-dialog"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="about-dialog-title"
+    >
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-panel">
+        <header class="modal-header">
+          <h2 id="about-dialog-title">What does this do?</h2>
+          <button type="button" class="modal-close" aria-label="Close">&times;</button>
+        </header>
+        <div class="modal-body" id="about-dialog-body">
+          <p>
+            Power Query names each transformation step for you. Those
+            names often appear as quoted identifiers like <code>#&quot;Changed Type&quot;</code>
+            or <code>#&quot;Filtered Rows 1&quot;</code>. This clutters the code,
+            making each step harder to scan and reference.
+          </p>
+          <p>
+            PQM Stepper helps to rename those steps to short, consistent identifiers using a mapping
+            schema all in one go. The logic stays the same, only the step names change, so queries become
+            easier to read and maintain.
+          </p>
+          <div id="about-extra-content" class="about-extra-content hidden"></div>
+        </div>
+        <footer class="modal-footer">
+          <button type="button" id="about-confused-btn" class="btn">Huh?</button>
+          <div class="modal-footer-actions">
+            <button type="button" id="about-close-btn" class="btn btn-primary">Got it</button>
+          </div>
+        </footer>
+      </div>
+    </div>
 
     <script src="app/vendor/prism/prism.min.js"></script>
     <script src="app/vendor/prism/prism-powerquery.min.js"></script>

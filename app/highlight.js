@@ -12,6 +12,41 @@ function getPrism() {
   return typeof globalThis.Prism !== "undefined" ? globalThis.Prism : null;
 }
 
+function ensureJsonGrammar() {
+  const Prism = getPrism();
+  if (!Prism || Prism.languages.json) return Prism;
+
+  Prism.languages.json = {
+    property: {
+      pattern: /"(?:\\.|[^\\"\r\n])*"(?=\s*:)/,
+      greedy: true,
+    },
+    string: {
+      pattern: /"(?:\\.|[^\\"\r\n])*"(?!\s*:)/,
+      greedy: true,
+    },
+    number: /-?\b\d+(?:\.\d+)?(?:e[+-]?\d+)?\b/i,
+    punctuation: /[{}[\],]/,
+    operator: /:/,
+    boolean: /\b(?:false|true)\b/,
+    null: {
+      pattern: /\bnull\b/,
+      alias: "keyword",
+    },
+  };
+
+  return Prism;
+}
+
+function renderJsonHighlighted(text) {
+  if (!text) return "";
+
+  const Prism = ensureJsonGrammar();
+  if (!Prism?.languages?.json) return escapeHtml(text);
+
+  return Prism.highlight(text, Prism.languages.json, "json");
+}
+
 /**
  * Collect step names for highlighting.
  */
@@ -294,4 +329,4 @@ function renderStepOnlyHtml(text, stepRanges) {
   return html;
 }
 
-export { renderHighlighted };
+export { renderHighlighted, renderJsonHighlighted };
