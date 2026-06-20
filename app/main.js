@@ -12,6 +12,7 @@ import {
   readPlainText,
   lineNumbersText,
 } from "./editor.js";
+import { initTheme, initThemeToggle } from "./theme.js";
 
 const inputEl = document.getElementById("input");
 const inputGutterEl = document.getElementById("input-gutter");
@@ -295,3 +296,12 @@ inputEl.addEventListener("paste", (e) => {
 
 loadMapping();
 loadExamples();
+initTheme();
+initThemeToggle(document.getElementById("theme-toggle"));
+
+document.addEventListener("pqm-theme-change", () => {
+  const caret =
+    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
+  updateInputDisplay(caret);
+  updateOutputHighlight();
+});
