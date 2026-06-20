@@ -19,6 +19,7 @@ import {
   wasStoredMappingInvalid,
 } from "./mapping-store.js";
 import { initMappingDialog, isMappingDialogOpen } from "./mapping-dialog.js";
+import { initAboutDialog, isAboutDialogOpen } from "./about-dialog.js";
 
 const inputEl = document.getElementById("input");
 const inputGutterEl = document.getElementById("input-gutter");
@@ -338,7 +339,7 @@ document.addEventListener("click", (e) => {
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
-    if (isMappingDialogOpen()) return;
+    if (isMappingDialogOpen() || isAboutDialogOpen()) return;
     closeExampleMenu();
   }
 });
@@ -377,6 +378,7 @@ inputEl.addEventListener("paste", (e) => {
 loadMapping().then(() => {
   initMappingDialog({ onMappingChange: setMapping });
 });
+initAboutDialog();
 loadExamples();
 initTheme();
 initThemeToggle(document.getElementById("theme-toggle"));

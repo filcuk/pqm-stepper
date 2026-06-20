@@ -35,6 +35,7 @@
       </div>
       <p class="tagline">
         <em>Step up</em> your game! Improved <code>M</code> readability and maintainability.
+        <button type="button" id="about-open-btn" class="btn btn-link tagline-link">What?</button>
       </p>
     </header>
 
@@ -244,6 +245,42 @@
           <div class="modal-footer-actions">
             <button type="button" id="mapping-cancel-btn" class="btn">Cancel</button>
             <button type="button" id="mapping-apply-btn" class="btn btn-primary">Apply</button>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <div
+      id="about-dialog"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="about-dialog-title"
+    >
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-panel">
+        <header class="modal-header">
+          <h2 id="about-dialog-title">What does this do?</h2>
+          <button type="button" class="modal-close" aria-label="Close">&times;</button>
+        </header>
+        <div class="modal-body" id="about-dialog-body">
+          <p>
+            Power Query names each transformation step for you. Those
+            names often appear as quoted identifiers like <code>#&quot;Changed Type&quot;</code>
+            or <code>#&quot;Filtered Rows 1&quot;</code>. This clutters the code,
+            making each step harder to scan and reference.
+          </p>
+          <p>
+            PQM Stepper helps to rename those steps to short, consistent identifiers using a mapping
+            schema all in one go. The logic stays the same, only the step names change, so queries become
+            easier to read and maintain.
+          </p>
+          <div id="about-extra-content" class="about-extra-content hidden"></div>
+        </div>
+        <footer class="modal-footer">
+          <button type="button" id="about-confused-btn" class="btn">Huh?</button>
+          <div class="modal-footer-actions">
+            <button type="button" id="about-close-btn" class="btn btn-primary">Got it</button>
           </div>
         </footer>
       </div>

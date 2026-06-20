@@ -110,6 +110,11 @@ body > footer {
   border-radius: 4px;
 }
 
+.tagline-link {
+  margin-left: 0.35rem;
+  font-size: inherit;
+}
+
 main {
   flex: 1;
   display: flex;
@@ -647,6 +652,66 @@ body.modal-open {
   padding: 0 1.25rem 0.75rem;
   color: var(--muted);
   font-size: 0.8125rem;
+}
+
+.modal-body {
+  flex: 1;
+  overflow: auto;
+  padding: 0 1.25rem 1rem;
+  color: var(--text);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.modal-body p {
+  margin: 0 0 0.875rem;
+}
+
+.modal-body p:last-child {
+  margin-bottom: 0;
+}
+
+.modal-subheading {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.modal-example-label {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--legend-text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.modal-code {
+  margin: 0 0 0.75rem;
+  padding: 0.75rem;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--code-bg);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre;
+  tab-size: 4;
+}
+
+.modal-body code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: var(--code-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+.about-extra-content .about-extra-block {
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px dashed var(--border);
 }
 
 .modal-error {
