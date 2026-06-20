@@ -28,8 +28,10 @@ const bannerEl = document.getElementById("banner");
 const mappingInfoEl = document.getElementById("mapping-info");
 const stepHighlightToggle = document.getElementById("step-highlight-toggle");
 const stepHighlightLegend = document.getElementById("step-highlight-legend");
+const syntaxHighlightToggle = document.getElementById("syntax-highlight-toggle");
 
 const STEP_HIGHLIGHT_STORAGE_KEY = "pqm-step-highlight";
+const SYNTAX_HIGHLIGHT_STORAGE_KEY = "pqm-syntax-highlight";
 
 let mapping = {};
 let examples = [];
@@ -50,6 +52,23 @@ function setStepHighlightEnabled(enabled) {
   localStorage.setItem(STEP_HIGHLIGHT_STORAGE_KEY, enabled ? "true" : "false");
   stepHighlightToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
   stepHighlightLegend.classList.toggle("is-disabled", !enabled);
+}
+
+function getSyntaxHighlightEnabled() {
+  const stored = localStorage.getItem(SYNTAX_HIGHLIGHT_STORAGE_KEY);
+  return stored !== "false";
+}
+
+function setSyntaxHighlightEnabled(enabled) {
+  localStorage.setItem(SYNTAX_HIGHLIGHT_STORAGE_KEY, enabled ? "true" : "false");
+  syntaxHighlightToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+}
+
+function getHighlightOptions() {
+  return {
+    stepHighlightEnabled: getStepHighlightEnabled(),
+    syntaxHighlightEnabled: getSyntaxHighlightEnabled(),
+  };
 }
 
 function showBanner(messages, type = "warning") {
@@ -88,7 +107,7 @@ function updateInputDisplay(caret) {
     inputText,
     "input",
     lastRenames,
-    getStepHighlightEnabled()
+    getHighlightOptions()
   );
 
   if (caret !== undefined) {
@@ -110,7 +129,7 @@ function updateOutputHighlight() {
     outputText,
     "output",
     lastRenames,
-    getStepHighlightEnabled()
+    getHighlightOptions()
   );
 }
 
@@ -184,14 +203,25 @@ async function copyOutput() {
 copyBtn.addEventListener("click", copyOutput);
 
 setStepHighlightEnabled(getStepHighlightEnabled());
+setSyntaxHighlightEnabled(getSyntaxHighlightEnabled());
 
-stepHighlightToggle.addEventListener("click", () => {
-  const enabled = stepHighlightToggle.getAttribute("aria-pressed") !== "true";
-  setStepHighlightEnabled(enabled);
+function refreshHighlights() {
   const caret =
     document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
   updateInputDisplay(caret);
   updateOutputHighlight();
+}
+
+stepHighlightToggle.addEventListener("click", () => {
+  const enabled = stepHighlightToggle.getAttribute("aria-pressed") !== "true";
+  setStepHighlightEnabled(enabled);
+  refreshHighlights();
+});
+
+syntaxHighlightToggle.addEventListener("click", () => {
+  const enabled = syntaxHighlightToggle.getAttribute("aria-pressed") !== "true";
+  setSyntaxHighlightEnabled(enabled);
+  refreshHighlights();
 });
 
 function setExampleControlsEnabled(enabled) {
@@ -331,9 +361,4 @@ loadExamples();
 initTheme();
 initThemeToggle(document.getElementById("theme-toggle"));
 
-document.addEventListener("pqm-theme-change", () => {
-  const caret =
-    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
-  updateInputDisplay(caret);
-  updateOutputHighlight();
-});
+document.addEventListener("pqm-theme-change", refreshHighlights);

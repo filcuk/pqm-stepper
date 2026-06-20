@@ -256,13 +256,16 @@ function buildCombinedHtml(text, syntaxRanges, stepRanges) {
   return html;
 }
 
-function renderHighlighted(text, mode, renames, stepHighlightEnabled = true) {
+function renderHighlighted(text, mode, renames, options = {}) {
+  const stepHighlightEnabled = options.stepHighlightEnabled !== false;
+  const syntaxHighlightEnabled = options.syntaxHighlightEnabled !== false;
+
   if (!text) return "";
 
   const stepRanges = stepHighlightEnabled
     ? buildStepRanges(text, mode, renames)
     : [];
-  const syntaxRanges = prismSyntaxRanges(text);
+  const syntaxRanges = syntaxHighlightEnabled ? prismSyntaxRanges(text) : [];
 
   if (syntaxRanges.length === 0 && stepRanges.length === 0) {
     return escapeHtml(text);

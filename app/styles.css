@@ -203,6 +203,10 @@ main {
   opacity: 0.35;
 }
 
+.btn-icon[aria-pressed="false"] .syntax-icon {
+  opacity: 0.45;
+}
+
 .combo-btn {
   position: relative;
   display: inline-flex;
