@@ -40,7 +40,19 @@
     </header>
 
     <main>
-      <div id="banner" class="banner hidden" role="status"></div>
+      <div id="mapping-banner" class="banner banner-warning hidden" role="status">
+        <span class="banner-icon" data-icon="warning" data-icon-class="banner-icon-svg"></span>
+        <div class="banner-body mapping-banner-body">
+          <span id="mapping-banner-text" class="mapping-banner-text"></span>
+          <button type="button" id="mapping-reset-banner-btn" class="btn mapping-banner-btn">
+            Reset to default
+          </button>
+        </div>
+      </div>
+      <div id="banner" class="banner hidden" role="status">
+        <span id="banner-icon" class="banner-icon" data-icon="warning" data-icon-class="banner-icon-svg"></span>
+        <span id="banner-body" class="banner-body"></span>
+      </div>
 
       <div class="toolbar">
         <div class="combo-btn" id="example-combo">
@@ -66,11 +78,76 @@
         </button>
         <button
           type="button"
-          id="syntax-highlight-toggle"
+          id="verbose-names-toggle"
           class="btn btn-icon toolbar-spacer"
+          aria-pressed="false"
+          aria-label="Numbered step names"
+          data-tooltip="Numbered step names"
+          data-tooltip-position="bottom"
+        >
+          <svg class="btn-icon-svg verbose-names-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <text
+              class="verbose-names-glyph verbose-names-glyph-numbered"
+              x="10"
+              y="10.5"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              font-size="14"
+              font-weight="600"
+              fill="currentColor"
+            >A</text>
+            <text
+              class="verbose-names-glyph verbose-names-glyph-verbose"
+              x="10"
+              y="10.5"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              font-size="11"
+              font-weight="600"
+              fill="currentColor"
+            >Ab</text>
+          </svg>
+        </button>
+        <button
+          type="button"
+          id="always-number-toggle"
+          class="btn btn-icon"
+          aria-pressed="false"
+          aria-label="Number repeated steps"
+          data-tooltip="Always number steps"
+          data-tooltip-position="bottom"
+        >
+          <svg class="btn-icon-svg always-number-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <text
+              class="always-number-glyph always-number-glyph-off"
+              x="10"
+              y="10.5"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              font-size="14"
+              font-weight="600"
+              fill="currentColor"
+            >1</text>
+            <text
+              class="always-number-glyph always-number-glyph-on"
+              x="10"
+              y="10.5"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              font-size="11"
+              font-weight="600"
+              fill="currentColor"
+            >1+</text>
+          </svg>
+        </button>
+        <button
+          type="button"
+          id="syntax-highlight-toggle"
+          class="btn btn-icon"
           aria-pressed="true"
           aria-label="Syntax highlighting"
-          title="Toggle syntax highlighting"
+          data-tooltip="Toggle syntax highlighting"
+          data-tooltip-position="bottom"
         >
           <svg class="btn-icon-svg syntax-icon" viewBox="0 0 20 20" aria-hidden="true">
             <path
@@ -88,7 +165,8 @@
           class="btn btn-icon"
           aria-pressed="true"
           aria-label="Step highlighting"
-          title="Toggle step highlighting"
+          data-tooltip="Toggle step highlighting"
+          data-tooltip-position="bottom"
         >
           <svg class="btn-icon-svg highlight-icon" viewBox="0 0 20 20" aria-hidden="true">
             <rect class="highlight-icon-swatch hl-blue" x="2" y="2" width="7" height="7" rx="1.5" />
@@ -145,7 +223,7 @@
       <p class="footer-meta">
         <span>
           edit
-          <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button>
+          <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button> <span id="mapping-version-label" class="mapping-version-label" aria-hidden="true"></span>
           · report an
           <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
           · star on
@@ -153,7 +231,7 @@
           · microapp by
         </span>
         <a class="footer-brand" href="https://github.com/filcuk" target="_blank">
-          <img src="app/res/icon/fi.svg" alt="Filcuk" width="26" height="26" />
+          <span class="footer-brand-icon" role="img" aria-label="Filcuk"></span>
         </a>
       </p>
       <div
@@ -166,54 +244,32 @@
           type="button"
           class="theme-toggle-btn"
           data-theme-mode="light"
+          data-icon="light-mode"
+          data-icon-class="theme-icon"
           aria-label="Light theme"
           aria-pressed="false"
-        >
-          <svg class="theme-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1.5" />
-            <path
-              d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.4 4.4l1.4 1.4M14.2 14.2l1.4 1.4M4.4 15.6l1.4-1.4M14.2 5.8l1.4-1.4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button>
+          title="Light"
+        ></button>
         <button
           type="button"
           class="theme-toggle-btn"
           data-theme-mode="dark"
+          data-icon="dark-mode"
+          data-icon-class="theme-icon"
           aria-label="Dark theme"
           aria-pressed="false"
-        >
-          <svg class="theme-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <path
-              d="M10 3.5a6.5 6.5 0 1 0 6.5 6.5A5.5 5.5 0 0 1 10 3.5Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+          title="Dark"
+        ></button>
         <button
           type="button"
           class="theme-toggle-btn"
           data-theme-mode="auto"
+          data-icon="auto-mode"
+          data-icon-class="theme-icon"
           aria-label="System theme"
           aria-pressed="false"
-        >
-          <svg class="theme-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" />
-            <path d="M10 3.5v13" fill="none" stroke="currentColor" stroke-width="1.5" />
-            <path
-              d="M10 3.5a6.5 6.5 0 0 1 0 13Z"
-              fill="currentColor"
-              opacity="0.35"
-            />
-          </svg>
-        </button>
+          title="System"
+        ></button>
       </div>
     </footer>
 

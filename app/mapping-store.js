@@ -1,6 +1,40 @@
 const STORAGE_KEY = "pqm-mapping";
+export const VERSION_KEY = "$version";
+const VERSION_PATTERN = /^\d+\.\d+$/;
 
 let defaultMapping = null;
+
+export function parseVersion(version) {
+  if (typeof version !== "string" || !VERSION_PATTERN.test(version)) return null;
+  const [major, minor] = version.split(".").map(Number);
+  return { major, minor, raw: version };
+}
+
+export function compareVersions(a, b) {
+  const left = parseVersion(a);
+  const right = parseVersion(b);
+  if (!left || !right) return null;
+
+  if (left.major !== right.major) return left.major - right.major;
+  return left.minor - right.minor;
+}
+
+export function isVersionOlder(storedVersion, currentVersion) {
+  const comparison = compareVersions(storedVersion, currentVersion);
+  if (comparison === null) return true;
+  return comparison < 0;
+}
+
+export function isVersionNewer(storedVersion, currentVersion) {
+  const comparison = compareVersions(storedVersion, currentVersion);
+  if (comparison === null) return false;
+  return comparison > 0;
+}
+
+export function getMappingVersion(obj) {
+  if (!obj || typeof obj !== "object") return null;
+  return parseVersion(obj[VERSION_KEY])?.raw ?? null;
+}
 
 export function validateMapping(obj) {
   if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
@@ -8,12 +42,27 @@ export function validateMapping(obj) {
   }
 
   for (const [key, value] of Object.entries(obj)) {
+    if (key === VERSION_KEY) {
+      if (parseVersion(value) === null) {
+        return "Mapping $version must be a MAJOR.MINOR string (e.g. 1.0).";
+      }
+      continue;
+    }
+
     if (typeof key !== "string" || typeof value !== "string") {
       return "All keys and values must be strings.";
     }
   }
 
   return null;
+}
+
+export function getMappingForTransform(obj) {
+  if (!obj || typeof obj !== "object") return {};
+
+  const mapping = { ...obj };
+  delete mapping[VERSION_KEY];
+  return mapping;
 }
 
 export async function loadDefaultMapping() {
@@ -23,6 +72,9 @@ export async function loadDefaultMapping() {
   const data = await res.json();
   const validationError = validateMapping(data);
   if (validationError) throw new Error(validationError);
+  if (!getMappingVersion(data)) {
+    throw new Error("mapping.json is missing a valid $version.");
+  }
 
   defaultMapping = data;
   return defaultMapping;
@@ -30,6 +82,10 @@ export async function loadDefaultMapping() {
 
 export function getDefaultMapping() {
   return defaultMapping;
+}
+
+export function getDefaultVersion() {
+  return getMappingVersion(defaultMapping) ?? "1.0";
 }
 
 export function getStoredMapping() {
@@ -49,6 +105,30 @@ export function hasStoredMapping() {
   return getStoredMapping() !== null;
 }
 
+function stableMappingJson(obj) {
+  if (!obj || typeof obj !== "object") return "";
+  const normalized = {};
+  for (const key of Object.keys(obj).sort()) {
+    normalized[key] = obj[key];
+  }
+  return JSON.stringify(normalized);
+}
+
+export function isSameMapping(a, b) {
+  if (!a || !b) return false;
+  return stableMappingJson(a) === stableMappingJson(b);
+}
+
+export function isDefaultMapping(obj) {
+  return Boolean(defaultMapping && isSameMapping(obj, defaultMapping));
+}
+
+export function hasCustomMapping() {
+  const stored = getStoredMapping();
+  if (!stored) return false;
+  return !isDefaultMapping(stored);
+}
+
 export function saveMapping(obj) {
   const validationError = validateMapping(obj);
   if (validationError) throw new Error(validationError);
@@ -61,6 +141,37 @@ export function clearStoredMapping() {
 
 export function getEffectiveMapping() {
   return getStoredMapping() ?? defaultMapping ?? {};
+}
+
+export function resolveMappingState() {
+  const currentVersion = getDefaultVersion();
+  const stored = getStoredMapping();
+
+  if (stored && !isDefaultMapping(stored)) {
+    const storedVersion = getMappingVersion(stored);
+    return {
+      mapping: stored,
+      isCustom: true,
+      isOutdated: !storedVersion || isVersionOlder(storedVersion, currentVersion),
+      isFuture: Boolean(storedVersion && isVersionNewer(storedVersion, currentVersion)),
+      currentVersion,
+      storedVersion,
+    };
+  }
+
+  return {
+    mapping: defaultMapping ?? {},
+    isCustom: false,
+    isOutdated: false,
+    isFuture: false,
+    currentVersion,
+    storedVersion: null,
+  };
+}
+
+export function resetToDefaultMapping() {
+  clearStoredMapping();
+  return defaultMapping ? { ...defaultMapping } : {};
 }
 
 export function parseMappingJson(text) {

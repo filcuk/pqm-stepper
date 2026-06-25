@@ -12,13 +12,20 @@ import {
   readPlainText,
   lineNumbersText,
 } from "./editor.js";
+import { initIcons, mountIcon } from "./icons.js";
+import { initTooltips } from "./tooltip.js";
 import { initTheme, initThemeToggle } from "./theme.js";
 import {
-  getEffectiveMapping,
+  getMappingForTransform,
   loadDefaultMapping,
+  resolveMappingState,
   wasStoredMappingInvalid,
 } from "./mapping-store.js";
-import { initMappingDialog, isMappingDialogOpen } from "./mapping-dialog.js";
+import {
+  initMappingDialog,
+  isMappingDialogOpen,
+  resetMappingToDefault,
+} from "./mapping-dialog.js";
 import { initAboutDialog, isAboutDialogOpen } from "./about-dialog.js";
 
 const inputEl = document.getElementById("input");
@@ -32,14 +39,33 @@ const exampleMenu = document.getElementById("example-menu");
 const clearBtn = document.getElementById("clear-btn");
 const copyBtn = document.getElementById("copy-btn");
 const bannerEl = document.getElementById("banner");
+const bannerIconEl = document.getElementById("banner-icon");
+const bannerBodyEl = document.getElementById("banner-body");
+const mappingBannerEl = document.getElementById("mapping-banner");
+const mappingBannerTextEl = document.getElementById("mapping-banner-text");
+const mappingResetBannerBtn = document.getElementById("mapping-reset-banner-btn");
+
+const BANNER_ICONS = {
+  warning: "warning",
+  error: "error",
+  info: "info",
+  success: "success",
+  note: "note",
+  important: "important",
+};
 const stepHighlightToggle = document.getElementById("step-highlight-toggle");
 const stepHighlightLegend = document.getElementById("step-highlight-legend");
 const syntaxHighlightToggle = document.getElementById("syntax-highlight-toggle");
+const verboseNamesToggle = document.getElementById("verbose-names-toggle");
+const alwaysNumberToggle = document.getElementById("always-number-toggle");
 
 const STEP_HIGHLIGHT_STORAGE_KEY = "pqm-step-highlight";
 const SYNTAX_HIGHLIGHT_STORAGE_KEY = "pqm-syntax-highlight";
+const VERBOSE_NAMES_STORAGE_KEY = "pqm-verbose-names";
+const ALWAYS_NUMBER_STORAGE_KEY = "pqm-always-number";
 
 let mapping = {};
+let mappingState = null;
 let examples = [];
 let lastLoadedExampleFile = null;
 let exampleMenuOpen = false;
@@ -70,6 +96,45 @@ function setSyntaxHighlightEnabled(enabled) {
   syntaxHighlightToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
 }
 
+function getVerboseNamesEnabled() {
+  return localStorage.getItem(VERBOSE_NAMES_STORAGE_KEY) === "true";
+}
+
+function setVerboseNamesEnabled(enabled) {
+  localStorage.setItem(VERBOSE_NAMES_STORAGE_KEY, enabled ? "true" : "false");
+  verboseNamesToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+  verboseNamesToggle.setAttribute(
+    "aria-label",
+    enabled ? "Verbose steps" : "Simple steps"
+  );
+  verboseNamesToggle.dataset.tooltip = enabled
+    ? "Verbose steps"
+    : "Simple steps";
+}
+
+function getAlwaysNumberEnabled() {
+  return localStorage.getItem(ALWAYS_NUMBER_STORAGE_KEY) === "true";
+}
+
+function setAlwaysNumberEnabled(enabled) {
+  localStorage.setItem(ALWAYS_NUMBER_STORAGE_KEY, enabled ? "true" : "false");
+  alwaysNumberToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+  alwaysNumberToggle.setAttribute(
+    "aria-label",
+    enabled ? "Number repeated steps" : "Always number steps"
+  );
+  alwaysNumberToggle.dataset.tooltip = enabled
+    ? "Always number steps"
+    : "Number repeated steps";
+}
+
+function getTransformOptions() {
+  return {
+    namingMode: getVerboseNamesEnabled() ? "verbose" : "numbered",
+    alwaysNumber: getAlwaysNumberEnabled(),
+  };
+}
+
 function getHighlightOptions() {
   return {
     stepHighlightEnabled: getStepHighlightEnabled(),
@@ -77,14 +142,51 @@ function getHighlightOptions() {
   };
 }
 
+function syncMappingVersionBanner() {
+  if (!mappingState?.isCustom) {
+    mappingBannerEl.classList.add("hidden");
+    mappingBannerTextEl.textContent = "";
+    return;
+  }
+
+  const storedLabel = mappingState.storedVersion
+    ? `v${mappingState.storedVersion}`
+    : "undefined";
+
+  if (mappingState.isOutdated) {
+    mappingBannerTextEl.textContent = `Your mapping (${storedLabel}) is older than the current (v${mappingState.currentVersion}).`;
+    mappingBannerEl.classList.remove("hidden");
+    return;
+  }
+
+  if (mappingState.isFuture) {
+    mappingBannerTextEl.textContent = `Your mapping (${storedLabel}) is newer than the current (v${mappingState.currentVersion}).`;
+    mappingBannerEl.classList.remove("hidden");
+    return;
+  }
+
+  mappingBannerEl.classList.add("hidden");
+  mappingBannerTextEl.textContent = "";
+}
+
+function refreshMappingState() {
+  mappingState = resolveMappingState();
+  syncMappingVersionBanner();
+}
+
 function showBanner(messages, type = "warning") {
   if (!messages.length) {
     bannerEl.classList.add("hidden");
-    bannerEl.textContent = "";
+    bannerBodyEl.textContent = "";
     return;
   }
+
+  const iconName = BANNER_ICONS[type] ?? "warning";
   bannerEl.className = `banner banner-${type}`;
-  bannerEl.textContent = messages.join(" ");
+  bannerEl.setAttribute("role", type === "error" ? "alert" : "status");
+  bannerIconEl.dataset.icon = iconName;
+  mountIcon(bannerIconEl, iconName, { className: "banner-icon-svg" });
+  bannerBodyEl.textContent = messages.join(" ");
   bannerEl.classList.remove("hidden");
 }
 
@@ -140,7 +242,11 @@ function updateOutputHighlight() {
 }
 
 function runTransform(caret) {
-  const result = transform(inputText, mapping);
+  const result = transform(
+    inputText,
+    getMappingForTransform(mapping),
+    getTransformOptions()
+  );
   lastRenames = result.renames;
   outputText = result.output;
   copyBtn.disabled = !outputText;
@@ -173,7 +279,8 @@ function setInputText(text, caret) {
 async function loadMapping() {
   try {
     await loadDefaultMapping();
-    mapping = getEffectiveMapping();
+    refreshMappingState();
+    mapping = mappingState.mapping;
 
     if (wasStoredMappingInvalid()) {
       showBanner(
@@ -195,6 +302,7 @@ async function loadMapping() {
 
 function setMapping(nextMapping) {
   mapping = nextMapping;
+  refreshMappingState();
   const caret =
     document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
   runTransform(caret);
@@ -222,6 +330,8 @@ copyBtn.addEventListener("click", copyOutput);
 
 setStepHighlightEnabled(getStepHighlightEnabled());
 setSyntaxHighlightEnabled(getSyntaxHighlightEnabled());
+setVerboseNamesEnabled(getVerboseNamesEnabled());
+setAlwaysNumberEnabled(getAlwaysNumberEnabled());
 
 function refreshHighlights() {
   const caret =
@@ -240,6 +350,18 @@ syntaxHighlightToggle.addEventListener("click", () => {
   const enabled = syntaxHighlightToggle.getAttribute("aria-pressed") !== "true";
   setSyntaxHighlightEnabled(enabled);
   refreshHighlights();
+});
+
+verboseNamesToggle.addEventListener("click", () => {
+  const enabled = verboseNamesToggle.getAttribute("aria-pressed") !== "true";
+  setVerboseNamesEnabled(enabled);
+  runTransform();
+});
+
+alwaysNumberToggle.addEventListener("click", () => {
+  const enabled = alwaysNumberToggle.getAttribute("aria-pressed") !== "true";
+  setAlwaysNumberEnabled(enabled);
+  runTransform();
 });
 
 function setExampleControlsEnabled(enabled) {
@@ -349,6 +471,11 @@ clearBtn.addEventListener("click", () => {
   inputEl.focus();
 });
 
+inputEl.closest(".code-editor")?.addEventListener("click", (e) => {
+  if (inputEl.contains(e.target)) return;
+  inputEl.focus();
+});
+
 inputEl.addEventListener("compositionstart", () => {
   isComposing = true;
 });
@@ -375,11 +502,20 @@ inputEl.addEventListener("paste", (e) => {
   runTransform(start + pasted.length);
 });
 
+mappingResetBannerBtn.addEventListener("click", () => {
+  resetMappingToDefault();
+});
+
 loadMapping().then(() => {
-  initMappingDialog({ onMappingChange: setMapping });
+  initMappingDialog({
+    onMappingChange: setMapping,
+    onMappingReset: refreshMappingState,
+  });
 });
 initAboutDialog();
 loadExamples();
+initIcons();
+initTooltips();
 initTheme();
 initThemeToggle(document.getElementById("theme-toggle"));
 

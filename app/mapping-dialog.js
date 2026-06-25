@@ -9,9 +9,12 @@ import {
   clearStoredMapping,
   formatMappingJson,
   getDefaultMapping,
+  getDefaultVersion,
   getEffectiveMapping,
-  hasStoredMapping,
+  hasCustomMapping,
+  isDefaultMapping,
   parseMappingJson,
+  resetToDefaultMapping,
   saveMapping,
 } from "./mapping-store.js";
 
@@ -19,22 +22,36 @@ let dialogEl = null;
 let editorEl = null;
 let errorEl = null;
 let openBtn = null;
+let versionLabelEl = null;
 let isOpen = false;
 let onMappingChange = null;
+let onMappingReset = null;
 let previouslyFocused = null;
 let skipNextInput = false;
 
 const FOCUSABLE =
   'button:not([disabled]), [contenteditable="true"]:not([contenteditable="false"]), textarea:not([disabled]), [href], input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+export function syncMappingVersionLabel() {
+  if (!versionLabelEl) return;
+
+  if (hasCustomMapping()) {
+    versionLabelEl.textContent = "(custom)";
+  } else {
+    versionLabelEl.textContent = `(v${getDefaultVersion()})`;
+  }
+}
+
 function syncOpenButtonState() {
   if (!openBtn) return;
 
-  if (hasStoredMapping()) {
+  if (hasCustomMapping()) {
     openBtn.title = "Custom mapping active — click to edit";
   } else {
     openBtn.title = "Edit step name mapping";
   }
+
+  syncMappingVersionLabel();
 }
 
 function showError(message) {
@@ -146,9 +163,20 @@ function closeDialog() {
 }
 
 function applyMapping(mapping, persist) {
-  if (persist) saveMapping(mapping);
-  onMappingChange?.(mapping);
+  if (persist) {
+    if (isDefaultMapping(mapping)) {
+      clearStoredMapping();
+    } else {
+      saveMapping(mapping);
+    }
+  }
+
+  const effective = isDefaultMapping(mapping)
+    ? getDefaultMapping() ?? mapping
+    : mapping;
+  onMappingChange?.(effective);
   syncOpenButtonState();
+  onMappingReset?.();
 }
 
 function handleApply() {
@@ -162,15 +190,24 @@ function handleApply() {
   closeDialog();
 }
 
-function handleReset() {
-  clearStoredMapping();
-  const defaultMapping = getDefaultMapping();
-  if (!defaultMapping) return;
+export function resetMappingToDefault() {
+  const defaultMapping = resetToDefaultMapping();
+  if (!defaultMapping || !Object.keys(defaultMapping).length) return null;
 
-  populateEditor(defaultMapping);
-  clearError();
-  applyMapping(defaultMapping, false);
-  editorEl.focus();
+  if (isOpen) {
+    populateEditor(defaultMapping);
+    clearError();
+    editorEl.focus();
+  }
+
+  onMappingChange?.(defaultMapping);
+  syncOpenButtonState();
+  onMappingReset?.();
+  return defaultMapping;
+}
+
+function handleReset() {
+  resetMappingToDefault();
 }
 
 export function isMappingDialogOpen() {
@@ -185,13 +222,18 @@ export function refreshMappingEditorHighlight() {
   updateEditorDisplay(caret);
 }
 
-export function initMappingDialog({ onMappingChange: mappingChangeHandler } = {}) {
+export function initMappingDialog({
+  onMappingChange: mappingChangeHandler,
+  onMappingReset: mappingResetHandler,
+} = {}) {
   onMappingChange = mappingChangeHandler;
+  onMappingReset = mappingResetHandler;
 
   dialogEl = document.getElementById("mapping-dialog");
   editorEl = document.getElementById("mapping-editor");
   errorEl = document.getElementById("mapping-dialog-error");
   openBtn = document.getElementById("mapping-edit-btn");
+  versionLabelEl = document.getElementById("mapping-version-label");
 
   const closeBtn = dialogEl.querySelector(".modal-close");
   const backdrop = dialogEl.querySelector(".modal-backdrop");
