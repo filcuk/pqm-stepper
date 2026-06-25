@@ -80,9 +80,9 @@
           type="button"
           id="verbose-names-toggle"
           class="btn btn-icon toolbar-spacer"
-          aria-pressed="false"
-          aria-label="Numbered step names"
-          data-tooltip="Numbered step names"
+          aria-pressed="true"
+          aria-label="Verbose steps"
+          data-tooltip="Verbose steps"
           data-tooltip-position="bottom"
         >
           <svg class="btn-icon-svg verbose-names-icon" viewBox="0 0 20 20" aria-hidden="true">
@@ -176,10 +176,26 @@
           </svg>
         </button>
         <span id="step-highlight-legend" class="legend">
-          <span class="legend-swatch hl-blue">Definition</span>
-          <span class="legend-swatch hl-green">New Definition</span>
-          <span class="legend-swatch hl-amber">Reference</span>
-          <span class="legend-swatch hl-red">New Reference</span>
+          <span
+            class="legend-swatch hl-blue"
+            data-tooltip="Original step name at its definition (let … =)"
+            data-tooltip-position="bottom"
+          >Definition</span>
+          <span
+            class="legend-swatch hl-green"
+            data-tooltip="Renamed step name at its definition in the output"
+            data-tooltip-position="bottom"
+          >New Definition</span>
+          <span
+            class="legend-swatch hl-amber"
+            data-tooltip="Original step name used later in the query"
+            data-tooltip-position="bottom"
+          >Reference</span>
+          <span
+            class="legend-swatch hl-red"
+            data-tooltip="Renamed step name used later in the query"
+            data-tooltip-position="bottom"
+          >New Reference</span>
         </span>
       </div>
 

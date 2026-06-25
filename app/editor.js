@@ -54,6 +54,16 @@ export function restoreCaretOffset(root, offset) {
   sel.addRange(range);
 }
 
+export function selectElementContents(root) {
+  const selection = window.getSelection();
+  if (!selection) return;
+
+  const range = document.createRange();
+  range.selectNodeContents(root);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
 export function readPlainText(el) {
   return el.innerText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 }

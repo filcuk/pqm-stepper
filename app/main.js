@@ -10,6 +10,7 @@ import {
   getSelectionOffsets,
   restoreCaretOffset,
   readPlainText,
+  selectElementContents,
   lineNumbersText,
 } from "./editor.js";
 import { initIcons, mountIcon } from "./icons.js";
@@ -97,7 +98,9 @@ function setSyntaxHighlightEnabled(enabled) {
 }
 
 function getVerboseNamesEnabled() {
-  return localStorage.getItem(VERBOSE_NAMES_STORAGE_KEY) === "true";
+  const stored = localStorage.getItem(VERBOSE_NAMES_STORAGE_KEY);
+  if (stored === null) return true;
+  return stored === "true";
 }
 
 function setVerboseNamesEnabled(enabled) {
@@ -316,17 +319,22 @@ async function copyOutput() {
       copyBtn.textContent = "Copy output";
     }, 1500);
   } catch {
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.selectNodeContents(outputHighlightEl);
-    selection.removeAllRanges();
-    selection.addRange(range);
+    selectElementContents(outputHighlightEl);
     document.execCommand("copy");
-    selection.removeAllRanges();
+    window.getSelection()?.removeAllRanges();
   }
 }
 
 copyBtn.addEventListener("click", copyOutput);
+
+outputHighlightEl.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "a") {
+    e.preventDefault();
+    if (outputText) {
+      selectElementContents(outputHighlightEl);
+    }
+  }
+});
 
 setStepHighlightEnabled(getStepHighlightEnabled());
 setSyntaxHighlightEnabled(getSyntaxHighlightEnabled());
