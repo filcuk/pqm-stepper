@@ -72,8 +72,72 @@
         </button>
         <button
           type="button"
-          id="syntax-highlight-toggle"
+          id="verbose-names-toggle"
           class="btn btn-icon toolbar-spacer"
+          aria-pressed="false"
+          aria-label="Numbered step names"
+          data-tooltip="Numbered step names"
+          data-tooltip-position="bottom"
+        >
+          <svg class="btn-icon-svg verbose-names-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <text
+              class="verbose-names-glyph verbose-names-glyph-numbered"
+              x="10"
+              y="10.5"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              font-size="14"
+              font-weight="600"
+              fill="currentColor"
+            >A</text>
+            <text
+              class="verbose-names-glyph verbose-names-glyph-verbose"
+              x="10"
+              y="10.5"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              font-size="11"
+              font-weight="600"
+              fill="currentColor"
+            >Ab</text>
+          </svg>
+        </button>
+        <button
+          type="button"
+          id="always-number-toggle"
+          class="btn btn-icon"
+          aria-pressed="false"
+          aria-label="Number repeated steps"
+          data-tooltip="Always number steps"
+          data-tooltip-position="bottom"
+        >
+          <svg class="btn-icon-svg always-number-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <text
+              class="always-number-glyph always-number-glyph-off"
+              x="10"
+              y="10.5"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              font-size="14"
+              font-weight="600"
+              fill="currentColor"
+            >1</text>
+            <text
+              class="always-number-glyph always-number-glyph-on"
+              x="10"
+              y="10.5"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              font-size="11"
+              font-weight="600"
+              fill="currentColor"
+            >1+</text>
+          </svg>
+        </button>
+        <button
+          type="button"
+          id="syntax-highlight-toggle"
+          class="btn btn-icon"
           aria-pressed="true"
           aria-label="Syntax highlighting"
           data-tooltip="Toggle syntax highlighting"

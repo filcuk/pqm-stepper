@@ -111,6 +111,13 @@ function showTooltip(target) {
   positionTooltip(target, text, getPosition(target));
 }
 
+function refreshTooltipTarget(target) {
+  if (!target?.dataset.tooltip) return;
+  if (activeTarget === target) {
+    showTooltip(target);
+  }
+}
+
 function handlePointerOver(e) {
   const target = e.target.closest("[data-tooltip]");
   if (!target || !e.currentTarget.contains(target)) return;
@@ -156,6 +163,14 @@ function repositionActiveTooltip() {
   );
 }
 
+function handleClick(e) {
+  const target = e.target.closest?.("[data-tooltip]");
+  if (!target || !e.currentTarget.contains(target)) return;
+
+  // Toggle handlers update data-tooltip on click; refresh after they run.
+  queueMicrotask(() => refreshTooltipTarget(target));
+}
+
 export function initTooltips(root = document) {
   if (boundRoots.has(root)) return;
 
@@ -165,6 +180,7 @@ export function initTooltips(root = document) {
   root.addEventListener("mouseout", handlePointerOut);
   root.addEventListener("focusin", handleFocusIn);
   root.addEventListener("focusout", handleFocusOut);
+  root.addEventListener("click", handleClick);
 
   if (!globalListenersBound) {
     window.addEventListener("scroll", repositionActiveTooltip, true);
@@ -173,4 +189,11 @@ export function initTooltips(root = document) {
   }
 
   boundRoots.add(root);
+}
+
+/** Re-read `data-tooltip` for the active target (e.g. after toggling state). */
+export function refreshActiveTooltip() {
+  if (activeTarget) {
+    refreshTooltipTarget(activeTarget);
+  }
 }

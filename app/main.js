@@ -45,9 +45,13 @@ const mappingResetBannerBtn = document.getElementById("mapping-reset-banner-btn"
 const stepHighlightToggle = document.getElementById("step-highlight-toggle");
 const stepHighlightLegend = document.getElementById("step-highlight-legend");
 const syntaxHighlightToggle = document.getElementById("syntax-highlight-toggle");
+const verboseNamesToggle = document.getElementById("verbose-names-toggle");
+const alwaysNumberToggle = document.getElementById("always-number-toggle");
 
 const STEP_HIGHLIGHT_STORAGE_KEY = "pqm-step-highlight";
 const SYNTAX_HIGHLIGHT_STORAGE_KEY = "pqm-syntax-highlight";
+const VERBOSE_NAMES_STORAGE_KEY = "pqm-verbose-names";
+const ALWAYS_NUMBER_STORAGE_KEY = "pqm-always-number";
 
 let mapping = {};
 let mappingState = null;
@@ -79,6 +83,45 @@ function getSyntaxHighlightEnabled() {
 function setSyntaxHighlightEnabled(enabled) {
   localStorage.setItem(SYNTAX_HIGHLIGHT_STORAGE_KEY, enabled ? "true" : "false");
   syntaxHighlightToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+}
+
+function getVerboseNamesEnabled() {
+  return localStorage.getItem(VERBOSE_NAMES_STORAGE_KEY) === "true";
+}
+
+function setVerboseNamesEnabled(enabled) {
+  localStorage.setItem(VERBOSE_NAMES_STORAGE_KEY, enabled ? "true" : "false");
+  verboseNamesToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+  verboseNamesToggle.setAttribute(
+    "aria-label",
+    enabled ? "Verbose steps" : "Simple steps"
+  );
+  verboseNamesToggle.dataset.tooltip = enabled
+    ? "Verbose steps"
+    : "Simple steps";
+}
+
+function getAlwaysNumberEnabled() {
+  return localStorage.getItem(ALWAYS_NUMBER_STORAGE_KEY) === "true";
+}
+
+function setAlwaysNumberEnabled(enabled) {
+  localStorage.setItem(ALWAYS_NUMBER_STORAGE_KEY, enabled ? "true" : "false");
+  alwaysNumberToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+  alwaysNumberToggle.setAttribute(
+    "aria-label",
+    enabled ? "Number repeated steps" : "Always number steps"
+  );
+  alwaysNumberToggle.dataset.tooltip = enabled
+    ? "Always number steps"
+    : "Number repeated steps";
+}
+
+function getTransformOptions() {
+  return {
+    namingMode: getVerboseNamesEnabled() ? "verbose" : "numbered",
+    alwaysNumber: getAlwaysNumberEnabled(),
+  };
 }
 
 function getHighlightOptions() {
@@ -170,7 +213,11 @@ function updateOutputHighlight() {
 }
 
 function runTransform(caret) {
-  const result = transform(inputText, getMappingForTransform(mapping));
+  const result = transform(
+    inputText,
+    getMappingForTransform(mapping),
+    getTransformOptions()
+  );
   lastRenames = result.renames;
   outputText = result.output;
   copyBtn.disabled = !outputText;
@@ -254,6 +301,8 @@ copyBtn.addEventListener("click", copyOutput);
 
 setStepHighlightEnabled(getStepHighlightEnabled());
 setSyntaxHighlightEnabled(getSyntaxHighlightEnabled());
+setVerboseNamesEnabled(getVerboseNamesEnabled());
+setAlwaysNumberEnabled(getAlwaysNumberEnabled());
 
 function refreshHighlights() {
   const caret =
@@ -272,6 +321,18 @@ syntaxHighlightToggle.addEventListener("click", () => {
   const enabled = syntaxHighlightToggle.getAttribute("aria-pressed") !== "true";
   setSyntaxHighlightEnabled(enabled);
   refreshHighlights();
+});
+
+verboseNamesToggle.addEventListener("click", () => {
+  const enabled = verboseNamesToggle.getAttribute("aria-pressed") !== "true";
+  setVerboseNamesEnabled(enabled);
+  runTransform();
+});
+
+alwaysNumberToggle.addEventListener("click", () => {
+  const enabled = alwaysNumberToggle.getAttribute("aria-pressed") !== "true";
+  setAlwaysNumberEnabled(enabled);
+  runTransform();
 });
 
 function setExampleControlsEnabled(enabled) {
