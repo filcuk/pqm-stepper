@@ -320,7 +320,8 @@ main {
 .btn-icon {
   box-sizing: border-box;
   min-height: var(--control-height);
-  padding: 0.5rem;
+  width: var(--control-height);
+  padding: 0;
   color: var(--text);
 }
 
