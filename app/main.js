@@ -97,7 +97,9 @@ function setSyntaxHighlightEnabled(enabled) {
 }
 
 function getVerboseNamesEnabled() {
-  return localStorage.getItem(VERBOSE_NAMES_STORAGE_KEY) === "true";
+  const stored = localStorage.getItem(VERBOSE_NAMES_STORAGE_KEY);
+  if (stored === null) return true;
+  return stored === "true";
 }
 
 function setVerboseNamesEnabled(enabled) {
