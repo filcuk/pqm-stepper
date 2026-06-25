@@ -230,6 +230,10 @@ function buildReplacementMaps(steps, mapping, mCode, warnings) {
       const newName = count === 1 ? targetName : targetName + (index + 1);
       const label = step.isQuoted ? `#"${step.name}"` : step.name;
 
+      if (!step.isQuoted && step.name === newName) {
+        return;
+      }
+
       if (usedOutputNames.has(newName)) {
         warnings.push(
           `Name collision: "${newName}" already exists. Skipping rename of ${label}.`
