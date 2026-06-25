@@ -12,7 +12,7 @@ import {
   readPlainText,
   lineNumbersText,
 } from "./editor.js";
-import { initIcons } from "./icons.js";
+import { initIcons, mountIcon } from "./icons.js";
 import { initTooltips } from "./tooltip.js";
 import { initTheme, initThemeToggle } from "./theme.js";
 import {
@@ -39,9 +39,20 @@ const exampleMenu = document.getElementById("example-menu");
 const clearBtn = document.getElementById("clear-btn");
 const copyBtn = document.getElementById("copy-btn");
 const bannerEl = document.getElementById("banner");
+const bannerIconEl = document.getElementById("banner-icon");
+const bannerBodyEl = document.getElementById("banner-body");
 const mappingBannerEl = document.getElementById("mapping-banner");
 const mappingBannerTextEl = document.getElementById("mapping-banner-text");
 const mappingResetBannerBtn = document.getElementById("mapping-reset-banner-btn");
+
+const BANNER_ICONS = {
+  warning: "warning",
+  error: "error",
+  info: "info",
+  success: "success",
+  note: "note",
+  important: "important",
+};
 const stepHighlightToggle = document.getElementById("step-highlight-toggle");
 const stepHighlightLegend = document.getElementById("step-highlight-legend");
 const syntaxHighlightToggle = document.getElementById("syntax-highlight-toggle");
@@ -166,11 +177,16 @@ function refreshMappingState() {
 function showBanner(messages, type = "warning") {
   if (!messages.length) {
     bannerEl.classList.add("hidden");
-    bannerEl.textContent = "";
+    bannerBodyEl.textContent = "";
     return;
   }
+
+  const iconName = BANNER_ICONS[type] ?? "warning";
   bannerEl.className = `banner banner-${type}`;
-  bannerEl.textContent = messages.join(" ");
+  bannerEl.setAttribute("role", type === "error" ? "alert" : "status");
+  bannerIconEl.dataset.icon = iconName;
+  mountIcon(bannerIconEl, iconName, { className: "banner-icon-svg" });
+  bannerBodyEl.textContent = messages.join(" ");
   bannerEl.classList.remove("hidden");
 }
 

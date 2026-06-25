@@ -41,12 +41,18 @@
 
     <main>
       <div id="mapping-banner" class="banner banner-warning hidden" role="status">
-        <span id="mapping-banner-text" class="mapping-banner-text"></span>
-        <button type="button" id="mapping-reset-banner-btn" class="btn mapping-banner-btn">
-          Reset to default
-        </button>
+        <span class="banner-icon" data-icon="warning" data-icon-class="banner-icon-svg"></span>
+        <div class="banner-body mapping-banner-body">
+          <span id="mapping-banner-text" class="mapping-banner-text"></span>
+          <button type="button" id="mapping-reset-banner-btn" class="btn mapping-banner-btn">
+            Reset to default
+          </button>
+        </div>
       </div>
-      <div id="banner" class="banner hidden" role="status"></div>
+      <div id="banner" class="banner hidden" role="status">
+        <span id="banner-icon" class="banner-icon" data-icon="warning" data-icon-class="banner-icon-svg"></span>
+        <span id="banner-body" class="banner-body"></span>
+      </div>
 
       <div class="toolbar">
         <div class="combo-btn" id="example-combo">
