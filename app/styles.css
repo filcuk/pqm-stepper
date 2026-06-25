@@ -490,6 +490,7 @@ main {
   padding: 0.15rem 0.45rem;
   border-radius: 3px;
   border: 1px solid var(--border);
+  cursor: help;
 }
 
 .legend .hl-blue {
