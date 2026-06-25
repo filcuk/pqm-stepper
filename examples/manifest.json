@@ -5,6 +5,7 @@
   { "file": "csv_sales.pq", "label": "CSV Sales Report" },
   { "file": "dataflow_entity.pq", "label": "Dataflow Entity" },
   { "file": "lakehouse_navigate.pq", "label": "Lakehouse Table" },
+  { "file": "sharepoint_excel.pq", "label": "SharePoint Library Path" },
   { "file": "merge_customers.pq", "label": "Merge Sheets" },
   { "file": "text_cleanup.pq", "label": "Text Cleanup" },
   { "file": "unpivot_pivot.pq", "label": "Unpivot & Pivot" },
