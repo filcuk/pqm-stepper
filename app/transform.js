@@ -304,6 +304,51 @@ function detectMappedStepType(body) {
   return null;
 }
 
+const NAVIGATION_VERBOSE_TARGETS = new Set([
+  "Workbook",
+  "Sheet",
+  "Navigate",
+  "Table",
+  "Navigation",
+]);
+
+function isNameContentNavigation(body) {
+  return /\{\s*\[\s*Name\s*=\s*"[^"]+"\s*\]\s*\}\s*\[\s*Content\s*\]/i.test(body);
+}
+
+function extractNavigationEntity(body) {
+  if (!body) return null;
+
+  let match = body.match(
+    /\{\s*\[[^\]]*Item\s*=\s*"([^"]+)"[^\]]*Kind\s*=\s*"Sheet"/i
+  );
+  if (!match) {
+    match = body.match(
+      /\{\s*\[[^\]]*Kind\s*=\s*"Sheet"[^\]]*Item\s*=\s*"([^"]+)"/i
+    );
+  }
+  if (match) return match[1];
+
+  match = body.match(/\{\s*\[[^\]]*Schema\s*=[^\]]*Item\s*=\s*"([^"]+)"/i);
+  if (match) return match[1];
+
+  match = body.match(/\{\s*\[\s*entity\s*=\s*"([^"]+)"/i);
+  if (match) return match[1];
+
+  const nameMatches = [
+    ...body.matchAll(/\{\s*\[\s*Name\s*=\s*"([^"]+)"\s*\]\s*\}\s*\[\s*Content\s*\]/gi),
+  ];
+  if (nameMatches.length > 0) {
+    let name = nameMatches[nameMatches.length - 1][1];
+    if (/Excel\.Workbook\s*\(/i.test(body)) {
+      name = name.replace(/\.(xlsx|xlsm|xlsb|xls|csv)$/i, "");
+    }
+    return name;
+  }
+
+  return null;
+}
+
 function extractVerboseColumn(mappingKey, stepBody) {
   if (!VERBOSE_STEP_BASES.has(mappingKey)) return null;
 
@@ -311,8 +356,28 @@ function extractVerboseColumn(mappingKey, stepBody) {
   return extractor?.(stepBody) ?? null;
 }
 
+function extractVerboseEntity(mappingKey, targetName, stepBody) {
+  const fromMapping = extractVerboseColumn(mappingKey, stepBody);
+  if (fromMapping) return fromMapping;
+
+  if (NAVIGATION_VERBOSE_TARGETS.has(targetName)) {
+    return extractNavigationEntity(stepBody);
+  }
+
+  return null;
+}
+
+function labelToVerbosePart(label) {
+  const part = toIdentifierPart(label);
+  if (part) return part;
+
+  // Numeric-only labels are valid as a suffix (e.g. Navigation2024).
+  const compact = label.trim().replace(/[^a-zA-Z0-9]+/g, "");
+  return compact || "";
+}
+
 function buildVerboseName(targetName, columnName) {
-  const part = toIdentifierPart(columnName);
+  const part = labelToVerbosePart(columnName);
   if (!part) return null;
   return sanitizeMIdentifier(targetName + part);
 }
@@ -359,7 +424,7 @@ function assignVerboseNames(
 
   if (count === 1) {
     const entry = groupedSteps[0];
-    const column = extractVerboseColumn(entry.mappingKey, entry.body);
+    const column = extractVerboseEntity(entry.mappingKey, targetName, entry.body);
     const verboseName = column ? buildVerboseName(targetName, column) : null;
     let newName = verboseName;
     if (verboseName && alwaysNumber) {
@@ -373,7 +438,7 @@ function assignVerboseNames(
   }
 
   const assignments = groupedSteps.map((entry, index) => {
-    const column = extractVerboseColumn(entry.mappingKey, entry.body);
+    const column = extractVerboseEntity(entry.mappingKey, targetName, entry.body);
     const verboseName = column ? buildVerboseName(targetName, column) : null;
     return { ...entry, index, verboseName };
   });
@@ -569,6 +634,10 @@ function resolveStepTargetName(step, mapping, mCode, warnings) {
   const stepBody = getStepBody(mCode, step);
   const navigationType = detectNavigationType(stepBody);
   if (navigationType) return navigationType;
+
+  if (isNameContentNavigation(stepBody)) {
+    return "Navigation";
+  }
 
   if (step.isQuoted) {
     return resolveMappedTargetName(step, mapping, stepBody, warnings);
