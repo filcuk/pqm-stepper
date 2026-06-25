@@ -13,6 +13,7 @@ import {
   lineNumbersText,
 } from "./editor.js";
 import { initIcons } from "./icons.js";
+import { initTooltips } from "./tooltip.js";
 import { initTheme, initThemeToggle } from "./theme.js";
 import {
   getMappingForTransform,
@@ -419,6 +420,7 @@ loadMapping().then(() => {
 initAboutDialog();
 loadExamples();
 initIcons();
+initTooltips();
 initTheme();
 initThemeToggle(document.getElementById("theme-toggle"));
 

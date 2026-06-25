@@ -157,6 +157,35 @@ main {
   white-space: nowrap;
 }
 
+.tooltip {
+  position: fixed;
+  z-index: 200;
+  max-width: 16rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(31, 35, 40, 0.12);
+}
+
+:root[data-theme="dark"] .tooltip {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.tooltip:not(.is-visible) {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.tooltip.is-visible {
+  visibility: visible;
+  opacity: 1;
+}
+
 .banner-warning {
   background: var(--banner-warn-bg);
   color: var(--banner-warn-text);
