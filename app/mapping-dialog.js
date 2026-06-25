@@ -6,10 +6,13 @@ import {
   saveCaretOffset,
 } from "./editor.js";
 import {
+  clearStoredMapping,
   formatMappingJson,
+  getDefaultMapping,
   getDefaultVersion,
   getEffectiveMapping,
   hasCustomMapping,
+  isDefaultMapping,
   parseMappingJson,
   resetToDefaultMapping,
   saveMapping,
@@ -160,8 +163,18 @@ function closeDialog() {
 }
 
 function applyMapping(mapping, persist) {
-  if (persist) saveMapping(mapping);
-  onMappingChange?.(mapping);
+  if (persist) {
+    if (isDefaultMapping(mapping)) {
+      clearStoredMapping();
+    } else {
+      saveMapping(mapping);
+    }
+  }
+
+  const effective = isDefaultMapping(mapping)
+    ? getDefaultMapping() ?? mapping
+    : mapping;
+  onMappingChange?.(effective);
   syncOpenButtonState();
   onMappingReset?.();
 }

@@ -105,8 +105,28 @@ export function hasStoredMapping() {
   return getStoredMapping() !== null;
 }
 
+function stableMappingJson(obj) {
+  if (!obj || typeof obj !== "object") return "";
+  const normalized = {};
+  for (const key of Object.keys(obj).sort()) {
+    normalized[key] = obj[key];
+  }
+  return JSON.stringify(normalized);
+}
+
+export function isSameMapping(a, b) {
+  if (!a || !b) return false;
+  return stableMappingJson(a) === stableMappingJson(b);
+}
+
+export function isDefaultMapping(obj) {
+  return Boolean(defaultMapping && isSameMapping(obj, defaultMapping));
+}
+
 export function hasCustomMapping() {
-  return hasStoredMapping();
+  const stored = getStoredMapping();
+  if (!stored) return false;
+  return !isDefaultMapping(stored);
 }
 
 export function saveMapping(obj) {
@@ -127,7 +147,7 @@ export function resolveMappingState() {
   const currentVersion = getDefaultVersion();
   const stored = getStoredMapping();
 
-  if (stored) {
+  if (stored && !isDefaultMapping(stored)) {
     const storedVersion = getMappingVersion(stored);
     return {
       mapping: stored,
