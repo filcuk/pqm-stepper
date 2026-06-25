@@ -40,6 +40,12 @@
     </header>
 
     <main>
+      <div id="mapping-banner" class="banner banner-warning hidden" role="status">
+        <span id="mapping-banner-text" class="mapping-banner-text"></span>
+        <button type="button" id="mapping-reset-banner-btn" class="btn mapping-banner-btn">
+          Reset to default
+        </button>
+      </div>
       <div id="banner" class="banner hidden" role="status"></div>
 
       <div class="toolbar">
@@ -145,7 +151,7 @@
       <p class="footer-meta">
         <span>
           edit
-          <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button>
+          <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button> <span id="mapping-version-label" class="mapping-version-label" aria-hidden="true"></span>
           · report an
           <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
           · star on

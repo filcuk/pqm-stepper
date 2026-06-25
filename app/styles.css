@@ -130,6 +130,33 @@ main {
   border: 1px solid var(--border);
 }
 
+#mapping-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+#mapping-banner.hidden {
+  display: none;
+}
+
+.mapping-banner-text {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.mapping-banner-btn {
+  flex-shrink: 0;
+}
+
+.mapping-version-label {
+  color: var(--muted);
+  font-size: inherit;
+  white-space: nowrap;
+}
+
 .banner-warning {
   background: var(--banner-warn-bg);
   color: var(--banner-warn-text);

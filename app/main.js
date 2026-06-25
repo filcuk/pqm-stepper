@@ -15,11 +15,16 @@ import {
 import { initIcons } from "./icons.js";
 import { initTheme, initThemeToggle } from "./theme.js";
 import {
-  getEffectiveMapping,
+  getMappingForTransform,
   loadDefaultMapping,
+  resolveMappingState,
   wasStoredMappingInvalid,
 } from "./mapping-store.js";
-import { initMappingDialog, isMappingDialogOpen } from "./mapping-dialog.js";
+import {
+  initMappingDialog,
+  isMappingDialogOpen,
+  resetMappingToDefault,
+} from "./mapping-dialog.js";
 import { initAboutDialog, isAboutDialogOpen } from "./about-dialog.js";
 
 const inputEl = document.getElementById("input");
@@ -33,6 +38,9 @@ const exampleMenu = document.getElementById("example-menu");
 const clearBtn = document.getElementById("clear-btn");
 const copyBtn = document.getElementById("copy-btn");
 const bannerEl = document.getElementById("banner");
+const mappingBannerEl = document.getElementById("mapping-banner");
+const mappingBannerTextEl = document.getElementById("mapping-banner-text");
+const mappingResetBannerBtn = document.getElementById("mapping-reset-banner-btn");
 const stepHighlightToggle = document.getElementById("step-highlight-toggle");
 const stepHighlightLegend = document.getElementById("step-highlight-legend");
 const syntaxHighlightToggle = document.getElementById("syntax-highlight-toggle");
@@ -41,6 +49,7 @@ const STEP_HIGHLIGHT_STORAGE_KEY = "pqm-step-highlight";
 const SYNTAX_HIGHLIGHT_STORAGE_KEY = "pqm-syntax-highlight";
 
 let mapping = {};
+let mappingState = null;
 let examples = [];
 let lastLoadedExampleFile = null;
 let exampleMenuOpen = false;
@@ -76,6 +85,25 @@ function getHighlightOptions() {
     stepHighlightEnabled: getStepHighlightEnabled(),
     syntaxHighlightEnabled: getSyntaxHighlightEnabled(),
   };
+}
+
+function syncMappingOutdatedBanner() {
+  if (!mappingState?.isCustom || !mappingState.isOutdated) {
+    mappingBannerEl.classList.add("hidden");
+    mappingBannerTextEl.textContent = "";
+    return;
+  }
+
+  const storedLabel = mappingState.storedVersion
+    ? `v${mappingState.storedVersion}`
+    : "an older version";
+  mappingBannerTextEl.textContent = `Your custom mapping (${storedLabel}) is older than the current default (v${mappingState.currentVersion}).`;
+  mappingBannerEl.classList.remove("hidden");
+}
+
+function refreshMappingState() {
+  mappingState = resolveMappingState();
+  syncMappingOutdatedBanner();
 }
 
 function showBanner(messages, type = "warning") {
@@ -141,7 +169,7 @@ function updateOutputHighlight() {
 }
 
 function runTransform(caret) {
-  const result = transform(inputText, mapping);
+  const result = transform(inputText, getMappingForTransform(mapping));
   lastRenames = result.renames;
   outputText = result.output;
   copyBtn.disabled = !outputText;
@@ -174,7 +202,8 @@ function setInputText(text, caret) {
 async function loadMapping() {
   try {
     await loadDefaultMapping();
-    mapping = getEffectiveMapping();
+    refreshMappingState();
+    mapping = mappingState.mapping;
 
     if (wasStoredMappingInvalid()) {
       showBanner(
@@ -196,6 +225,7 @@ async function loadMapping() {
 
 function setMapping(nextMapping) {
   mapping = nextMapping;
+  refreshMappingState();
   const caret =
     document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
   runTransform(caret);
@@ -376,8 +406,15 @@ inputEl.addEventListener("paste", (e) => {
   runTransform(start + pasted.length);
 });
 
+mappingResetBannerBtn.addEventListener("click", () => {
+  resetMappingToDefault();
+});
+
 loadMapping().then(() => {
-  initMappingDialog({ onMappingChange: setMapping });
+  initMappingDialog({
+    onMappingChange: setMapping,
+    onMappingReset: refreshMappingState,
+  });
 });
 initAboutDialog();
 loadExamples();
