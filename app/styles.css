@@ -540,10 +540,21 @@ body > footer {
   line-height: 0;
 }
 
-.footer-brand img {
+.footer-brand-icon {
   display: block;
   width: 1.625rem;
   height: 1.625rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+:root[data-theme="light"] .footer-brand-icon {
+  background-image: url("res/icon/fi-light.svg");
+}
+
+:root[data-theme="dark"] .footer-brand-icon {
+  background-image: url("res/icon/fi-dark.svg");
 }
 
 body > footer a {

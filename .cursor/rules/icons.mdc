@@ -1,0 +1,36 @@
+---
+description: Never invent SVG icon paths — use app/icons.js only
+alwaysApply: true
+---
+
+# Icons
+
+All inline UI icons live in `app/icons.js`. Do **not** write SVG path markup in HTML, CSS, or other JS files.
+
+## Adding icons
+
+1. Source paths from [Icônes — Google Material Icons (Round)](https://icones.js.org/collection/ic?s=info&variant=Round) or another licensed set the user approves.
+2. Add the entry to `ICONS` in `app/icons.js` with correct `viewBox`, `markup`, and `attribution` when required.
+3. Reference icons via `data-icon="id"` (optional `data-icon-class`) in HTML, or `createIcon()` / `mountIcon()` in JS.
+4. Call `initIcons()` at page boot so `[data-icon]` elements are mounted.
+
+## When you need a new icon
+
+**Never guess or invent path `d` attributes.**
+
+Instead:
+
+1. Add a placeholder entry in `app/icons.js`:
+
+```js
+"my-icon": {
+  viewBox: "0 0 24 24",
+  markup: `<!-- PLACEHOLDER: user must add path from Icônes -->`,
+  name: "round-???",
+},
+```
+
+2. Wire `data-icon="my-icon"` (or `createIcon("my-icon")`) in the UI.
+3. Tell the user which Icônes icon to copy and ask them to paste the path markup into the placeholder.
+
+Brand images (`app/res/icon/`) stay as separate files — not inline icons.

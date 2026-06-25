@@ -12,6 +12,7 @@ import {
   readPlainText,
   lineNumbersText,
 } from "./editor.js";
+import { initIcons } from "./icons.js";
 import { initTheme, initThemeToggle } from "./theme.js";
 import {
   getEffectiveMapping,
@@ -380,6 +381,7 @@ loadMapping().then(() => {
 });
 initAboutDialog();
 loadExamples();
+initIcons();
 initTheme();
 initThemeToggle(document.getElementById("theme-toggle"));
 

@@ -153,7 +153,7 @@
           · microapp by
         </span>
         <a class="footer-brand" href="https://github.com/filcuk" target="_blank">
-          <img src="app/res/icon/fi.svg" alt="Filcuk" width="26" height="26" />
+          <span class="footer-brand-icon" role="img" aria-label="Filcuk"></span>
         </a>
       </p>
       <div
@@ -166,54 +166,32 @@
           type="button"
           class="theme-toggle-btn"
           data-theme-mode="light"
+          data-icon="light-mode"
+          data-icon-class="theme-icon"
           aria-label="Light theme"
           aria-pressed="false"
-        >
-          <svg class="theme-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1.5" />
-            <path
-              d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.4 4.4l1.4 1.4M14.2 14.2l1.4 1.4M4.4 15.6l1.4-1.4M14.2 5.8l1.4-1.4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button>
+          title="Light"
+        ></button>
         <button
           type="button"
           class="theme-toggle-btn"
           data-theme-mode="dark"
+          data-icon="dark-mode"
+          data-icon-class="theme-icon"
           aria-label="Dark theme"
           aria-pressed="false"
-        >
-          <svg class="theme-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <path
-              d="M10 3.5a6.5 6.5 0 1 0 6.5 6.5A5.5 5.5 0 0 1 10 3.5Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+          title="Dark"
+        ></button>
         <button
           type="button"
           class="theme-toggle-btn"
           data-theme-mode="auto"
+          data-icon="auto-mode"
+          data-icon-class="theme-icon"
           aria-label="System theme"
           aria-pressed="false"
-        >
-          <svg class="theme-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" />
-            <path d="M10 3.5v13" fill="none" stroke="currentColor" stroke-width="1.5" />
-            <path
-              d="M10 3.5a6.5 6.5 0 0 1 0 13Z"
-              fill="currentColor"
-              opacity="0.35"
-            />
-          </svg>
-        </button>
+          title="System"
+        ></button>
       </div>
     </footer>
 
