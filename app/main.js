@@ -455,6 +455,11 @@ clearBtn.addEventListener("click", () => {
   inputEl.focus();
 });
 
+inputEl.closest(".code-editor")?.addEventListener("click", (e) => {
+  if (inputEl.contains(e.target)) return;
+  inputEl.focus();
+});
+
 inputEl.addEventListener("compositionstart", () => {
   isComposing = true;
 });

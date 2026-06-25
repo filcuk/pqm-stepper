@@ -464,7 +464,7 @@ main {
   inset: 0;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: stretch;
   overflow: auto;
 }
 
@@ -530,6 +530,8 @@ main {
 .code-input-editable {
   cursor: text;
   outline: none;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
 .code-editor-readonly .code-output {
