@@ -83,9 +83,30 @@ function parseQuotedName(innerName) {
 function toIdentifierPart(name) {
   const parts = name.split(/[^a-zA-Z0-9]+/).filter(Boolean);
   if (parts.length === 0) return "";
-  return parts
+
+  let start = 0;
+  while (start < parts.length && /^\d+$/.test(parts[start])) {
+    start += 1;
+  }
+
+  const usable = parts.slice(start);
+  if (usable.length === 0) return "";
+
+  return usable
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join("");
+}
+
+/** Ensure a step identifier is valid M (no leading digit). */
+function sanitizeMIdentifier(name, fallback = "Step") {
+  if (!name) return fallback;
+
+  const stripped = name.replace(/^[0-9]+/, "");
+  if (!stripped || !/^[A-Za-z_]/.test(stripped)) {
+    return fallback;
+  }
+
+  return stripped;
 }
 
 function isDynamicTemplate(template) {
@@ -94,8 +115,8 @@ function isDynamicTemplate(template) {
 
 function resolveDynamicName(template, objectName) {
   const part = toIdentifierPart(objectName);
-  if (!part) return template.replace("*", "");
-  return template.replace("*", part);
+  if (!part) return sanitizeMIdentifier(template.replace("*", ""));
+  return sanitizeMIdentifier(template.replace("*", part));
 }
 
 function extractAddColumnName(body) {
@@ -293,7 +314,7 @@ function extractVerboseColumn(mappingKey, stepBody) {
 function buildVerboseName(targetName, columnName) {
   const part = toIdentifierPart(columnName);
   if (!part) return null;
-  return targetName + part;
+  return sanitizeMIdentifier(targetName + part);
 }
 
 function resolveNumberedName(targetName, index, count, alwaysNumber) {
@@ -396,6 +417,7 @@ function assignVerboseNames(
 
 function assignStepName(step, newName, usedOutputNames, quotedMap, regularMap, warnings) {
   const label = step.isQuoted ? `#"${step.name}"` : step.name;
+  newName = sanitizeMIdentifier(newName);
 
   if (!step.isQuoted && step.name === newName) {
     return;
@@ -497,7 +519,7 @@ function extractObjectName(baseStepName, stepBody) {
 }
 
 function sanitizeQuotedName(innerName) {
-  return toIdentifierPart(innerName) || "Step";
+  return sanitizeMIdentifier(toIdentifierPart(innerName));
 }
 
 function resolveMappingKey(stepName, mapping, stepBody) {
@@ -525,12 +547,12 @@ function resolveMappedTargetName(step, mapping, stepBody, warnings) {
 
   if (!template) return sanitizeQuotedName(step.name);
 
-  if (!isDynamicTemplate(template)) return template;
+  if (!isDynamicTemplate(template)) return sanitizeMIdentifier(template);
 
   const objectName = extractObjectName(mappingKey, stepBody);
 
   if (!objectName) {
-    const fallback = template.replace("*", "");
+    const fallback = sanitizeMIdentifier(template.replace("*", ""));
     warnings.push(
       `Could not extract object name for #"${step.name}"; using "${fallback}".`
     );
