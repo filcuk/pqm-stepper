@@ -131,8 +131,8 @@ function getHighlightOptions() {
   };
 }
 
-function syncMappingOutdatedBanner() {
-  if (!mappingState?.isCustom || !mappingState.isOutdated) {
+function syncMappingVersionBanner() {
+  if (!mappingState?.isCustom) {
     mappingBannerEl.classList.add("hidden");
     mappingBannerTextEl.textContent = "";
     return;
@@ -140,14 +140,27 @@ function syncMappingOutdatedBanner() {
 
   const storedLabel = mappingState.storedVersion
     ? `v${mappingState.storedVersion}`
-    : "an older version";
-  mappingBannerTextEl.textContent = `Your custom mapping (${storedLabel}) is older than the current default (v${mappingState.currentVersion}).`;
-  mappingBannerEl.classList.remove("hidden");
+    : "undefined";
+
+  if (mappingState.isOutdated) {
+    mappingBannerTextEl.textContent = `Your mapping (${storedLabel}) is older than the current (v${mappingState.currentVersion}).`;
+    mappingBannerEl.classList.remove("hidden");
+    return;
+  }
+
+  if (mappingState.isFuture) {
+    mappingBannerTextEl.textContent = `Your mapping (${storedLabel}) is newer than the current (v${mappingState.currentVersion}).`;
+    mappingBannerEl.classList.remove("hidden");
+    return;
+  }
+
+  mappingBannerEl.classList.add("hidden");
+  mappingBannerTextEl.textContent = "";
 }
 
 function refreshMappingState() {
   mappingState = resolveMappingState();
-  syncMappingOutdatedBanner();
+  syncMappingVersionBanner();
 }
 
 function showBanner(messages, type = "warning") {

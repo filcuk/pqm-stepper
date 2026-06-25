@@ -25,6 +25,12 @@ export function isVersionOlder(storedVersion, currentVersion) {
   return comparison < 0;
 }
 
+export function isVersionNewer(storedVersion, currentVersion) {
+  const comparison = compareVersions(storedVersion, currentVersion);
+  if (comparison === null) return false;
+  return comparison > 0;
+}
+
 export function getMappingVersion(obj) {
   if (!obj || typeof obj !== "object") return null;
   return parseVersion(obj[VERSION_KEY])?.raw ?? null;
@@ -127,6 +133,7 @@ export function resolveMappingState() {
       mapping: stored,
       isCustom: true,
       isOutdated: !storedVersion || isVersionOlder(storedVersion, currentVersion),
+      isFuture: Boolean(storedVersion && isVersionNewer(storedVersion, currentVersion)),
       currentVersion,
       storedVersion,
     };
@@ -136,6 +143,7 @@ export function resolveMappingState() {
     mapping: defaultMapping ?? {},
     isCustom: false,
     isOutdated: false,
+    isFuture: false,
     currentVersion,
     storedVersion: null,
   };
