@@ -13,6 +13,7 @@ import {
   getEffectiveMapping,
   hasCustomMapping,
   isDefaultMapping,
+  isDefaultMappingReady,
   parseMappingJson,
   resetToDefaultMapping,
   saveMapping,
@@ -44,6 +45,15 @@ export function syncMappingVersionLabel() {
 function syncOpenButtonState() {
   if (!openBtn) return;
 
+  if (!isDefaultMappingReady()) {
+    openBtn.disabled = true;
+    openBtn.title = "Mapping unavailable — default mapping failed to load";
+    if (versionLabelEl) versionLabelEl.textContent = "";
+    return;
+  }
+
+  openBtn.disabled = false;
+
   if (hasCustomMapping()) {
     openBtn.title = "Custom mapping active — click to edit";
   } else {
@@ -51,6 +61,14 @@ function syncOpenButtonState() {
   }
 
   syncMappingVersionLabel();
+}
+
+/** Refresh open-button state after default mapping load succeeds or fails. */
+export function refreshMappingEditorAvailability() {
+  if (!isDefaultMappingReady() && isOpen) {
+    closeDialog();
+  }
+  syncOpenButtonState();
 }
 
 function showError(message) {
@@ -131,6 +149,10 @@ function handleEditorPaste(e) {
 
 function openDialog() {
   if (isOpen) return;
+  if (!isDefaultMappingReady()) {
+    syncOpenButtonState();
+    return;
+  }
 
   previouslyFocused = document.activeElement;
   populateEditor(getEffectiveMapping());
@@ -156,6 +178,10 @@ function closeDialog() {
 }
 
 function applyMapping(mapping, persist) {
+  if (!isDefaultMappingReady()) {
+    throw new Error("Default mapping is not loaded; cannot apply changes.");
+  }
+
   if (persist) {
     if (isDefaultMapping(mapping)) {
       clearStoredMapping();
@@ -173,13 +199,23 @@ function applyMapping(mapping, persist) {
 }
 
 function handleApply() {
+  if (!isDefaultMappingReady()) {
+    showError("Default mapping is not loaded; cannot apply changes.");
+    return;
+  }
+
   const result = parseMappingJson(getEditorText());
   if (result.error) {
     showError(result.error);
     return;
   }
 
-  applyMapping(result.mapping, true);
+  try {
+    applyMapping(result.mapping, true);
+  } catch (err) {
+    showError(err.message);
+    return;
+  }
   closeDialog();
 }
 

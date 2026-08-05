@@ -26,6 +26,7 @@ import {
   initMappingDialog,
   isMappingDialogOpen,
   resetMappingToDefault,
+  refreshMappingEditorAvailability,
 } from "./mapping-dialog.js";
 import { initAboutDialog, isAboutDialogOpen } from "./about-dialog.js";
 
@@ -292,6 +293,7 @@ async function loadMapping() {
     }
 
     runTransform(0);
+    return true;
   } catch (err) {
     showBanner(
       [
@@ -299,6 +301,7 @@ async function loadMapping() {
       ],
       "error"
     );
+    return false;
   }
 }
 
@@ -509,11 +512,12 @@ mappingResetBannerBtn.addEventListener("click", () => {
   resetMappingToDefault();
 });
 
+initMappingDialog({
+  onMappingChange: setMapping,
+  onMappingReset: refreshMappingState,
+});
 loadMapping().then(() => {
-  initMappingDialog({
-    onMappingChange: setMapping,
-    onMappingReset: refreshMappingState,
-  });
+  refreshMappingEditorAvailability();
 });
 initAboutDialog();
 loadExamples();
