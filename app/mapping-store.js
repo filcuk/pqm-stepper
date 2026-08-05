@@ -41,13 +41,16 @@ export function validateMapping(obj) {
     return "Mapping must be a JSON object.";
   }
 
+  if (!Object.prototype.hasOwnProperty.call(obj, VERSION_KEY)) {
+    return "Mapping must include a $version (MAJOR.MINOR, e.g. 1.0).";
+  }
+
+  if (parseVersion(obj[VERSION_KEY]) === null) {
+    return "Mapping $version must be a MAJOR.MINOR string (e.g. 1.0).";
+  }
+
   for (const [key, value] of Object.entries(obj)) {
-    if (key === VERSION_KEY) {
-      if (parseVersion(value) === null) {
-        return "Mapping $version must be a MAJOR.MINOR string (e.g. 1.0).";
-      }
-      continue;
-    }
+    if (key === VERSION_KEY) continue;
 
     if (typeof key !== "string" || typeof value !== "string") {
       return "All keys and values must be strings.";
@@ -72,9 +75,6 @@ export async function loadDefaultMapping() {
   const data = await res.json();
   const validationError = validateMapping(data);
   if (validationError) throw new Error(validationError);
-  if (!getMappingVersion(data)) {
-    throw new Error("mapping.json is missing a valid $version.");
-  }
 
   defaultMapping = data;
   return defaultMapping;
@@ -82,6 +82,11 @@ export async function loadDefaultMapping() {
 
 export function getDefaultMapping() {
   return defaultMapping;
+}
+
+/** True once mapping.json has loaded successfully. */
+export function isDefaultMappingReady() {
+  return defaultMapping !== null;
 }
 
 export function getDefaultVersion() {
@@ -132,6 +137,9 @@ export function hasCustomMapping() {
 export function saveMapping(obj) {
   const validationError = validateMapping(obj);
   if (validationError) throw new Error(validationError);
+  if (!isDefaultMappingReady()) {
+    throw new Error("Default mapping is not loaded; cannot save.");
+  }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
 }
 

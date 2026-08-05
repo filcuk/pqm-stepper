@@ -2,7 +2,17 @@
  * PQM Stepper — transform Power Query M step names using a mapping schema.
  */
 
-import { STEP_DECL_RE, escapeRegExp } from "./m-utils.js";
+import {
+  escapeRegExp,
+  buildMContextMask,
+  isProtectedLiteral,
+  isCodeRange,
+  findStepDeclarations,
+  hasLetKeyword,
+  isKeywordAt,
+  indexAfterLetIn,
+  M_SPAN_CODE,
+} from "./m-utils.js";
 
 const OBJECT_EXTRACTORS = {
   "Added Custom": extractAddColumnName,
@@ -531,48 +541,43 @@ function detectNavigationType(body) {
 
 /**
  * Extract the RHS expression for a step declaration.
+ * Uses the declaration's eqIndex (not the first textual occurrence of the name).
  * @param {string} mCode
- * @param {{ name: string, isQuoted: boolean }} step
+ * @param {{ name: string, isQuoted: boolean, eqIndex?: number }} step
+ * @param {Uint8Array} [mask]
  */
-function getStepBody(mCode, step) {
-  let eqIdx;
+function getStepBody(mCode, step, mask = buildMContextMask(mCode)) {
+  if (typeof step.eqIndex !== "number" || step.eqIndex < 0) return null;
 
-  if (step.isQuoted) {
-    const token = `#"${step.name}"`;
-    const tokenIdx = mCode.indexOf(token);
-    if (tokenIdx === -1) return null;
-    eqIdx = mCode.indexOf("=", tokenIdx + token.length);
-  } else {
-    const declRe = new RegExp(
-      `(?:^|\\n)\\s*${escapeRegExp(step.name)}\\s*=`,
-      "m"
-    );
-    const match = declRe.exec(mCode);
-    if (!match) return null;
-    eqIdx = mCode.indexOf("=", match.index);
-  }
-
-  if (eqIdx === -1) return null;
-
-  let start = eqIdx + 1;
+  let start = step.eqIndex + 1;
   while (start < mCode.length && /\s/.test(mCode[start])) start++;
 
-  const rest = mCode.slice(start);
-  const nextStepRe =
-    /\n\s*(?:(#"[^"]+")|([A-Za-z_][A-Za-z0-9_]*))\s*=/;
-  const inClauseRe = /\n\s*in\b/;
+  let i = start;
+  let depth = 0;
 
-  let end = rest.length;
-  const nextMatch = nextStepRe.exec(rest);
-  if (nextMatch && nextMatch.index > 0 && nextMatch.index < end) {
-    end = nextMatch.index;
-  }
-  const inMatch = inClauseRe.exec(rest);
-  if (inMatch && inMatch.index < end) {
-    end = inMatch.index;
+  while (i < mCode.length) {
+    if (mask[i] !== M_SPAN_CODE) {
+      i++;
+      continue;
+    }
+
+    if (depth === 0 && isKeywordAt(mCode, i, "in")) break;
+    if (depth === 0 && mCode[i] === ",") break;
+
+    if (depth === 0 && isKeywordAt(mCode, i, "let")) {
+      i = indexAfterLetIn(mCode, mask, i + 3);
+      continue;
+    }
+
+    const ch = mCode[i];
+    if (ch === "(" || ch === "[" || ch === "{") depth++;
+    else if (ch === ")" || ch === "]" || ch === "}") {
+      depth = Math.max(0, depth - 1);
+    }
+    i++;
   }
 
-  let body = rest.slice(0, end).trim();
+  let body = mCode.slice(start, i).trim();
   if (body.endsWith(",")) body = body.slice(0, -1).trim();
   return body;
 }
@@ -629,18 +634,22 @@ function resolveMappedTargetName(step, mapping, stepBody, warnings) {
 
 /**
  * Resolve target name: navigation patterns first, then mapping (quoted steps only).
+ * @param {string | null} [stepBody]
  */
-function resolveStepTargetName(step, mapping, mCode, warnings) {
-  const stepBody = getStepBody(mCode, step);
-  const navigationType = detectNavigationType(stepBody);
+function resolveStepTargetName(step, mapping, mCode, warnings, stepBody = null) {
+  const body =
+    stepBody !== null && stepBody !== undefined
+      ? stepBody
+      : getStepBody(mCode, step);
+  const navigationType = detectNavigationType(body);
   if (navigationType) return navigationType;
 
-  if (isNameContentNavigation(stepBody)) {
+  if (isNameContentNavigation(body)) {
     return "Navigation";
   }
 
   if (step.isQuoted) {
-    return resolveMappedTargetName(step, mapping, stepBody, warnings);
+    return resolveMappedTargetName(step, mapping, body, warnings);
   }
 
   return null;
@@ -648,22 +657,10 @@ function resolveStepTargetName(step, mapping, mCode, warnings) {
 
 /**
  * Collect step declarations in document order.
- * @returns {{ name: string, isQuoted: boolean, token: string }[]}
+ * @returns {{ name: string, isQuoted: boolean, token: string, tokenStart: number, eqIndex: number }[]}
  */
 function parseSteps(mCode) {
-  const steps = [];
-
-  STEP_DECL_RE.lastIndex = 0;
-  let match;
-  while ((match = STEP_DECL_RE.exec(mCode)) !== null) {
-    if (match[2]) {
-      steps.push({ name: match[2], isQuoted: true, token: match[1] });
-    } else if (match[3]) {
-      steps.push({ name: match[3], isQuoted: false, token: match[3] });
-    }
-  }
-
-  return steps;
+  return findStepDeclarations(mCode);
 }
 
 /**
@@ -678,10 +675,17 @@ function buildReplacementMaps(
   alwaysNumber = false
 ) {
   const targetGroups = new Map();
+  const mask = buildMContextMask(mCode);
 
   for (const step of steps) {
-    const stepBody = getStepBody(mCode, step);
-    const target = resolveStepTargetName(step, mapping, mCode, warnings);
+    const stepBody = getStepBody(mCode, step, mask);
+    const target = resolveStepTargetName(
+      step,
+      mapping,
+      mCode,
+      warnings,
+      stepBody
+    );
     if (target) {
       if (!targetGroups.has(target)) {
         targetGroups.set(target, []);
@@ -731,20 +735,42 @@ function buildReplacementMaps(
 }
 
 function applyReplacements(mCode, quotedMap, regularMap) {
-  let result = mCode;
+  const mask = buildMContextMask(mCode);
+  /** @type {{ start: number, end: number, text: string }[]} */
+  const edits = [];
 
   const sortedQuoted = [...quotedMap.keys()].sort((a, b) => b.length - a.length);
   for (const innerName of sortedQuoted) {
     const newName = quotedMap.get(innerName);
     const pattern = new RegExp(`#"${escapeRegExp(innerName)}"`, "g");
-    result = result.replace(pattern, newName);
+    for (const match of mCode.matchAll(pattern)) {
+      const start = match.index;
+      const end = start + match[0].length;
+      if (isProtectedLiteral(mask, start)) continue;
+      edits.push({ start, end, text: newName });
+    }
   }
 
   const sortedRegular = [...regularMap.keys()].sort((a, b) => b.length - a.length);
   for (const name of sortedRegular) {
     const newName = regularMap.get(name);
     const pattern = new RegExp(`\\b${escapeRegExp(name)}\\b`, "g");
-    result = result.replace(pattern, newName);
+    for (const match of mCode.matchAll(pattern)) {
+      const start = match.index;
+      const end = start + match[0].length;
+      if (!isCodeRange(mask, start, end)) continue;
+      edits.push({ start, end, text: newName });
+    }
+  }
+
+  edits.sort((a, b) => b.start - a.start || b.end - a.end);
+
+  let result = mCode;
+  let lastStart = Infinity;
+  for (const edit of edits) {
+    if (edit.end > lastStart) continue;
+    result = result.slice(0, edit.start) + edit.text + result.slice(edit.end);
+    lastStart = edit.start;
   }
 
   return result;
@@ -765,11 +791,15 @@ function transform(mCode, mapping, options = {}) {
     return { output: "", warnings: ["Input is empty."], renames: null };
   }
 
-  if (!/\blet\b/i.test(mCode)) {
+  const hasLet = hasLetKeyword(mCode);
+  if (!hasLet) {
     warnings.push("No let block found; performing best-effort rename.");
   }
 
   const steps = parseSteps(mCode);
+  if (hasLet && steps.length === 0) {
+    warnings.push("Found a let block but no step declarations to rename.");
+  }
   const { quotedMap, regularMap } = buildReplacementMaps(
     steps,
     mapping,
@@ -793,7 +823,7 @@ function transform(mCode, mapping, options = {}) {
   }
 
   const renamed = quotedMap.size + regularMap.size;
-  if (renamed === 0 && unmappedDefined.length === 0 && !/\blet\b/i.test(mCode)) {
+  if (renamed === 0 && unmappedDefined.length === 0 && !hasLet) {
     warnings.push("No step identifiers found.");
   }
 
