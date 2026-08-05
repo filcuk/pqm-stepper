@@ -1,7 +1,6 @@
 import { parseSteps } from "./transform.js";
 import {
   QUOTED_TOKEN_RE,
-  STEP_DECL_RE,
   escapeRegExp,
   buildMContextMask,
   isProtectedLiteral,
@@ -74,17 +73,10 @@ function collectStepNames(mCode) {
 }
 
 function getDeclarationRanges(text) {
-  const ranges = [];
-
-  STEP_DECL_RE.lastIndex = 0;
-  let match;
-  while ((match = STEP_DECL_RE.exec(text)) !== null) {
-    const token = match[1] || match[3];
-    const tokenStart = match.index + match[0].indexOf(token);
-    ranges.push({ start: tokenStart, end: tokenStart + token.length });
-  }
-
-  return ranges;
+  return parseSteps(text).map((step) => ({
+    start: step.tokenStart,
+    end: step.tokenStart + step.token.length,
+  }));
 }
 
 function overlapsDeclaration(start, end, declRanges) {

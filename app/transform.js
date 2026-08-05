@@ -3,11 +3,15 @@
  */
 
 import {
-  STEP_DECL_RE,
   escapeRegExp,
   buildMContextMask,
   isProtectedLiteral,
   isCodeRange,
+  findStepDeclarations,
+  hasLetKeyword,
+  isKeywordAt,
+  indexAfterLetIn,
+  M_SPAN_CODE,
 } from "./m-utils.js";
 
 const OBJECT_EXTRACTORS = {
@@ -538,47 +542,41 @@ function detectNavigationType(body) {
 /**
  * Extract the RHS expression for a step declaration.
  * @param {string} mCode
- * @param {{ name: string, isQuoted: boolean }} step
+ * @param {{ name: string, isQuoted: boolean, eqIndex?: number }} step
  */
 function getStepBody(mCode, step) {
-  let eqIdx;
+  if (typeof step.eqIndex !== "number" || step.eqIndex < 0) return null;
 
-  if (step.isQuoted) {
-    const token = `#"${step.name}"`;
-    const tokenIdx = mCode.indexOf(token);
-    if (tokenIdx === -1) return null;
-    eqIdx = mCode.indexOf("=", tokenIdx + token.length);
-  } else {
-    const declRe = new RegExp(
-      `(?:^|\\n)\\s*${escapeRegExp(step.name)}\\s*=`,
-      "m"
-    );
-    const match = declRe.exec(mCode);
-    if (!match) return null;
-    eqIdx = mCode.indexOf("=", match.index);
-  }
-
-  if (eqIdx === -1) return null;
-
-  let start = eqIdx + 1;
+  const mask = buildMContextMask(mCode);
+  let start = step.eqIndex + 1;
   while (start < mCode.length && /\s/.test(mCode[start])) start++;
 
-  const rest = mCode.slice(start);
-  const nextStepRe =
-    /\n\s*(?:(#"[^"]+")|([A-Za-z_][A-Za-z0-9_]*))\s*=/;
-  const inClauseRe = /\n\s*in\b/;
+  let i = start;
+  let depth = 0;
 
-  let end = rest.length;
-  const nextMatch = nextStepRe.exec(rest);
-  if (nextMatch && nextMatch.index > 0 && nextMatch.index < end) {
-    end = nextMatch.index;
-  }
-  const inMatch = inClauseRe.exec(rest);
-  if (inMatch && inMatch.index < end) {
-    end = inMatch.index;
+  while (i < mCode.length) {
+    if (mask[i] !== M_SPAN_CODE) {
+      i++;
+      continue;
+    }
+
+    if (depth === 0 && isKeywordAt(mCode, i, "in")) break;
+    if (depth === 0 && mCode[i] === ",") break;
+
+    if (depth === 0 && isKeywordAt(mCode, i, "let")) {
+      i = indexAfterLetIn(mCode, mask, i + 3);
+      continue;
+    }
+
+    const ch = mCode[i];
+    if (ch === "(" || ch === "[" || ch === "{") depth++;
+    else if (ch === ")" || ch === "]" || ch === "}") {
+      depth = Math.max(0, depth - 1);
+    }
+    i++;
   }
 
-  let body = rest.slice(0, end).trim();
+  let body = mCode.slice(start, i).trim();
   if (body.endsWith(",")) body = body.slice(0, -1).trim();
   return body;
 }
@@ -654,22 +652,10 @@ function resolveStepTargetName(step, mapping, mCode, warnings) {
 
 /**
  * Collect step declarations in document order.
- * @returns {{ name: string, isQuoted: boolean, token: string }[]}
+ * @returns {{ name: string, isQuoted: boolean, token: string, tokenStart: number, eqIndex: number }[]}
  */
 function parseSteps(mCode) {
-  const steps = [];
-
-  STEP_DECL_RE.lastIndex = 0;
-  let match;
-  while ((match = STEP_DECL_RE.exec(mCode)) !== null) {
-    if (match[2]) {
-      steps.push({ name: match[2], isQuoted: true, token: match[1] });
-    } else if (match[3]) {
-      steps.push({ name: match[3], isQuoted: false, token: match[3] });
-    }
-  }
-
-  return steps;
+  return findStepDeclarations(mCode);
 }
 
 /**
@@ -793,11 +779,15 @@ function transform(mCode, mapping, options = {}) {
     return { output: "", warnings: ["Input is empty."], renames: null };
   }
 
-  if (!/\blet\b/i.test(mCode)) {
+  const hasLet = hasLetKeyword(mCode);
+  if (!hasLet) {
     warnings.push("No let block found; performing best-effort rename.");
   }
 
   const steps = parseSteps(mCode);
+  if (hasLet && steps.length === 0) {
+    warnings.push("Found a let block but no step declarations to rename.");
+  }
   const { quotedMap, regularMap } = buildReplacementMaps(
     steps,
     mapping,
@@ -821,7 +811,7 @@ function transform(mCode, mapping, options = {}) {
   }
 
   const renamed = quotedMap.size + regularMap.size;
-  if (renamed === 0 && unmappedDefined.length === 0 && !/\blet\b/i.test(mCode)) {
+  if (renamed === 0 && unmappedDefined.length === 0 && !hasLet) {
     warnings.push("No step identifiers found.");
   }
 
