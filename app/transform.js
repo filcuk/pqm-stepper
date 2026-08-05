@@ -2,7 +2,13 @@
  * PQM Stepper — transform Power Query M step names using a mapping schema.
  */
 
-import { STEP_DECL_RE, escapeRegExp } from "./m-utils.js";
+import {
+  STEP_DECL_RE,
+  escapeRegExp,
+  buildMContextMask,
+  isProtectedLiteral,
+  isCodeRange,
+} from "./m-utils.js";
 
 const OBJECT_EXTRACTORS = {
   "Added Custom": extractAddColumnName,
@@ -731,20 +737,42 @@ function buildReplacementMaps(
 }
 
 function applyReplacements(mCode, quotedMap, regularMap) {
-  let result = mCode;
+  const mask = buildMContextMask(mCode);
+  /** @type {{ start: number, end: number, text: string }[]} */
+  const edits = [];
 
   const sortedQuoted = [...quotedMap.keys()].sort((a, b) => b.length - a.length);
   for (const innerName of sortedQuoted) {
     const newName = quotedMap.get(innerName);
     const pattern = new RegExp(`#"${escapeRegExp(innerName)}"`, "g");
-    result = result.replace(pattern, newName);
+    for (const match of mCode.matchAll(pattern)) {
+      const start = match.index;
+      const end = start + match[0].length;
+      if (isProtectedLiteral(mask, start)) continue;
+      edits.push({ start, end, text: newName });
+    }
   }
 
   const sortedRegular = [...regularMap.keys()].sort((a, b) => b.length - a.length);
   for (const name of sortedRegular) {
     const newName = regularMap.get(name);
     const pattern = new RegExp(`\\b${escapeRegExp(name)}\\b`, "g");
-    result = result.replace(pattern, newName);
+    for (const match of mCode.matchAll(pattern)) {
+      const start = match.index;
+      const end = start + match[0].length;
+      if (!isCodeRange(mask, start, end)) continue;
+      edits.push({ start, end, text: newName });
+    }
+  }
+
+  edits.sort((a, b) => b.start - a.start || b.end - a.end);
+
+  let result = mCode;
+  let lastStart = Infinity;
+  for (const edit of edits) {
+    if (edit.end > lastStart) continue;
+    result = result.slice(0, edit.start) + edit.text + result.slice(edit.end);
+    lastStart = edit.start;
   }
 
   return result;
