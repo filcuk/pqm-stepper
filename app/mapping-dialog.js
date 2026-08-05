@@ -27,7 +27,6 @@ let isOpen = false;
 let onMappingChange = null;
 let onMappingReset = null;
 let previouslyFocused = null;
-let skipNextInput = false;
 
 const FOCUSABLE =
   'button:not([disabled]), [contenteditable="true"]:not([contenteditable="false"]), textarea:not([disabled]), [href], input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -114,18 +113,12 @@ function handleEscape(e) {
 }
 
 function handleEditorInput() {
-  if (skipNextInput) {
-    skipNextInput = false;
-    return;
-  }
-
   const caret = saveCaretOffset(editorEl);
   updateEditorDisplay(caret);
 }
 
 function handleEditorPaste(e) {
   e.preventDefault();
-  skipNextInput = true;
 
   const pasted = e.clipboardData.getData("text/plain");
   const { start, end } = getSelectionOffsets(editorEl);

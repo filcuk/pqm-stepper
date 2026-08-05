@@ -74,7 +74,6 @@ let lastRenames = null;
 let inputText = "";
 let outputText = "";
 let isComposing = false;
-let skipNextInput = false;
 
 function getStepHighlightEnabled() {
   const stored = localStorage.getItem(STEP_HIGHLIGHT_STORAGE_KEY);
@@ -494,16 +493,12 @@ inputEl.addEventListener("compositionend", () => {
 });
 
 inputEl.addEventListener("input", () => {
-  if (isComposing || skipNextInput) {
-    skipNextInput = false;
-    return;
-  }
+  if (isComposing) return;
   handleInputEdit();
 });
 
 inputEl.addEventListener("paste", (e) => {
   e.preventDefault();
-  skipNextInput = true;
   const pasted = e.clipboardData.getData("text/plain");
   const { start, end } = getSelectionOffsets(inputEl);
   inputText = inputText.slice(0, start) + pasted + inputText.slice(end);
