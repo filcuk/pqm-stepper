@@ -75,6 +75,9 @@ let lastRenames = null;
 let inputText = "";
 let outputText = "";
 let isComposing = false;
+/** @type {ReturnType<typeof setTimeout> | null} */
+let inputEditTimer = null;
+const INPUT_EDIT_DEBOUNCE_MS = 75;
 
 function getStepHighlightEnabled() {
   const stored = localStorage.getItem(STEP_HIGHLIGHT_STORAGE_KEY);
@@ -268,13 +271,32 @@ function runTransform(caret) {
   );
 }
 
+function cancelPendingInputEdit() {
+  if (inputEditTimer !== null) {
+    clearTimeout(inputEditTimer);
+    inputEditTimer = null;
+  }
+}
+
 function handleInputEdit() {
   const caret = saveCaretOffset(inputEl);
   inputText = readPlainText(inputEl);
+  cancelPendingInputEdit();
+  inputEditTimer = setTimeout(() => {
+    inputEditTimer = null;
+    runTransform(
+      document.activeElement === inputEl ? saveCaretOffset(inputEl) : caret
+    );
+  }, INPUT_EDIT_DEBOUNCE_MS);
+}
+
+function runTransformNow(caret) {
+  cancelPendingInputEdit();
   runTransform(caret);
 }
 
 function setInputText(text, caret) {
+  cancelPendingInputEdit();
   inputText = text;
   runTransform(caret ?? text.length);
 }
@@ -308,9 +330,12 @@ async function loadMapping() {
 function setMapping(nextMapping) {
   mapping = nextMapping;
   refreshMappingState();
+  if (document.activeElement === inputEl) {
+    inputText = readPlainText(inputEl);
+  }
   const caret =
     document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
-  runTransform(caret);
+  runTransformNow(caret);
 }
 
 async function copyOutput() {
@@ -365,13 +390,23 @@ syntaxHighlightToggle.addEventListener("click", () => {
 verboseNamesToggle.addEventListener("click", () => {
   const enabled = verboseNamesToggle.getAttribute("aria-pressed") !== "true";
   setVerboseNamesEnabled(enabled);
-  runTransform();
+  if (document.activeElement === inputEl) {
+    inputText = readPlainText(inputEl);
+  }
+  runTransformNow(
+    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined
+  );
 });
 
 alwaysNumberToggle.addEventListener("click", () => {
   const enabled = alwaysNumberToggle.getAttribute("aria-pressed") !== "true";
   setAlwaysNumberEnabled(enabled);
-  runTransform();
+  if (document.activeElement === inputEl) {
+    inputText = readPlainText(inputEl);
+  }
+  runTransformNow(
+    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined
+  );
 });
 
 function setExampleControlsEnabled(enabled) {
@@ -492,7 +527,9 @@ inputEl.addEventListener("compositionstart", () => {
 
 inputEl.addEventListener("compositionend", () => {
   isComposing = false;
-  handleInputEdit();
+  const caret = saveCaretOffset(inputEl);
+  inputText = readPlainText(inputEl);
+  runTransformNow(caret);
 });
 
 inputEl.addEventListener("input", () => {
@@ -502,10 +539,12 @@ inputEl.addEventListener("input", () => {
 
 inputEl.addEventListener("paste", (e) => {
   e.preventDefault();
+  cancelPendingInputEdit();
+  inputText = readPlainText(inputEl);
   const pasted = e.clipboardData.getData("text/plain");
   const { start, end } = getSelectionOffsets(inputEl);
   inputText = inputText.slice(0, start) + pasted + inputText.slice(end);
-  runTransform(start + pasted.length);
+  runTransformNow(start + pasted.length);
 });
 
 mappingResetBannerBtn.addEventListener("click", () => {

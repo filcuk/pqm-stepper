@@ -541,13 +541,14 @@ function detectNavigationType(body) {
 
 /**
  * Extract the RHS expression for a step declaration.
+ * Uses the declaration's eqIndex (not the first textual occurrence of the name).
  * @param {string} mCode
  * @param {{ name: string, isQuoted: boolean, eqIndex?: number }} step
+ * @param {Uint8Array} [mask]
  */
-function getStepBody(mCode, step) {
+function getStepBody(mCode, step, mask = buildMContextMask(mCode)) {
   if (typeof step.eqIndex !== "number" || step.eqIndex < 0) return null;
 
-  const mask = buildMContextMask(mCode);
   let start = step.eqIndex + 1;
   while (start < mCode.length && /\s/.test(mCode[start])) start++;
 
@@ -633,18 +634,22 @@ function resolveMappedTargetName(step, mapping, stepBody, warnings) {
 
 /**
  * Resolve target name: navigation patterns first, then mapping (quoted steps only).
+ * @param {string | null} [stepBody]
  */
-function resolveStepTargetName(step, mapping, mCode, warnings) {
-  const stepBody = getStepBody(mCode, step);
-  const navigationType = detectNavigationType(stepBody);
+function resolveStepTargetName(step, mapping, mCode, warnings, stepBody = null) {
+  const body =
+    stepBody !== null && stepBody !== undefined
+      ? stepBody
+      : getStepBody(mCode, step);
+  const navigationType = detectNavigationType(body);
   if (navigationType) return navigationType;
 
-  if (isNameContentNavigation(stepBody)) {
+  if (isNameContentNavigation(body)) {
     return "Navigation";
   }
 
   if (step.isQuoted) {
-    return resolveMappedTargetName(step, mapping, stepBody, warnings);
+    return resolveMappedTargetName(step, mapping, body, warnings);
   }
 
   return null;
@@ -670,10 +675,17 @@ function buildReplacementMaps(
   alwaysNumber = false
 ) {
   const targetGroups = new Map();
+  const mask = buildMContextMask(mCode);
 
   for (const step of steps) {
-    const stepBody = getStepBody(mCode, step);
-    const target = resolveStepTargetName(step, mapping, mCode, warnings);
+    const stepBody = getStepBody(mCode, step, mask);
+    const target = resolveStepTargetName(
+      step,
+      mapping,
+      mCode,
+      warnings,
+      stepBody
+    );
     if (target) {
       if (!targetGroups.has(target)) {
         targetGroups.set(target, []);

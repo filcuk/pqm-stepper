@@ -4,6 +4,7 @@ import {
   escapeRegExp,
   buildMContextMask,
   isProtectedLiteral,
+  M_SPAN_CODE,
 } from "./m-utils.js";
 
 function escapeHtml(text) {
@@ -53,27 +54,20 @@ function renderJsonHighlighted(text) {
 }
 
 /**
- * Collect step names for highlighting.
+ * Collect declared step names for highlighting.
  */
-function collectStepNames(mCode) {
-  const steps = parseSteps(mCode);
-  const quoted = new Set();
+function collectStepNamesFromSteps(steps) {
   const regular = new Set();
 
   for (const step of steps) {
-    if (step.isQuoted) quoted.add(step.name);
-    else regular.add(step.name);
+    if (!step.isQuoted) regular.add(step.name);
   }
 
-  for (const match of mCode.matchAll(QUOTED_TOKEN_RE)) {
-    quoted.add(match[1]);
-  }
-
-  return { quoted, regular };
+  return { regular };
 }
 
-function getDeclarationRanges(text) {
-  return parseSteps(text).map((step) => ({
+function getDeclarationRangesFromSteps(steps) {
+  return steps.map((step) => ({
     start: step.tokenStart,
     end: step.tokenStart + step.token.length,
   }));
@@ -96,7 +90,7 @@ function isStepReference(text, start, end, declRanges, mask) {
 
   if (before === "." || after === ".") return false;
   if (before === "#") return false;
-  if (isProtectedLiteral(mask, start)) return false;
+  if (mask[start] !== M_SPAN_CODE) return false;
 
   const validBefore = start === 0 || REF_BEFORE.test(before);
   const validAfter = end === text.length || REF_AFTER.test(after);
@@ -129,11 +123,13 @@ function classForOccurrence(start, end, mode, declRanges, isRenamed = false) {
 
 /**
  * Build highlight ranges for step names.
+ * Parses steps and builds the context mask once per call.
  * @param {"input"|"output"} mode
  */
 function buildStepRanges(text, mode, renames) {
-  const { regular } = collectStepNames(text);
-  const declRanges = getDeclarationRanges(text);
+  const steps = parseSteps(text);
+  const { regular } = collectStepNamesFromSteps(steps);
+  const declRanges = getDeclarationRangesFromSteps(steps);
   const mask = buildMContextMask(text);
   const ranges = [];
   const renamedTargets = renames?.to ?? new Set();
