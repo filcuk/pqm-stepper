@@ -1,0 +1,157 @@
+/* Prism.js — token colours and line numbers aligned with design tokens */
+
+code[class*="language-"],
+pre[class*="language-"] {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  tab-size: 2;
+  hyphens: none;
+}
+
+pre[class*="language-"] {
+  margin: 0;
+  padding: 1rem 1.5rem 1rem 1rem;
+  overflow: auto;
+  background: var(--code-bg);
+  color: var(--text);
+}
+
+:not(pre) > code[class*="language-"] {
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: var(--code-bg);
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: var(--muted);
+}
+
+.token.punctuation {
+  color: var(--text);
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: var(--accent);
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: var(--banner-success-text);
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: var(--banner-warn-text);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: var(--banner-important-text);
+}
+
+.token.function,
+.token.class-name {
+  color: var(--banner-info-text);
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: var(--banner-error-text);
+}
+
+/* Line numbers: gutter | scrolling code (single horizontal scrollport on code) */
+
+pre[class*="language-"].line-numbers {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  padding-left: 0;
+  counter-reset: linenumber;
+  overflow: hidden;
+}
+
+/* Full-height gutter chrome behind the digit column */
+pre[class*="language-"].line-numbers::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3em;
+  background: var(--code-bg);
+  border-right: 1px solid var(--border);
+  pointer-events: none;
+  z-index: 2;
+}
+
+pre[class*="language-"].line-numbers > code {
+  position: relative;
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  /* Gap between gutter border and first glyph (was 3.8em − 3em band) */
+  padding: 0 0 0 0.8em;
+  white-space: inherit;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/*
+ * Digit column is a flex sibling of `code` (see code-block.js) — not inside the
+ * scrollport — so it stays fixed while code scrolls horizontally.
+ */
+pre.line-numbers > .line-numbers-rows {
+  position: relative;
+  flex: 0 0 3em;
+  box-sizing: border-box;
+  width: 3em;
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  letter-spacing: -1px;
+  background: var(--code-bg);
+  border-right: 1px solid var(--border);
+  pointer-events: none;
+  user-select: none;
+  z-index: 3;
+}
+
+/* Prism may inject a copy into `code`; never show it. */
+pre.line-numbers > code .line-numbers-rows {
+  display: none;
+}
+
+.line-numbers-rows > span {
+  display: block;
+  counter-increment: linenumber;
+  pointer-events: none;
+}
+
+.line-numbers-rows > span::before {
+  content: counter(linenumber);
+  display: block;
+  padding-right: 0.8em;
+  text-align: right;
+  color: var(--muted);
+}

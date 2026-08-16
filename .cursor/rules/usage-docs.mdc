@@ -1,0 +1,43 @@
+---
+description: Keep USAGE.md in sync when adding or changing reusable components
+globs: app/**/*.js,app/**/*.css,demo.html,USAGE.md,.github/workflows/**
+alwaysApply: false
+---
+
+# Keep USAGE.md up to date
+
+[`USAGE.md`](USAGE.md) is the **authoritative** guide for forking the template, deployment, the component catalogue, and markup/JS examples. [`README.md`](README.md) stays sparse — link to USAGE.md; do not move long component docs back into README.
+
+When you add or materially change a **reusable** feature, update USAGE.md in the same task (unless the user explicitly asks for docs-only or no-docs work).
+
+## Update USAGE.md when you change
+
+| Change | USAGE.md section |
+| ------ | ---------------- |
+| New `app/*.js` module or public API (`initX`, `showX`) | **Available features** table + **Using components** (markup + import example) |
+| New CSS component pattern (`.foo`, BEM block) | **Available features** table + usage example if non-obvious; styles go in the matching `app/css/` partial |
+| New `demo.html` section | Ensure **Using components** matches live demo; mention demo in feature row |
+| Fork/deploy workflow (`pages.yml`, entry HTML) | **Creating a new app**, **GitHub Pages**, or **Project structure** |
+| New optional asset path (`app/res/`, `vendor/`) | **Project structure** and/or fork checklist |
+
+## Each component entry should include
+
+1. One-line purpose in the **Available features** table
+2. **Using components** subsection with:
+   - Minimal HTML markup (classes, key `data-*` attributes)
+   - `import` + `init` snippet
+   - Notable options (data attributes, callbacks, `getSelected`/`setMode`, etc.)
+
+Mirror existing entries (e.g. Dropdown, Toggle dropdown, Banners).
+
+## Also update when relevant
+
+- [`AGENTS.md`](AGENTS.md) — module conventions table if a new `initX` / pattern is added
+- [`demo.html`](demo.html) — interactive example for user-facing components
+- Do **not** duplicate full usage into README; at most add a table row linking to USAGE.md
+
+## Skip USAGE.md updates for
+
+- Bug fixes with no API/markup change
+- Internal refactors with no user-visible contract change
+- App-specific logic in `main.js` on a fork (template `main.js` stays minimal)

@@ -1,7 +1,7 @@
 ---
 name: init-app
 description: >-
-  Initialize a new app from microapp-template: collect fork details, configure
+  Initialize a new app from SMA1 Framework: collect fork details, configure
   config/version/HTML, choose keep-all or selective components, wire branding
   via handle-assets and manage-color, and trim demo/Pages. Use when forking,
   scaffolding, or creating a new app from this template.

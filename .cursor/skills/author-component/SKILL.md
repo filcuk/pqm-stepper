@@ -1,7 +1,7 @@
 ﻿---
 name: author-component
 description: >-
-  Author a new reusable component into microapp-template itself: scaffold
+  Author a new reusable component in SMA1 Framework itself: scaffold
   initX/initXs JS, CSS partial, demo, USAGE/AGENTS docs, and component-map.
   Use when adding a new template component, not when restoring one into a fork.
 ---
@@ -33,6 +33,7 @@ Agree with the user:
    - `USAGE.md` — **Available features** row + **Using components** (markup + import)
    - `AGENTS.md` — module conventions table if a new `initX` pattern
 6. Update [../_shared/component-map.md](../_shared/component-map.md) **and** [`scripts/lib/template-catalogue.mjs`](../../../scripts/lib/template-catalogue.mjs) (JS, CSS, vendor, icons, infra).
+   - Vendor: put upstream files under `app/vendor/` only; the component owns access (UMD global or relative ESM). Do **not** add a per-vendor seam under `app/components/` for a single consumer — see [../../rules/vendor.mdc](../../rules/vendor.mdc).
 7. Regenerate the manifest: `npm run manifest:template` (and keep `template.lock.json` on `"*"` for this repo).
 8. Note a CHANGELOG bullet for the next `release-template` (do not bump `TEMPLATE_VERSION` here unless the user is releasing now).
 

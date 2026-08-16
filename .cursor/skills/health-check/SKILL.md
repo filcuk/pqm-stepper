@@ -1,7 +1,7 @@
 ---
 name: health-check
 description: >-
-  Verify a microapp-template app or fork against boot conventions, Pages
+  Verify an SMA1 Framework app or fork against boot conventions, Pages
   deploy config, versions, icons/assets hygiene, template lock/verify, and
   optional lint/test. Use after init, migrate, sync, restore, finalize, or
   when the user asks to health-check / verify / sanity-check the template or app.

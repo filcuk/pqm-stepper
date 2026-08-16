@@ -1,7 +1,7 @@
 ---
 name: restore-component
 description: >-
-  Copy trimmed microapp-template components back into a fork (JS, CSS imports,
+  Copy trimmed SMA1 Framework components back into a fork (JS, CSS imports,
   vendor, icons via handle-assets, init wiring, markup). Use when adding back
   a component, restoring dropdown/dialog/table/etc., or expanding a trimmed app.
 ---
@@ -19,7 +19,7 @@ Ask which component-map / catalogue `id`(s) to restore (e.g. `dialog`, `code-blo
 - Prefer upstream **tag matching** this fork’s `TEMPLATE_VERSION` (`vX.Y.Z`).
 - If mid-migrate to a newer template, use that newer revision (or run `migrate-template` first).
 
-Default upstream: `filcuk/microapp-template` (or the remote / local path the user specifies).
+Default upstream: `filcuk/sma1-framework` (or the remote / local path the user specifies).
 
 ## 2. Update the lock and sync
 
@@ -31,7 +31,7 @@ Default upstream: `filcuk/microapp-template` (or the remote / local path the use
 ```bash
 npm run sync:template -- --version <X.Y.Z>
 # or, with a local checkout of the template:
-npm run sync:template -- --from /path/to/microapp-template
+npm run sync:template -- --from /path/to/sma1-framework
 ```
 
 Sync copies JS/CSS/vendor for the lock selection, regenerates `app/css/template.css`, refreshes `template-manifest.json`, and **does not** overwrite app-owned paths (`main.js`, `config.js`, `styles.css`, `css/app.css`, `icons-app.js`, `res/`, entry HTML).

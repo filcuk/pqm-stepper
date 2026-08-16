@@ -22,7 +22,7 @@ Do not duplicate footer, theme toggle, or `#page-nav` markup in HTML — `render
 ## Visibility and listeners
 
 - Show/hide with `setHidden()` from `app/utils/dom.js` (class **and** `hidden` attribute).
-- Use `app/utils/document-listeners.js` for click-outside and Escape — do not add per-instance `document` listeners for those. Escape priorities: dialogs `100`, expandable surfaces `90`, menus `50`.
+- Use `app/utils/document-listeners.js` for click-outside and Escape — do not add per-instance `document` listeners for those. Escape priorities: tutorials `110`, dialogs `100`, expandable surfaces `90`, menus / popovers `50`.
 
 ## Icons and brand assets
 
@@ -54,7 +54,20 @@ Do not duplicate footer, theme toggle, or `#page-nav` markup in HTML — `render
 
 Do not bump the other constant unless the user asks.
 
-Forks pin `template.lock.json` (`templateVersion` + `components`) and use `npm run sync:template` / `npm run verify:template`. Template releases **must** create git tag `vX.Y.Z` so fetch-based sync can resolve the revision.
+Forks pin `template.lock.json` (`templateVersion` + `components` + optional `skills`) and use `npm run sync:template` / `npm run verify:template`. Template releases **must** create git tag `vX.Y.Z` so fetch-based sync can resolve the revision. See **Template lock, manifest, and upgrades** in [`USAGE.md`](../../../USAGE.md).
+
+## Agent skills and rules
+
+- Template-owned Cursor playbooks live under `.cursor/skills/<id>/` and rules under `.cursor/rules/`. They are hashed in `template-manifest.json` and synced with the lock’s `skills` selection (`*` / `-id`).
+- Fork-local skills must use a **distinct id** (folder + frontmatter `name`). Do not edit a template skill in place — copy/rename it, customise `description`, and exclude the original with `"skills": ["*", "-original-id"]`.
+- Shared maps (`_shared`) stay template-owned; forks should not fork `_shared` unless they also stop selecting template skills that depend on it.
+
+## Deprecate, retire, and path moves
+
+- Stable **ids** (component / skill) are the unit of selection and lifecycle; file paths may change.
+- Same-id moves: update live `files` and list old paths in `previousFiles`.
+- Id removal uses two stages: **deprecated** (still shipped) then **retired** (`previousFiles` prunable via `sync --prune`).
+- **Never reuse** a retired / `previousFiles` path for a new live file — manifest generation rejects overlaps.
 
 ## GitHub Pages
 

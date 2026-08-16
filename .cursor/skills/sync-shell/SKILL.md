@@ -1,7 +1,7 @@
 ---
 name: sync-shell
 description: >-
-  Light-sync shell, theme, tokens, and shared infra from upstream microapp-template
+  Light-sync shell, theme, tokens, and shared infra from upstream SMA1 Framework
   without touching optional app components or main.js logic. Use when pulling
   shell-only updates, theme/token fixes, or chrome changes without a full migrate.
 ---
@@ -37,6 +37,7 @@ Do **not** replace unless the user explicitly expands scope:
 - `app/main.js` / app page logic
 - `app/config.js` fork settings
 - Custom `app/res/` artwork
+- **Cursor agent skills/rules** (`.cursor/skills/`, `.cursor/rules/`) — owned by `migrate-template` / `npm run sync:template`, not this light shell sync
 
 ## Icons merge
 
