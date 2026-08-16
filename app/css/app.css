@@ -2,9 +2,18 @@
  * Fork-owned styles. Never overwritten by template sync.
  * App-specific rules for PQM Stepper: code editors, step-highlight
  * colours, toolbar glyph toggles, and the mapping dialog/banner.
- *
- * Brand accent overrides (manage-color) land here in a later step.
  */
+
+/* ---------- Brand accent (manage-color) ---------- */
+
+:root {
+  --accent: #6349da;
+}
+
+:root[data-theme="dark"] {
+  --accent: #3b2c83;
+  --accent-fg: #ffffff;
+}
 
 /* ---------- App tokens (step-highlight palette, code accents) ---------- */
 
@@ -304,14 +313,14 @@ main {
 .code-input-editable *::selection,
 .code-output::selection,
 .code-output *::selection {
-  background: rgba(9, 105, 218, 0.28);
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 :root[data-theme="dark"] .code-input-editable::selection,
 :root[data-theme="dark"] .code-input-editable *::selection,
 :root[data-theme="dark"] .code-output::selection,
 :root[data-theme="dark"] .code-output *::selection {
-  background: rgba(88, 166, 255, 0.35);
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 /* Prism tokens inside editors — step-highlight backgrounds stay visible */
