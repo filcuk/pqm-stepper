@@ -1,7 +1,414 @@
 /**
  * Fork-owned styles. Never overwritten by template sync.
- * Add app-specific rules here (or pull in additional local sheets).
+ * App-specific rules for PQM Stepper: code editors, step-highlight
+ * colours, toolbar glyph toggles, and the mapping dialog/banner.
  *
- * Accent overrides (manage-color) and migrated app rules land here in a later step.
- * Until then, the live entry stylesheet remains `app/styles.css` (monolith).
+ * Brand accent overrides (manage-color) land here in a later step.
  */
+
+/* ---------- App tokens (step-highlight palette, code accents) ---------- */
+
+:root {
+  --legend-text: #424a53;
+  --hl-blue: rgba(56, 139, 253, 0.22);
+  --hl-green: rgba(46, 160, 67, 0.2);
+  --hl-amber: rgba(210, 153, 34, 0.28);
+  --hl-red: rgba(255, 99, 99, 0.22);
+  --hl-icon-blue: #0969da;
+  --hl-icon-green: #1a7f37;
+  --hl-icon-amber: #bf8700;
+  --hl-icon-red: #cf222e;
+}
+
+:root[data-theme="dark"] {
+  --legend-text: #c3ccd5;
+  --hl-blue: rgba(56, 139, 253, 0.18);
+  --hl-green: rgba(46, 160, 67, 0.16);
+  --hl-amber: rgba(210, 153, 34, 0.22);
+  --hl-red: rgba(255, 99, 99, 0.18);
+  --hl-icon-blue: #58a6ff;
+  --hl-icon-green: #3fb950;
+  --hl-icon-amber: #e3b341;
+  --hl-icon-red: #ff7b72;
+}
+
+/* ---------- Layout ---------- */
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.toolbar-spacer {
+  margin-left: auto;
+}
+
+.toolbar-mapping {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.mapping-version-label {
+  color: var(--muted);
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+/* ---------- Toolbar glyph toggles (app-owned inline SVGs) ---------- */
+
+.btn-icon[aria-pressed="false"] {
+  color: var(--muted);
+}
+
+.verbose-names-icon,
+.always-number-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.verbose-names-glyph,
+.always-number-glyph {
+  font-family: inherit;
+}
+
+.highlight-icon-swatch {
+  stroke: var(--border);
+  stroke-width: 0.75;
+}
+
+.highlight-icon .hl-blue {
+  fill: var(--hl-icon-blue);
+}
+
+.highlight-icon .hl-green {
+  fill: var(--hl-icon-green);
+}
+
+.highlight-icon .hl-amber {
+  fill: var(--hl-icon-amber);
+}
+
+.highlight-icon .hl-red {
+  fill: var(--hl-icon-red);
+}
+
+.btn-icon[aria-pressed="false"] .highlight-icon-swatch {
+  opacity: 0.35;
+}
+
+.btn-icon[aria-pressed="false"] .syntax-icon {
+  opacity: 0.45;
+}
+
+.btn-icon[aria-pressed="true"] .verbose-names-glyph-numbered {
+  display: none;
+}
+
+.btn-icon[aria-pressed="false"] .verbose-names-glyph-verbose {
+  display: none;
+}
+
+.btn-icon[aria-pressed="true"] .always-number-glyph-off {
+  display: none;
+}
+
+.btn-icon[aria-pressed="false"] .always-number-glyph-on {
+  display: none;
+}
+
+/* ---------- Step-highlight legend (template legend chips) ---------- */
+
+#step-highlight-legend {
+  color: var(--legend-text);
+  font-size: 0.75rem;
+}
+
+#step-highlight-legend .legend-chip {
+  cursor: help;
+}
+
+#step-highlight-legend.is-disabled {
+  opacity: 0.45;
+}
+
+.legend-chip-hl-blue {
+  --legend-color: var(--hl-blue);
+}
+
+.legend-chip-hl-green {
+  --legend-color: var(--hl-green);
+}
+
+.legend-chip-hl-amber {
+  --legend-color: var(--hl-amber);
+}
+
+.legend-chip-hl-red {
+  --legend-color: var(--hl-red);
+}
+
+/* ---------- Mapping banner ---------- */
+
+#mapping-banner .mapping-banner-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.mapping-banner-text {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.mapping-banner-btn {
+  flex-shrink: 0;
+}
+
+/* ---------- Code editor panes ---------- */
+
+.panes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  flex: 1;
+  min-height: 400px;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+.pane-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.code-editor {
+  position: relative;
+  flex: 1;
+  min-height: 360px;
+  resize: none;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.code-editor:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.code-editor-scroll {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  overflow: auto;
+}
+
+.line-gutter {
+  flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0.75rem 0.625rem 0.75rem 0.5rem;
+  min-width: 2.25rem;
+  text-align: right;
+  user-select: none;
+  white-space: pre;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+.code-input-editable,
+.code-output {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  margin: 0;
+  padding: 0.75rem;
+  white-space: pre;
+  overflow: visible;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  text-shadow: none;
+  tab-size: 4;
+}
+
+/* Beat Prism global pre/code rules inside editors */
+.code-editor pre.code-input-editable,
+.code-editor pre.code-output {
+  white-space: pre;
+  padding: 0.75rem;
+  margin: 0;
+  overflow: visible;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  background: transparent;
+}
+
+.code-editor [class*="language-"],
+.code-editor [class*="language-"] .token {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-shadow: none;
+}
+
+.code-input-editable {
+  cursor: text;
+  outline: none;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.code-editor-readonly .code-output {
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+  pointer-events: auto;
+}
+
+.code-input-editable.is-empty::before,
+.code-output.is-empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.code-input-editable::selection,
+.code-input-editable *::selection,
+.code-output::selection,
+.code-output *::selection {
+  background: rgba(9, 105, 218, 0.28);
+}
+
+:root[data-theme="dark"] .code-input-editable::selection,
+:root[data-theme="dark"] .code-input-editable *::selection,
+:root[data-theme="dark"] .code-output::selection,
+:root[data-theme="dark"] .code-output *::selection {
+  background: rgba(88, 166, 255, 0.35);
+}
+
+/* Prism tokens inside editors — step-highlight backgrounds stay visible */
+.code-input-editable .token,
+.code-output .token {
+  background: transparent;
+}
+
+.code-input-editable .hl-blue,
+.code-input-editable .hl-green,
+.code-input-editable .hl-amber,
+.code-input-editable .hl-red,
+.code-output .hl-blue,
+.code-output .hl-green,
+.code-output .hl-amber,
+.code-output .hl-red {
+  border-radius: 2px;
+}
+
+.code-input-editable .hl-blue,
+.code-output .hl-blue {
+  background: var(--hl-blue);
+}
+
+.code-input-editable .hl-green,
+.code-output .hl-green {
+  background: var(--hl-green);
+}
+
+.code-input-editable .hl-amber,
+.code-output .hl-amber {
+  background: var(--hl-amber);
+}
+
+.code-input-editable .hl-red,
+.code-output .hl-red {
+  background: var(--hl-red);
+}
+
+/* ---------- Mapping / about dialog extras ---------- */
+
+.modal-hint {
+  margin: 0;
+  padding: 0 1.25rem 0.75rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.modal-error {
+  margin: 0 1.25rem 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--banner-error-bg);
+  color: var(--banner-error-text);
+  font-size: 0.8125rem;
+}
+
+.mapping-editor {
+  flex: 1;
+  min-height: 640px;
+  margin: 0 1.25rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--code-bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  overflow: auto;
+  resize: none;
+  white-space: pre;
+  tab-size: 2;
+  cursor: text;
+  outline: none;
+}
+
+.mapping-editor:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.mapping-editor [class*="language-"],
+.mapping-editor [class*="language-"] .token {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-shadow: none;
+}
+
+.mapping-editor .token {
+  background: transparent;
+}
+
+.about-extra-block {
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px dashed var(--border);
+}

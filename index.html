@@ -4,7 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PQM Stepper</title>
-    <link rel="icon" href="app/res/icon/icon.svg" type="image/svg+xml" />
+    <script>
+      window.__MICROAPP__ = {
+        themeStorageKey: "pqm-theme",
+        appIcon: "app/res/icon/icon.svg",
+        appIconLight: "",
+        appIconDark: "",
+      };
+    </script>
+    <link rel="icon" href="app/res/icon/icon.svg" type="image/svg+xml" data-brand-icon />
     <link rel="icon" href="app/res/icon/icon.png" type="image/png" />
     <link rel="apple-touch-icon" href="app/res/icon/icon.png" />
     <link
@@ -39,7 +47,7 @@
       </p>
     </header>
 
-    <main>
+    <main id="main">
       <div id="mapping-banner" class="banner banner-warning hidden" role="status">
         <span class="banner-icon" data-icon="warning" data-icon-class="banner-icon-svg"></span>
         <div class="banner-body mapping-banner-body">
@@ -76,6 +84,11 @@
         <button type="button" id="copy-btn" class="btn btn-primary" disabled>
           Copy output
         </button>
+        <span class="toolbar-mapping">
+          edit
+          <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button>
+          <span id="mapping-version-label" class="mapping-version-label" aria-hidden="true"></span>
+        </span>
         <button
           type="button"
           id="verbose-names-toggle"
@@ -175,24 +188,28 @@
             <rect class="highlight-icon-swatch hl-red" x="11" y="11" width="7" height="7" rx="1.5" />
           </svg>
         </button>
-        <span id="step-highlight-legend" class="legend">
+        <span id="step-highlight-legend" class="legend" role="list" aria-label="Step highlight legend">
           <span
-            class="legend-swatch hl-blue"
+            class="legend-chip legend-chip-hl-blue"
+            role="listitem"
             data-tooltip="Original step name at its definition (let … =)"
             data-tooltip-position="bottom"
           >Definition</span>
           <span
-            class="legend-swatch hl-green"
+            class="legend-chip legend-chip-hl-green"
+            role="listitem"
             data-tooltip="Renamed step name at its definition in the output"
             data-tooltip-position="bottom"
           >New Definition</span>
           <span
-            class="legend-swatch hl-amber"
+            class="legend-chip legend-chip-hl-amber"
+            role="listitem"
             data-tooltip="Original step name used later in the query"
             data-tooltip-position="bottom"
           >Reference</span>
           <span
-            class="legend-swatch hl-red"
+            class="legend-chip legend-chip-hl-red"
+            role="listitem"
             data-tooltip="Renamed step name used later in the query"
             data-tooltip-position="bottom"
           >New Reference</span>
@@ -235,60 +252,6 @@
       </div>
     </main>
 
-    <footer>
-      <p class="footer-meta">
-        <span>
-          edit
-          <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button> <span id="mapping-version-label" class="mapping-version-label" aria-hidden="true"></span>
-          · report an
-          <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
-          · star on
-          <a href="https://github.com/filcuk/pqm-stepper" target="_blank">GitHub</a>
-          · microapp by
-        </span>
-        <a class="footer-brand" href="https://github.com/filcuk" target="_blank">
-          <span class="footer-brand-icon" role="img" aria-label="Filcuk"></span>
-        </a>
-      </p>
-      <div
-        id="theme-toggle"
-        class="theme-toggle"
-        role="group"
-        aria-label="Color theme"
-      >
-        <button
-          type="button"
-          class="theme-toggle-btn"
-          data-theme-mode="light"
-          data-icon="light-mode"
-          data-icon-class="theme-icon"
-          aria-label="Light theme"
-          aria-pressed="false"
-          title="Light"
-        ></button>
-        <button
-          type="button"
-          class="theme-toggle-btn"
-          data-theme-mode="dark"
-          data-icon="dark-mode"
-          data-icon-class="theme-icon"
-          aria-label="Dark theme"
-          aria-pressed="false"
-          title="Dark"
-        ></button>
-        <button
-          type="button"
-          class="theme-toggle-btn"
-          data-theme-mode="auto"
-          data-icon="auto-mode"
-          data-icon-class="theme-icon"
-          aria-label="System theme"
-          aria-pressed="false"
-          title="System"
-        ></button>
-      </div>
-    </footer>
-
     <div
       id="mapping-dialog"
       class="modal hidden"
@@ -296,11 +259,11 @@
       aria-modal="true"
       aria-labelledby="mapping-dialog-title"
     >
-      <div class="modal-backdrop" data-close></div>
+      <div class="modal-backdrop" data-dialog-close></div>
       <div class="modal-panel">
         <header class="modal-header">
           <h2 id="mapping-dialog-title">Step mapping</h2>
-          <button type="button" class="modal-close" aria-label="Close">&times;</button>
+          <button type="button" class="modal-close" aria-label="Close" data-dialog-close>&times;</button>
         </header>
         <p class="modal-hint">Keys are Power Query step names; values are target identifiers.</p>
         <div id="mapping-dialog-error" class="modal-error hidden" role="alert"></div>
@@ -315,7 +278,7 @@
         <footer class="modal-footer">
           <button type="button" id="mapping-reset-btn" class="btn">Reset to default</button>
           <div class="modal-footer-actions">
-            <button type="button" id="mapping-cancel-btn" class="btn">Cancel</button>
+            <button type="button" id="mapping-cancel-btn" class="btn" data-dialog-close>Cancel</button>
             <button type="button" id="mapping-apply-btn" class="btn btn-primary">Apply</button>
           </div>
         </footer>
@@ -329,11 +292,11 @@
       aria-modal="true"
       aria-labelledby="about-dialog-title"
     >
-      <div class="modal-backdrop" data-close></div>
+      <div class="modal-backdrop" data-dialog-close></div>
       <div class="modal-panel">
         <header class="modal-header">
           <h2 id="about-dialog-title">What does this do?</h2>
-          <button type="button" class="modal-close" aria-label="Close">&times;</button>
+          <button type="button" class="modal-close" aria-label="Close" data-dialog-close>&times;</button>
         </header>
         <div class="modal-body" id="about-dialog-body">
           <p>
@@ -347,12 +310,26 @@
             schema all in one go. The logic stays the same, only the step names change, so queries become
             easier to read and maintain.
           </p>
-          <div id="about-extra-content" class="about-extra-content hidden"></div>
+          <p class="about-extra-block hidden" data-about-stage data-about-next-label="Uhh...">
+            <em>Okay</em>, so Power Query is the data-cleaning bit of Excel and Power BI.
+            Every button you click adds a <em>step</em> to the query. But the step names
+            look like <code>#&quot;Changed Type&quot;</code> - hash, quotes, spaces, the works.
+            This page shortens them to things like <code>Type</code>. Paste messy code on
+            the top. Tidy code appears on the bottom. That's the whole trick.
+          </p>
+          <p class="about-extra-block hidden" data-about-stage>
+            Big button make steps. Step name very long. Name complicated. Brain hurt.
+            We give, you fix. Put in big hole. Comes nice below. Short name good.
+            Magic? No. Tool.
+          </p>
+          <p class="about-extra-block hidden" data-about-final>
+            <a href="https://pbskids.org/games/play/coloring/33484" data-no-external-icon>I don't get it</a>
+          </p>
         </div>
         <footer class="modal-footer">
-          <button type="button" id="about-confused-btn" class="btn">Huh?</button>
+          <button type="button" class="btn" data-about-confused>Huh?</button>
           <div class="modal-footer-actions">
-            <button type="button" id="about-close-btn" class="btn btn-primary">Got it</button>
+            <button type="button" id="about-close-btn" class="btn btn-primary" data-dialog-close>Got it</button>
           </div>
         </footer>
       </div>
