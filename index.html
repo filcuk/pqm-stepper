@@ -204,33 +204,31 @@
       <div class="panes">
         <label class="pane">
           <span class="pane-label">Input</span>
-          <div class="code-editor">
-            <div class="code-editor-scroll">
-              <div id="input-gutter" class="line-gutter" aria-hidden="true">1</div>
-              <pre
-                id="input"
-                class="code-input-editable language-powerquery"
-                contenteditable="true"
-                spellcheck="false"
-                role="textbox"
-                aria-multiline="true"
-                data-placeholder="Paste your let ... in block here"
-              ></pre>
+          <div
+            id="input-code-block"
+            class="code-block pqm-code-block"
+            data-code-mode="edit"
+            data-code-toolbar="none"
+            data-code-surface-actions="none"
+            data-code-editor-label="Power Query M input"
+          >
+            <div class="code-block-body">
+              <pre class="language-powerquery"><code id="input-highlight" class="language-powerquery"></code></pre>
             </div>
           </div>
         </label>
 
         <label class="pane">
           <span class="pane-label">Output</span>
-          <div class="code-editor code-editor-readonly">
-            <div class="code-editor-scroll">
-              <div id="output-gutter" class="line-gutter" aria-hidden="true">1</div>
-              <pre
-                id="output-highlight"
-                class="code-output language-powerquery"
-                tabindex="0"
-                data-placeholder="Transformed M code appears here automatically"
-              ></pre>
+          <div
+            id="output-code-block"
+            class="code-block pqm-code-block"
+            data-code-mode="select"
+            data-code-toolbar="none"
+            data-code-surface-actions="none"
+          >
+            <div class="code-block-body">
+              <pre class="language-powerquery" tabindex="0"><code id="output-highlight" class="language-powerquery"></code></pre>
             </div>
           </div>
         </label>

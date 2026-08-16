@@ -12,7 +12,7 @@ describe("single-line let", () => {
 
     const steps = parseSteps(input);
     assert.deepEqual(
-      steps.map((s) => (s.isQuoted ? `#\"${s.name}\"` : s.name)),
+      steps.map((s) => (s.isQuoted ? `#"${s.name}"` : s.name)),
       ["Source", '#"Changed Type"']
     );
 

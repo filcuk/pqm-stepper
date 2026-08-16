@@ -77,8 +77,8 @@ function overlapsDeclaration(start, end, declRanges) {
   return declRanges.some((d) => start < d.end && end > d.start);
 }
 
-const REF_BEFORE = /[(,\[\{\s=]/;
-const REF_AFTER = /[),\]\}\s,=]/;
+const REF_BEFORE = /[(,[{\s=]/;
+const REF_AFTER = /[),\]}\s,=]/;
 
 function isStepReference(text, start, end, declRanges, mask) {
   if (overlapsDeclaration(start, end, declRanges)) {

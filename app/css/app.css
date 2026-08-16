@@ -7,11 +7,11 @@
 /* ---------- Brand accent (manage-color) ---------- */
 
 :root {
-  --accent: #6349da;
+  --accent: #3b2c83;
 }
 
 :root[data-theme="dark"] {
-  --accent: #3b2c83;
+  --accent: #6349da;
   --accent-fg: #ffffff;
 }
 
@@ -203,160 +203,81 @@ main {
   font-size: 0.875rem;
 }
 
-.code-editor {
-  position: relative;
+.pqm-code-block {
+  display: flex;
+  flex-direction: column;
+  max-width: none;
+  width: 100%;
   flex: 1;
   min-height: 360px;
-  resize: none;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--surface);
+  --code-tab-size: 4;
 }
 
-.code-editor:focus-within {
+.pqm-code-block:focus-within {
   outline: 2px solid var(--accent);
   outline-offset: -1px;
 }
 
-.code-editor-scroll {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  overflow: auto;
-}
-
-.line-gutter {
-  flex-shrink: 0;
-  position: sticky;
-  left: 0;
-  z-index: 1;
-  margin: 0;
-  padding: 0.75rem 0.625rem 0.75rem 0.5rem;
-  min-width: 2.25rem;
-  text-align: right;
-  user-select: none;
-  white-space: pre;
-  font-family: var(--mono);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--muted);
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-}
-
-.code-input-editable,
-.code-output {
+.pqm-code-block > .code-block-body,
+.pqm-code-block .code-block-editor-stack,
+.pqm-code-block .code-block-body > pre {
   flex: 1;
-  min-width: 0;
-  display: block;
-  margin: 0;
-  padding: 0.75rem;
-  white-space: pre;
-  overflow: visible;
-  font-family: var(--mono);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--text);
-  background: transparent;
-  border: none;
-  text-shadow: none;
-  tab-size: 4;
+  min-height: 360px;
+  height: 100%;
 }
 
-/* Beat Prism global pre/code rules inside editors */
-.code-editor pre.code-input-editable,
-.code-editor pre.code-output {
-  white-space: pre;
-  padding: 0.75rem;
-  margin: 0;
-  overflow: visible;
-  font-family: var(--mono);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  background: transparent;
-}
-
-.code-editor [class*="language-"],
-.code-editor [class*="language-"] .token {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  text-shadow: none;
-}
-
-.code-input-editable {
-  cursor: text;
-  outline: none;
-  min-height: 100%;
-  box-sizing: border-box;
-}
-
-.code-editor-readonly .code-output {
-  cursor: text;
-  user-select: text;
-  -webkit-user-select: text;
-  pointer-events: auto;
-}
-
-.code-input-editable.is-empty::before,
-.code-output.is-empty::before {
+.pqm-code-block code.is-empty::before,
+#input-highlight:empty::before {
   content: attr(data-placeholder);
   color: var(--muted);
   opacity: 0.7;
   pointer-events: none;
 }
 
-.code-input-editable::selection,
-.code-input-editable *::selection,
-.code-output::selection,
-.code-output *::selection {
+#output-highlight::selection,
+#output-highlight *::selection {
   background: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
-:root[data-theme="dark"] .code-input-editable::selection,
-:root[data-theme="dark"] .code-input-editable *::selection,
-:root[data-theme="dark"] .code-output::selection,
-:root[data-theme="dark"] .code-output *::selection {
+:root[data-theme="dark"] #output-highlight::selection,
+:root[data-theme="dark"] #output-highlight *::selection {
   background: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 /* Prism tokens inside editors — step-highlight backgrounds stay visible */
-.code-input-editable .token,
-.code-output .token {
+#input-highlight .token,
+#output-highlight .token {
   background: transparent;
 }
 
-.code-input-editable .hl-blue,
-.code-input-editable .hl-green,
-.code-input-editable .hl-amber,
-.code-input-editable .hl-red,
-.code-output .hl-blue,
-.code-output .hl-green,
-.code-output .hl-amber,
-.code-output .hl-red {
+#input-highlight .hl-blue,
+#input-highlight .hl-green,
+#input-highlight .hl-amber,
+#input-highlight .hl-red,
+#output-highlight .hl-blue,
+#output-highlight .hl-green,
+#output-highlight .hl-amber,
+#output-highlight .hl-red {
   border-radius: 2px;
 }
 
-.code-input-editable .hl-blue,
-.code-output .hl-blue {
+#input-highlight .hl-blue,
+#output-highlight .hl-blue {
   background: var(--hl-blue);
 }
 
-.code-input-editable .hl-green,
-.code-output .hl-green {
+#input-highlight .hl-green,
+#output-highlight .hl-green {
   background: var(--hl-green);
 }
 
-.code-input-editable .hl-amber,
-.code-output .hl-amber {
+#input-highlight .hl-amber,
+#output-highlight .hl-amber {
   background: var(--hl-amber);
 }
 
-.code-input-editable .hl-red,
-.code-output .hl-red {
+#input-highlight .hl-red,
+#output-highlight .hl-red {
   background: var(--hl-red);
 }
 

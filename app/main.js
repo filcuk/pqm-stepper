@@ -4,6 +4,7 @@ import { mountIcon } from "./utils/icons.js";
 import { initCombo } from "./components/combo.js";
 import { initToggleButton } from "./components/toggle-button.js";
 import { initAboutDialog } from "./components/about-dialog.js";
+import { initCodeBlock } from "./components/code-block.js";
 import { transform } from "./transform.js";
 import { renderHighlighted } from "./highlight.js";
 import {
@@ -11,14 +12,7 @@ import {
   fetchExampleManifest,
   pickRandomExample,
 } from "./examples.js";
-import {
-  saveCaretOffset,
-  getSelectionOffsets,
-  restoreCaretOffset,
-  readPlainText,
-  selectElementContents,
-  lineNumbersText,
-} from "./editor.js";
+import { selectElementContents } from "./editor.js";
 import {
   getMappingForTransform,
   loadDefaultMapping,
@@ -33,10 +27,18 @@ import {
 
 initShell();
 
-const inputEl = document.getElementById("input");
-const inputGutterEl = document.getElementById("input-gutter");
+const inputCodeBlockEl = document.getElementById("input-code-block");
+const outputCodeBlockEl = document.getElementById("output-code-block");
+const inputCodeBlock = initCodeBlock(inputCodeBlockEl);
+const outputCodeBlock = initCodeBlock(outputCodeBlockEl);
+const inputEl = inputCodeBlockEl.querySelector(".code-block-editor");
+const inputHighlightEl = document.getElementById("input-highlight");
 const outputHighlightEl = document.getElementById("output-highlight");
-const outputGutterEl = document.getElementById("output-gutter");
+const outputPreEl = outputHighlightEl.closest("pre");
+inputEl.placeholder = "Paste your let ... in block here";
+inputHighlightEl.dataset.placeholder = inputEl.placeholder;
+outputHighlightEl.dataset.placeholder =
+  "Transformed M code appears here automatically";
 const exampleCombo = document.getElementById("example-combo");
 const exampleBtn = document.getElementById("example-btn");
 const exampleMenuBtn = document.getElementById("example-menu-btn");
@@ -180,43 +182,24 @@ function filterLiveWarnings(warnings, text) {
 }
 
 function updateInputDisplay(caret) {
-  inputGutterEl.textContent = lineNumbersText(inputText);
-
-  if (!inputText) {
-    inputEl.innerHTML = "";
-    inputEl.classList.add("is-empty");
-    return;
+  if (inputCodeBlock.getSource() !== inputText) {
+    inputCodeBlock.setSource(inputText);
   }
-
-  inputEl.classList.remove("is-empty");
-  inputEl.innerHTML = renderHighlighted(
-    inputText,
-    "input",
-    lastRenames,
-    getHighlightOptions()
-  );
+  inputHighlightEl.innerHTML = inputText
+    ? renderHighlighted(inputText, "input", lastRenames, getHighlightOptions())
+    : "";
 
   if (caret !== undefined) {
-    restoreCaretOffset(inputEl, caret);
+    inputEl.setSelectionRange(caret, caret);
   }
 }
 
 function updateOutputHighlight() {
-  outputGutterEl.textContent = lineNumbersText(outputText);
-
-  if (!outputText) {
-    outputHighlightEl.textContent = "";
-    outputHighlightEl.classList.add("is-empty");
-    return;
-  }
-
-  outputHighlightEl.classList.remove("is-empty");
-  outputHighlightEl.innerHTML = renderHighlighted(
-    outputText,
-    "output",
-    lastRenames,
-    getHighlightOptions()
-  );
+  outputCodeBlock.setSource(outputText);
+  outputHighlightEl.classList.toggle("is-empty", !outputText);
+  outputHighlightEl.innerHTML = outputText
+    ? renderHighlighted(outputText, "output", lastRenames, getHighlightOptions())
+    : "";
 }
 
 function runTransform(caret) {
@@ -230,7 +213,7 @@ function runTransform(caret) {
   copyBtn.disabled = !outputText;
 
   if (caret === undefined && document.activeElement === inputEl) {
-    caret = saveCaretOffset(inputEl);
+    caret = inputEl.selectionStart;
   }
 
   updateInputDisplay(caret);
@@ -251,13 +234,13 @@ function cancelPendingInputEdit() {
 }
 
 function handleInputEdit() {
-  const caret = saveCaretOffset(inputEl);
-  inputText = readPlainText(inputEl);
+  const caret = inputEl.selectionStart;
+  inputText = inputEl.value;
   cancelPendingInputEdit();
   inputEditTimer = setTimeout(() => {
     inputEditTimer = null;
     runTransform(
-      document.activeElement === inputEl ? saveCaretOffset(inputEl) : caret
+      document.activeElement === inputEl ? inputEl.selectionStart : caret
     );
   }, INPUT_EDIT_DEBOUNCE_MS);
 }
@@ -270,15 +253,16 @@ function runTransformNow(caret) {
 function setInputText(text, caret) {
   cancelPendingInputEdit();
   inputText = text;
+  inputCodeBlock.setSource(text);
   runTransform(caret ?? text.length);
 }
 
 function rerunFromToggle() {
   if (document.activeElement === inputEl) {
-    inputText = readPlainText(inputEl);
+    inputText = inputEl.value;
   }
   runTransformNow(
-    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined
+    document.activeElement === inputEl ? inputEl.selectionStart : undefined
   );
 }
 
@@ -312,10 +296,10 @@ function setMapping(nextMapping) {
   mapping = nextMapping;
   refreshMappingState();
   if (document.activeElement === inputEl) {
-    inputText = readPlainText(inputEl);
+    inputText = inputEl.value;
   }
   const caret =
-    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
+    document.activeElement === inputEl ? inputEl.selectionStart : undefined;
   runTransformNow(caret);
 }
 
@@ -335,7 +319,7 @@ async function copyOutput() {
 
 copyBtn.addEventListener("click", copyOutput);
 
-outputHighlightEl.addEventListener("keydown", (e) => {
+outputPreEl.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "a") {
     e.preventDefault();
     if (outputText) {
@@ -346,7 +330,7 @@ outputHighlightEl.addEventListener("keydown", (e) => {
 
 function refreshHighlights() {
   const caret =
-    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
+    document.activeElement === inputEl ? inputEl.selectionStart : undefined;
   updateInputDisplay(caret);
   updateOutputHighlight();
 }
@@ -476,7 +460,7 @@ clearBtn.addEventListener("click", () => {
   inputEl.focus();
 });
 
-inputEl.closest(".code-editor")?.addEventListener("click", (e) => {
+inputCodeBlockEl.addEventListener("click", (e) => {
   if (inputEl.contains(e.target)) return;
   inputEl.focus();
 });
@@ -487,24 +471,14 @@ inputEl.addEventListener("compositionstart", () => {
 
 inputEl.addEventListener("compositionend", () => {
   isComposing = false;
-  const caret = saveCaretOffset(inputEl);
-  inputText = readPlainText(inputEl);
+  const caret = inputEl.selectionStart;
+  inputText = inputEl.value;
   runTransformNow(caret);
 });
 
 inputEl.addEventListener("input", () => {
   if (isComposing) return;
   handleInputEdit();
-});
-
-inputEl.addEventListener("paste", (e) => {
-  e.preventDefault();
-  cancelPendingInputEdit();
-  inputText = readPlainText(inputEl);
-  const pasted = e.clipboardData.getData("text/plain");
-  const { start, end } = getSelectionOffsets(inputEl);
-  inputText = inputText.slice(0, start) + pasted + inputText.slice(end);
-  runTransformNow(start + pasted.length);
 });
 
 mappingResetBannerBtn.addEventListener("click", () => {
