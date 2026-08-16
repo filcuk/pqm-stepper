@@ -1,0 +1,7 @@
+/**
+ * Fork-owned styles. Never overwritten by template sync.
+ * Add app-specific rules here (or pull in additional local sheets).
+ *
+ * Accent overrides (manage-color) and migrated app rules land here in a later step.
+ * Until then, the live entry stylesheet remains `app/styles.css` (monolith).
+ */
