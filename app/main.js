@@ -5,6 +5,7 @@ import { initCombo } from "./components/combo.js";
 import { initToggleButton } from "./components/toggle-button.js";
 import { initAboutDialog } from "./components/about-dialog.js";
 import { initCodeBlock } from "./components/code-block.js";
+import { initTutorial } from "./components/tutorial.js";
 import { transform } from "./transform.js";
 import { renderHighlighted } from "./highlight.js";
 import {
@@ -21,11 +22,17 @@ import {
 } from "./mapping-store.js";
 import {
   initMappingDialog,
-  resetMappingToDefault,
+  requestMappingReset,
   refreshMappingEditorAvailability,
 } from "./mapping-dialog.js";
+import { initPageNavPanel } from "./shell/page-nav.js";
 
 initShell();
+
+/* This tool is a single-viewport editor — hide the shell’s floating page-nav
+   jumps (and heading strip) rather than leaving them over the code panes. */
+initPageNavPanel()?.destroy();
+document.getElementById("page-nav")?.remove();
 
 const inputCodeBlockEl = document.getElementById("input-code-block");
 const outputCodeBlockEl = document.getElementById("output-code-block");
@@ -35,10 +42,9 @@ const inputEl = inputCodeBlockEl.querySelector(".code-block-editor");
 const inputHighlightEl = document.getElementById("input-highlight");
 const outputHighlightEl = document.getElementById("output-highlight");
 const outputPreEl = outputHighlightEl.closest("pre");
-inputEl.placeholder = "Paste your let ... in block here";
-inputHighlightEl.dataset.placeholder = inputEl.placeholder;
+inputEl.placeholder = "let\n    Source = ...\nin\n    ...";
 outputHighlightEl.dataset.placeholder =
-  "Transformed M code appears here automatically";
+  "Transformed code appears here";
 const exampleCombo = document.getElementById("example-combo");
 const exampleBtn = document.getElementById("example-btn");
 const exampleMenuBtn = document.getElementById("example-menu-btn");
@@ -482,27 +488,12 @@ inputEl.addEventListener("input", () => {
 });
 
 mappingResetBannerBtn.addEventListener("click", () => {
-  resetMappingToDefault();
+  requestMappingReset();
 });
 
-/* Prism stylesheet swap follows the shell theme (shell owns tokens/chrome;
-   the vendored Prism themes are app-owned). */
-function updatePrismTheme(resolvedTheme) {
-  const lightLink = document.getElementById("prism-light");
-  const darkLink = document.getElementById("prism-dark");
-  if (!lightLink || !darkLink) return;
-
-  lightLink.disabled = resolvedTheme !== "light";
-  darkLink.disabled = resolvedTheme !== "dark";
-}
-
-document.addEventListener(APP_CONFIG.themeChangeEvent, (e) => {
-  updatePrismTheme(
-    e.detail?.resolved ?? document.documentElement.dataset.theme
-  );
+document.addEventListener(APP_CONFIG.themeChangeEvent, () => {
   refreshHighlights();
 });
-updatePrismTheme(document.documentElement.dataset.theme);
 
 initMappingDialog({
   onMappingChange: setMapping,
@@ -514,5 +505,47 @@ loadMapping().then(() => {
 initAboutDialog({
   dialogEl: document.getElementById("about-dialog"),
   openTriggers: [document.getElementById("about-open-btn")],
+});
+initTutorial({
+  id: "pqm-overview",
+  startTriggers: [document.getElementById("start-tour-btn")],
+  steps: [
+    {
+      target: "#input-code-block",
+      title: "Input",
+      body: "Paste or type your Power Query M let … in block here. The transformed result updates automatically.",
+      position: "right",
+    },
+    {
+      target: "#output-code-block",
+      title: "Output",
+      body: "The renamed query appears here. Select or copy it when you are happy with the result.",
+      position: "left",
+    },
+    {
+      target: "#verbose-names-toggle",
+      title: "Step name style",
+      body: "Switch between short numbered names and more descriptive step names.",
+      position: "bottom",
+    },
+    {
+      target: "#always-number-toggle",
+      title: "Number repeated steps",
+      body: "Choose whether repeated step types always receive a number.",
+      position: "bottom",
+    },
+    {
+      target: "#syntax-highlight-toggle",
+      title: "Syntax highlighting",
+      body: "Turn Power Query M syntax colours on or off.",
+      position: "bottom",
+    },
+    {
+      target: "#step-highlight-toggle",
+      title: "Step highlighting",
+      body: "Show or hide the coloured definition and reference highlights described by the legend.",
+      position: "bottom",
+    },
+  ],
 });
 loadExamples();

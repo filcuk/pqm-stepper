@@ -27,6 +27,10 @@
   --hl-icon-green: #1a7f37;
   --hl-icon-amber: #bf8700;
   --hl-icon-red: #cf222e;
+  --hl-border-blue: var(--hl-icon-blue);
+  --hl-border-green: var(--hl-icon-green);
+  --hl-border-amber: var(--hl-icon-amber);
+  --hl-border-red: var(--hl-icon-red);
 }
 
 :root[data-theme="dark"] {
@@ -39,6 +43,10 @@
   --hl-icon-green: #3fb950;
   --hl-icon-amber: #e3b341;
   --hl-icon-red: #ff7b72;
+  --hl-border-blue: #39658b;
+  --hl-border-green: #23772b;
+  --hl-border-amber: #896800;
+  --hl-border-red: #8b2e34;
 }
 
 /* ---------- Layout ---------- */
@@ -148,18 +156,22 @@ main {
 
 .legend-chip-hl-blue {
   --legend-color: var(--hl-blue);
+  --legend-border: var(--hl-border-blue);
 }
 
 .legend-chip-hl-green {
   --legend-color: var(--hl-green);
+  --legend-border: var(--hl-border-green);
 }
 
 .legend-chip-hl-amber {
   --legend-color: var(--hl-amber);
+  --legend-border: var(--hl-border-amber);
 }
 
 .legend-chip-hl-red {
   --legend-color: var(--hl-red);
+  --legend-border: var(--hl-border-red);
 }
 
 /* ---------- Mapping banner ---------- */
@@ -185,7 +197,8 @@ main {
 
 .panes {
   display: grid;
-  grid-template-columns: 1fr;
+  /* minmax(0, …): long code lines must scroll inside the pane, not widen it */
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
   flex: 1;
   min-height: 400px;
@@ -196,11 +209,14 @@ main {
   flex-direction: column;
   gap: 0.5rem;
   min-height: 0;
+  min-width: 0;
 }
 
 .pane-label {
+  margin: 0;
   font-weight: 600;
   font-size: 0.875rem;
+  line-height: 1.4;
 }
 
 .pqm-code-block {
@@ -210,6 +226,7 @@ main {
   width: 100%;
   flex: 1;
   min-height: 360px;
+  min-width: 0;
   --code-tab-size: 4;
 }
 
@@ -220,18 +237,50 @@ main {
 
 .pqm-code-block > .code-block-body,
 .pqm-code-block .code-block-editor-stack,
-.pqm-code-block .code-block-body > pre {
+.pqm-code-block .code-block-body > pre,
+.pqm-code-block .code-block-editor-stack > pre {
   flex: 1;
   min-height: 360px;
   height: 100%;
 }
 
-.pqm-code-block code.is-empty::before,
-#input-highlight:empty::before {
+/* Edit mode nests `pre` in the editor stack; stretch it so the line-number
+   gutter band reaches the bottom of the pane instead of ending with the text. */
+.pqm-code-block .code-block-editor-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mapping editor: same pane styling, sized for the modal panel */
+.pqm-mapping-code-block,
+.pqm-mapping-code-block > .code-block-body,
+.pqm-mapping-code-block .code-block-editor-stack,
+.pqm-mapping-code-block .code-block-body > pre,
+.pqm-mapping-code-block .code-block-editor-stack > pre {
+  min-height: 18rem;
+}
+
+.pqm-mapping-code-block {
+  /* `width: auto` (not 100%): the modal panel stretches this flex item, so a
+     percentage width would add the side margins on top of the full width. */
+  width: auto;
+  margin: 0 1.25rem;
+}
+
+.pqm-code-block code.is-empty::before {
   content: attr(data-placeholder);
   color: var(--muted);
   opacity: 0.7;
   pointer-events: none;
+  white-space: pre;
+}
+
+/* Edit-mode placeholder lives on the transparent textarea (supports newlines). */
+.pqm-code-block .code-block-editor::placeholder {
+  color: var(--muted);
+  -webkit-text-fill-color: var(--muted);
+  opacity: 0.7;
+  white-space: pre;
 }
 
 #output-highlight::selection,
@@ -283,6 +332,10 @@ main {
 
 /* ---------- Mapping / about dialog extras ---------- */
 
+.mapping-reset-panel {
+  max-width: 28rem;
+}
+
 .modal-hint {
   margin: 0;
   padding: 0 1.25rem 0.75rem;
@@ -298,43 +351,6 @@ main {
   background: var(--banner-error-bg);
   color: var(--banner-error-text);
   font-size: 0.8125rem;
-}
-
-.mapping-editor {
-  flex: 1;
-  min-height: 640px;
-  margin: 0 1.25rem;
-  padding: 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--code-bg);
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  overflow: auto;
-  resize: none;
-  white-space: pre;
-  tab-size: 2;
-  cursor: text;
-  outline: none;
-}
-
-.mapping-editor:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: -1px;
-}
-
-.mapping-editor [class*="language-"],
-.mapping-editor [class*="language-"] .token {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  text-shadow: none;
-}
-
-.mapping-editor .token {
-  background: transparent;
 }
 
 .about-extra-block {

@@ -18,6 +18,7 @@ function getPrism() {
   return typeof globalThis.Prism !== "undefined" ? globalThis.Prism : null;
 }
 
+/** Prism core ships without JSON; register it so `language-json` blocks highlight. */
 function ensureJsonGrammar() {
   const Prism = getPrism();
   if (!Prism || Prism.languages.json) return Prism;
@@ -42,15 +43,6 @@ function ensureJsonGrammar() {
   };
 
   return Prism;
-}
-
-function renderJsonHighlighted(text) {
-  if (!text) return "";
-
-  const Prism = ensureJsonGrammar();
-  if (!Prism?.languages?.json) return escapeHtml(text);
-
-  return Prism.highlight(text, Prism.languages.json, "json");
 }
 
 /**
@@ -307,4 +299,4 @@ function renderStepOnlyHtml(text, stepRanges) {
   return html;
 }
 
-export { renderHighlighted, renderJsonHighlighted };
+export { renderHighlighted, ensureJsonGrammar };
