@@ -1,36 +1,40 @@
 ---
-description: Never invent SVG icon paths — use app/icons.js only
+description: Never invent SVG icons — use icons modules only; ask the user to add missing icons
 alwaysApply: true
 ---
 
-# Icons
+# Icons — do not invent or generate
 
-All inline UI icons live in `app/icons.js`. Do **not** write SVG path markup in HTML, CSS, or other JS files.
+Inline UI icons are defined in:
 
-## Adding icons
+- [`app/utils/icons-template.js`](app/utils/icons-template.js) — template catalogue (`TEMPLATE_ICONS`; synced / hashed)
+- [`app/utils/icons-app.js`](app/utils/icons-app.js) — fork / app icons (`APP_ICONS`; never overwritten by sync)
+- [`app/utils/icons.js`](app/utils/icons.js) — merges both (app wins on key clash) and exports `createIcon` / `initIcons`
 
-1. Source paths from [Icônes — Google Material Icons (Round)](https://icones.js.org/collection/ic?s=info&variant=Round) or another licensed set the user approves.
-2. Add the entry to `ICONS` in `app/icons.js` with correct `viewBox`, `markup`, and `attribution` when required.
-3. Reference icons via `data-icon="id"` (optional `data-icon-class`) in HTML, or `createIcon()` / `mountIcon()` in JS.
-4. Call `initIcons()` at page boot so `[data-icon]` elements are mounted.
+See the **Available** lists in the template and app file headers.
 
-## When you need a new icon
+## Never
 
-**Never guess or invent path `d` attributes.**
+- Invent, guess, or generate SVG path data (`d="…"`, `<path>`, `<svg>`, etc.)
+- Paste icon markup from memory, a casual web scrape, or image generation into HTML, CSS, or JS
+- Duplicate SVG paths outside the icons modules above
+- Approximate or “fix up” path `d` data when sourcing from Icônes
 
-Instead:
+## When an icon is missing
 
-1. Add a placeholder entry in `app/icons.js`:
+1. **Stop** — do not substitute a made-up icon.
+2. **Reuse** an existing icon if one is close enough (`data-icon`, `createIcon()`, or `{ ref: "other-icon" }`).
+3. **Pull from Icônes** via the [`add-icon`](../skills/add-icon/SKILL.md) skill (Iconify fetch script — exact markup, `name`, and `attribution`). Prefer [Material Icons Round (`ic`)](https://icones.js.org/collection/ic?s=info&variant=Round); fall back to Material Symbols Rounded. Ask for the app id and place (template vs app) if the user did not provide them.
+4. Or ask the user to supply their own vector asset / paste markup — then use [`handle-assets`](../skills/handle-assets/SKILL.md) for stubs and wiring.
+5. You may add a **blank placeholder entry** in `APP_ICONS` / `TEMPLATE_ICONS` using the template in those files (empty `markup`, correct `viewBox`) so wiring (`data-icon`, imports) can land in the same change — then tell the user to fill in the paths (or finish with `add-icon`).
 
-```js
-"my-icon": {
-  viewBox: "0 0 24 24",
-  markup: `<!-- PLACEHOLDER: user must add path from Icônes -->`,
-  name: "round-???",
-},
-```
+## Allowed without user-provided paths
 
-2. Wire `data-icon="my-icon"` (or `createIcon("my-icon")`) in the UI.
-3. Tell the user which Icônes icon to copy and ask them to paste the path markup into the placeholder.
+- `data-icon="existing-id"` / `createIcon("existing-id")` for ids already in the merged `ICONS`
+- `{ ref: "existing-id" }` aliases
+- Exact Iconify bodies inserted by following **`add-icon`** (fetch script only — not from memory)
+- Blank template stub with `markup: \`\`` only when the user has agreed to add the icon
 
-Brand images (`app/res/icon/`) stay as separate files — not inline icons.
+## Logo / raster assets
+
+Brand images stay in `app/res/` — same rule: do not invent; use existing files or ask the user to supply them.

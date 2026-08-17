@@ -1,10 +1,8 @@
-import { renderJsonHighlighted } from "./highlight.js";
-import {
-  getSelectionOffsets,
-  readPlainText,
-  restoreCaretOffset,
-  saveCaretOffset,
-} from "./editor.js";
+import { initDialog } from "./components/dialog.js";
+import { initCodeBlock } from "./components/code-block.js";
+import { ensureJsonGrammar } from "./highlight.js";
+import { setPageInert } from "./utils/dom.js";
+import { onDocumentEscape } from "./utils/document-listeners.js";
 import {
   clearStoredMapping,
   formatMappingJson,
@@ -19,18 +17,21 @@ import {
   saveMapping,
 } from "./mapping-store.js";
 
+let dialogControl = null;
+let confirmControl = null;
 let dialogEl = null;
+let editorCodeBlock = null;
 let editorEl = null;
 let errorEl = null;
 let openBtn = null;
+let resetBtn = null;
 let versionLabelEl = null;
-let isOpen = false;
 let onMappingChange = null;
 let onMappingReset = null;
-let previouslyFocused = null;
 
-const FOCUSABLE =
-  'button:not([disabled]), [contenteditable="true"]:not([contenteditable="false"]), textarea:not([disabled]), [href], input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+function isOpen() {
+  return dialogControl?.isDialogOpen() ?? false;
+}
 
 export function syncMappingVersionLabel() {
   if (!versionLabelEl) return;
@@ -42,6 +43,31 @@ export function syncMappingVersionLabel() {
   }
 }
 
+function getEditorText() {
+  return editorCodeBlock?.getSource() ?? "";
+}
+
+/** Nothing to reset when the default is already stored and shown unedited. */
+function canResetMapping() {
+  if (!isDefaultMappingReady()) return false;
+  if (hasCustomMapping()) return true;
+  if (!isOpen()) return false;
+
+  // Unapplied edits count as resettable, including JSON that no longer parses.
+  const result = parseMappingJson(getEditorText());
+  return result.error ? true : !isDefaultMapping(result.mapping);
+}
+
+function syncResetButtonState() {
+  if (!resetBtn) return;
+
+  const canReset = canResetMapping();
+  resetBtn.disabled = !canReset;
+  resetBtn.title = canReset
+    ? "Discard the custom mapping and restore the default"
+    : "Already using the default mapping";
+}
+
 function syncOpenButtonState() {
   if (!openBtn) return;
 
@@ -49,6 +75,7 @@ function syncOpenButtonState() {
     openBtn.disabled = true;
     openBtn.title = "Mapping unavailable — default mapping failed to load";
     if (versionLabelEl) versionLabelEl.textContent = "";
+    syncResetButtonState();
     return;
   }
 
@@ -61,12 +88,13 @@ function syncOpenButtonState() {
   }
 
   syncMappingVersionLabel();
+  syncResetButtonState();
 }
 
 /** Refresh open-button state after default mapping load succeeds or fails. */
 export function refreshMappingEditorAvailability() {
-  if (!isDefaultMappingReady() && isOpen) {
-    closeDialog();
+  if (!isDefaultMappingReady() && isOpen()) {
+    dialogControl.closeDialog();
   }
   syncOpenButtonState();
 }
@@ -81,100 +109,8 @@ function clearError() {
   errorEl.classList.add("hidden");
 }
 
-function getEditorText() {
-  return readPlainText(editorEl);
-}
-
-function updateEditorDisplay(caret) {
-  const text = getEditorText();
-  editorEl.innerHTML = renderJsonHighlighted(text);
-
-  if (caret !== undefined) {
-    restoreCaretOffset(editorEl, caret);
-  }
-}
-
 function populateEditor(mapping) {
-  const text = formatMappingJson(mapping);
-  editorEl.innerHTML = renderJsonHighlighted(text);
-}
-
-function getFocusableElements() {
-  return [...dialogEl.querySelectorAll(FOCUSABLE)].filter(
-    (el) => el.offsetParent !== null
-  );
-}
-
-function trapFocus(e) {
-  if (!isOpen || e.key !== "Tab") return;
-
-  const focusable = getFocusableElements();
-  if (!focusable.length) return;
-
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-
-  if (e.shiftKey && document.activeElement === first) {
-    e.preventDefault();
-    last.focus();
-  } else if (!e.shiftKey && document.activeElement === last) {
-    e.preventDefault();
-    first.focus();
-  }
-}
-
-function handleEscape(e) {
-  if (!isOpen || e.key !== "Escape") return;
-  e.preventDefault();
-  e.stopPropagation();
-  closeDialog();
-}
-
-function handleEditorInput() {
-  const caret = saveCaretOffset(editorEl);
-  updateEditorDisplay(caret);
-}
-
-function handleEditorPaste(e) {
-  e.preventDefault();
-
-  const pasted = e.clipboardData.getData("text/plain");
-  const { start, end } = getSelectionOffsets(editorEl);
-  const text = getEditorText();
-  const nextText = text.slice(0, start) + pasted + text.slice(end);
-
-  editorEl.textContent = nextText;
-  updateEditorDisplay(start + pasted.length);
-}
-
-function openDialog() {
-  if (isOpen) return;
-  if (!isDefaultMappingReady()) {
-    syncOpenButtonState();
-    return;
-  }
-
-  previouslyFocused = document.activeElement;
-  populateEditor(getEffectiveMapping());
-  clearError();
-  dialogEl.classList.remove("hidden");
-  document.body.classList.add("modal-open");
-  isOpen = true;
-  editorEl.focus();
-  restoreCaretOffset(editorEl, getEditorText().length);
-}
-
-function closeDialog() {
-  if (!isOpen) return;
-
-  dialogEl.classList.add("hidden");
-  document.body.classList.remove("modal-open");
-  isOpen = false;
-  clearError();
-
-  if (previouslyFocused?.focus) {
-    previouslyFocused.focus();
-  }
+  editorCodeBlock.setSource(formatMappingJson(mapping));
 }
 
 function applyMapping(mapping, persist) {
@@ -216,14 +152,14 @@ function handleApply() {
     showError(err.message);
     return;
   }
-  closeDialog();
+  dialogControl.closeDialog();
 }
 
 export function resetMappingToDefault() {
   const defaultMapping = resetToDefaultMapping();
   if (!defaultMapping || !Object.keys(defaultMapping).length) return null;
 
-  if (isOpen) {
+  if (isOpen()) {
     populateEditor(defaultMapping);
     clearError();
     editorEl.focus();
@@ -235,20 +171,14 @@ export function resetMappingToDefault() {
   return defaultMapping;
 }
 
-function handleReset() {
-  resetMappingToDefault();
+/** Reset is destructive — always route it through the confirmation dialog. */
+export function requestMappingReset() {
+  if (!canResetMapping()) return;
+  confirmControl?.openDialog();
 }
 
 export function isMappingDialogOpen() {
-  return isOpen;
-}
-
-export function refreshMappingEditorHighlight() {
-  if (!isOpen || !editorEl) return;
-
-  const caret =
-    document.activeElement === editorEl ? saveCaretOffset(editorEl) : undefined;
-  updateEditorDisplay(caret);
+  return isOpen();
 }
 
 export function initMappingDialog({
@@ -259,31 +189,70 @@ export function initMappingDialog({
   onMappingReset = mappingResetHandler;
 
   dialogEl = document.getElementById("mapping-dialog");
-  editorEl = document.getElementById("mapping-editor");
   errorEl = document.getElementById("mapping-dialog-error");
   openBtn = document.getElementById("mapping-edit-btn");
   versionLabelEl = document.getElementById("mapping-version-label");
+  resetBtn = document.getElementById("mapping-reset-btn");
 
-  const closeBtn = dialogEl.querySelector(".modal-close");
-  const backdrop = dialogEl.querySelector(".modal-backdrop");
-  const cancelBtn = document.getElementById("mapping-cancel-btn");
   const applyBtn = document.getElementById("mapping-apply-btn");
-  const resetBtn = document.getElementById("mapping-reset-btn");
+  const codeBlockEl = document.getElementById("mapping-code-block");
+  const confirmDialogEl = document.getElementById("mapping-reset-dialog");
+  const confirmBtn = document.getElementById("mapping-reset-confirm-btn");
+  const confirmCancelBtn = document.getElementById("mapping-reset-cancel-btn");
 
-  openBtn.addEventListener("click", openDialog);
-  closeBtn.addEventListener("click", closeDialog);
-  backdrop.addEventListener("click", closeDialog);
-  cancelBtn.addEventListener("click", closeDialog);
+  ensureJsonGrammar();
+  editorCodeBlock = initCodeBlock(codeBlockEl);
+  editorEl = codeBlockEl.querySelector(".code-block-editor");
+
+  // Focus trap, Escape, backdrop / close / cancel ([data-dialog-close]), and
+  // the Enter → Apply default all come from the template dialog.
+  dialogControl = initDialog({
+    dialogEl,
+    openTriggers: [openBtn],
+    onOpen: () => {
+      populateEditor(getEffectiveMapping());
+      clearError();
+      syncResetButtonState();
+      editorEl.focus();
+      editorEl.setSelectionRange(editorEl.value.length, editorEl.value.length);
+    },
+    onClose: () => {
+      clearError();
+      syncResetButtonState();
+    },
+  });
+
+  confirmControl = initDialog({
+    dialogEl: confirmDialogEl,
+    onOpen: () => confirmCancelBtn?.focus(),
+    onClose: () => {
+      // Opened on top of the mapping dialog, which still needs its page chrome.
+      if (isOpen()) {
+        document.body.classList.add("modal-open");
+        setPageInert(true);
+      }
+    },
+  });
+
+  // Both dialogs register Escape at the same priority, so the confirmation
+  // needs to win while it is on top.
+  onDocumentEscape(
+    () => {
+      if (!confirmControl.isDialogOpen()) return false;
+      confirmControl.closeDialog();
+      return true;
+    },
+    { priority: 200 }
+  );
+
+  confirmBtn.addEventListener("click", () => {
+    confirmControl.closeDialog();
+    resetMappingToDefault();
+  });
+
   applyBtn.addEventListener("click", handleApply);
-  resetBtn.addEventListener("click", handleReset);
-
-  editorEl.addEventListener("input", handleEditorInput);
-  editorEl.addEventListener("paste", handleEditorPaste);
-
-  dialogEl.addEventListener("keydown", trapFocus);
-  document.addEventListener("keydown", handleEscape, true);
-
-  document.addEventListener("pqm-theme-change", refreshMappingEditorHighlight);
+  resetBtn.addEventListener("click", requestMappingReset);
+  editorEl.addEventListener("input", syncResetButtonState);
 
   syncOpenButtonState();
 }

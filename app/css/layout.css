@@ -1,0 +1,1204 @@
+/* Layout */
+
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 200;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform 0.15s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+header,
+main,
+body > footer {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--page-padding-y) var(--page-padding-x);
+  width: 100%;
+}
+
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.site-logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.brand-icon--dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .brand-icon--light {
+  display: none;
+}
+
+:root[data-theme="dark"] .brand-icon--dark {
+  display: block;
+}
+
+.site-brand h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.tagline {
+  margin: 0;
+  color: var(--muted);
+}
+
+.tagline a {
+  color: var(--accent);
+}
+
+.tagline-link {
+  margin-left: 0.35rem;
+  font-size: inherit;
+}
+
+/* Optional sticky chrome — opt in via data-sticky-* on :root.
+   Stack: site header → single content slot (segment, or Segment > Section crumb).
+   JS toggles data-sticky-stuck / data-sticky-stuck-edge / data-sticky-crumb*.
+
+   Pinning waits for data-sticky-ready (set by sticky.js). All pinned chrome —
+   background, gap fill, hairline — is painted from JS-set state, so pinning
+   before the first sync would float bare heading text over scrolled content
+   until the module ran. data-sticky-boot zeroes the fade durations so that
+   first sync lands fully painted instead of transitioning in. */
+
+/* Tier-lead collapse shifts layout above the viewport; disable scroll
+   anchoring so programmatic page-nav jumps keep their target Y. */
+:root[data-sticky-section-headings] {
+  overflow-anchor: none;
+}
+
+:root[data-sticky-boot] {
+  --sticky-fade-ms: 0ms;
+  --sticky-crumb-ms: 0ms;
+}
+
+.content-tier {
+  --sticky-tier-offset: 0px;
+}
+
+:root[data-sticky-ready][data-sticky-header] body > header {
+  position: sticky;
+  /* Flush at rest — top: sticky-gap would offset the header immediately at scroll 0 */
+  top: 0;
+  z-index: 40;
+  background: var(--bg);
+}
+
+:root[data-sticky-header] body > header[data-sticky-stuck] {
+  z-index: 41;
+}
+
+:root[data-sticky-ready][data-sticky-section-headings] .content-tier-header {
+  position: sticky;
+  top: calc(var(--sticky-header-offset) + var(--sticky-gap));
+  /* Below site header; above section titles so crumbs paint over merged ghosts */
+  z-index: 30;
+}
+
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck] {
+  z-index: 31;
+  background: var(--bg);
+  /* Stack edge hairline replaces the title rule while pinned. */
+  border-bottom-color: transparent;
+  /* Tighter band under the title while pinned. */
+  padding-bottom: 0.25rem;
+  /* Give back the height lost to lead collapse + tighter padding, measured by
+     sticky.js. Pinning must not shorten the page: otherwise the next tier
+     rises, evicts this header, the lead returns, and the boundary oscillates. */
+  margin-bottom: var(--sticky-collapse-reserve, 0px);
+}
+
+/* Drop the lead while pinned so the sticky band stays title-height only. */
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck] .content-tier-lead {
+  display: none;
+}
+
+/* Breadcrumb trail — stacked on the segment title so height does not jump.
+   Opacity (not display/visibility snaps) crossfades segment ↔ crumb. */
+.sticky-crumb {
+  display: none;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--sticky-crumb-ms, 180ms) ease;
+}
+
+/* While the tier is pinned, keep segment + crumb in one grid cell so we can
+   crossfade instead of snapping the large segment title back in. */
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck] .segment-title,
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck] .sticky-crumb {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck] .segment-title {
+  transition: opacity var(--sticky-crumb-ms, 180ms) ease;
+}
+
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-crumb] .segment-title {
+  opacity: 0;
+  pointer-events: none;
+}
+
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck] .sticky-crumb {
+  display: flex;
+  align-self: center;
+  width: 100%;
+}
+
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-crumb] .sticky-crumb {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck] .content-tier-lead {
+  grid-column: 1;
+}
+
+.sticky-crumb-primary,
+.sticky-crumb-current {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sticky-crumb-primary {
+  flex: 0 1 auto;
+  color: var(--muted);
+}
+
+.sticky-crumb-current {
+  flex: 1 1 auto;
+  color: var(--text);
+  transition: opacity calc(var(--sticky-crumb-ms, 180ms) * 0.55) ease;
+}
+
+.sticky-crumb-primary:hover,
+.sticky-crumb-current:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.sticky-crumb-primary:focus-visible,
+.sticky-crumb-current:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.sticky-crumb-primary[aria-disabled="true"],
+.sticky-crumb-current[aria-disabled="true"] {
+  cursor: default;
+  text-decoration: none;
+  pointer-events: none;
+}
+
+.sticky-crumb-current.is-swapping {
+  opacity: 0;
+}
+
+.sticky-crumb-sep {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  color: var(--muted);
+}
+
+.sticky-crumb-sep-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* Pinned titles (no crumb overlay) are also clickable jump targets. */
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck]:not([data-sticky-crumb]) .segment-title,
+:root[data-sticky-section-headings] .section-title[data-sticky-stuck]:not([data-sticky-crumb-merged]) {
+  cursor: pointer;
+}
+
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck]:not([data-sticky-crumb]) .segment-title:hover,
+:root[data-sticky-section-headings] .section-title[data-sticky-stuck]:not([data-sticky-crumb-merged]):hover {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+:root[data-sticky-ready][data-sticky-section-headings] .section-title {
+  position: sticky;
+  /* Same content slot as the tier header (breadcrumb merge, not vertical stack). */
+  top: calc(var(--sticky-header-offset) + var(--sticky-gap));
+  z-index: 20;
+}
+
+:root[data-sticky-section-headings] .section-title[data-sticky-stuck] {
+  z-index: 21;
+  background: var(--bg);
+}
+
+/* Merged into the tier crumb — keep sticky containment, hide chrome.
+   visibility keeps box size so merging does not shift scroll geometry. */
+:root[data-sticky-section-headings] .section-title[data-sticky-crumb-merged] {
+  visibility: hidden;
+  background: transparent;
+  pointer-events: none;
+  z-index: 19;
+}
+
+/* Gap fill above + full-bleed page-bg wings while stuck (center stays clear so
+   the host background shows). Edge pad below carries the stack hairline. */
+:root[data-sticky-header] body > header::before,
+:root[data-sticky-section-headings] .content-tier-header::before,
+:root[data-sticky-section-headings] .section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--sticky-gap));
+  bottom: 0;
+  z-index: -1;
+  /* Gap strip opaque; element band transparent so the host background shows. */
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0,
+    var(--bg) var(--sticky-gap),
+    transparent var(--sticky-gap)
+  );
+  /* Side wings only — clip-path is on the pseudo, not the sticky host. */
+  box-shadow: 0 0 0 100vmax var(--bg);
+  clip-path: inset(0 -100vmax);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--sticky-fade-ms, 150ms) ease;
+}
+
+:root[data-sticky-header] body > header::after,
+:root[data-sticky-section-headings] .content-tier-header::after,
+:root[data-sticky-section-headings] .section-title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  top: 100%;
+  height: var(--sticky-edge-pad, 0.5rem);
+  background: var(--bg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--sticky-fade-ms, 150ms) ease;
+}
+
+:root[data-sticky-header] body > header[data-sticky-stuck]::before,
+:root[data-sticky-header] body > header[data-sticky-stuck]::after,
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck]::before,
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck]::after,
+:root[data-sticky-section-headings] .section-title[data-sticky-stuck]:not([data-sticky-crumb-merged])::before,
+:root[data-sticky-section-headings] .section-title[data-sticky-stuck]:not([data-sticky-crumb-merged])::after {
+  opacity: 1;
+}
+
+:root[data-sticky-section-headings] .section-title[data-sticky-crumb-merged]::before,
+:root[data-sticky-section-headings] .section-title[data-sticky-crumb-merged]::after {
+  opacity: 0;
+  transition: none;
+}
+
+/* Full-viewport hairline + drop shadow on the bottom-most pinned element. */
+:root[data-sticky-header] body > header[data-sticky-stuck-edge]::after,
+:root[data-sticky-section-headings] .content-tier-header[data-sticky-stuck-edge]::after,
+:root[data-sticky-section-headings] .section-title[data-sticky-stuck-edge]::after {
+  box-shadow:
+    0 1px 0 var(--border),
+    0 8px 16px -2px var(--sticky-shadow),
+    0 18px 36px -10px var(--sticky-shadow);
+}
+
+/* Short viewports: drop the tier from the stack so content stays usable.
+   Matches the pinning selector so it still wins on specificity. */
+@media (max-height: 700px) {
+  :root[data-sticky-ready][data-sticky-section-headings] .content-tier-header {
+    position: static;
+  }
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.content-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  /* Clear the pinned tier bar (--sticky-tier-offset) so jumps land the heading
+     below the crumb rather than behind it. */
+  scroll-margin-top: calc(
+    var(--sticky-header-offset) + var(--sticky-gap) + var(--sticky-tier-offset, 0px) + 0.75rem
+  );
+}
+
+/* Optional outline prefixes — see app/shell/title-numbering.js */
+.title-number {
+  font-variant-numeric: tabular-nums;
+  /* Trailing nbsp is in the span text for page-nav labels; keep margin tight */
+  margin-inline-end: 0.1em;
+}
+
+.heading-anchor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  max-width: 100%;
+}
+
+.heading-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0;
+  flex-shrink: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.heading-anchor:hover .heading-link-btn,
+.heading-link-btn:focus-visible {
+  opacity: 1;
+}
+
+.heading-link-btn:hover,
+.heading-link-btn:focus-visible {
+  color: var(--accent);
+  outline: none;
+}
+
+.heading-link-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.panel-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.panel-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.panel-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Spread items across the full line instead of bunching them at the start. */
+.panel-row--spread {
+  justify-content: space-between;
+}
+
+.panel-inline {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.content-tier {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.content-tier + .content-tier {
+  margin-top: 3.5rem;
+}
+
+.content-tier-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 0 0.875rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.segment-title {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  scroll-margin-top: calc(var(--sticky-header-offset) + var(--sticky-gap) + 1.5rem);
+}
+
+.content-tier-lead {
+  margin: 0;
+  max-width: 42rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.content-tier-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.panel-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.panel-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+}
+
+.panel-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.panel-grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1100px) {
+  .panel-grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .panel-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* Full-bleed rule inside padded panels (`.section-panel`, …).
+ * Place the divider as a direct child of the padded panel so `--panel-padding`
+ * inherits; nested wrappers break the negative margin. */
+.panel-divider {
+  align-self: stretch;
+  margin-block: var(--panel-divider-margin, 0.35rem);
+  margin-inline: calc(-1 * var(--panel-padding, 1rem));
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.panel-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  column-gap: 1.25rem;
+  align-items: stretch;
+  /* Bleed into panel padding (top) and flex gap + following hr margin (bottom)
+   * so the vertical rule can meet the panel edge and the horizontal divider. */
+  margin-block: calc(-1 * var(--panel-padding, 1rem));
+}
+
+.panel-split--3 {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+/* Three equal columns, two rows; one vertical rail after column 1.
+ * Child order: col1-row1, col1-row2, vertical divider, col2-row1, col3-row1, col2-row2, col3-row2. */
+.panel-split--3x2 {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  row-gap: 1.25rem;
+}
+
+.panel-split--3x2 > .panel-stack:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.panel-split--3x2 > .panel-stack:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.panel-split--3x2 > .panel-divider {
+  grid-column: 2;
+  grid-row: 1 / -1;
+}
+
+.panel-split--3x2 > .panel-stack:nth-child(4) {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.panel-split--3x2 > .panel-stack:nth-child(5) {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.panel-split--3x2 > .panel-stack:nth-child(6) {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.panel-split--3x2 > .panel-stack:nth-child(7) {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+/* Against the panel edge the bleed is one padding; against a full-bleed rule it
+ * is the panel gap plus that rule's own margin, so the rail meets the rule. */
+.panel-split:has(+ .panel-divider) {
+  margin-bottom: calc(-1 * (var(--panel-gap, 0.75rem) + var(--panel-divider-margin, 0.35rem)));
+}
+
+.panel-divider + .panel-split:not(.panel-split--after-heading) {
+  margin-top: calc(-1 * (var(--panel-gap, 0.75rem) + var(--panel-divider-margin, 0.35rem)));
+}
+
+/* Keep a normal gap under in-panel headings/hints; still bleed into adjacent hrs. */
+.panel-split--after-heading {
+  margin-top: 0;
+}
+
+.panel-split > .panel-stack {
+  /* Keep content inset while the split box itself full-bleeds vertically. */
+  padding-block: var(--panel-padding, 1rem);
+}
+
+.panel-split--3x2 > .panel-stack:nth-child(1),
+.panel-split--3x2 > .panel-stack:nth-child(4),
+.panel-split--3x2 > .panel-stack:nth-child(5) {
+  padding-bottom: 0;
+}
+
+.panel-split--3x2 > .panel-stack:nth-child(2),
+.panel-split--3x2 > .panel-stack:nth-child(6),
+.panel-split--3x2 > .panel-stack:nth-child(7) {
+  padding-top: 0;
+}
+
+.panel-split--after-heading > .panel-stack {
+  padding-top: 0;
+}
+
+.panel-divider.panel-divider--vertical {
+  width: 1px;
+  height: auto;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: var(--border);
+}
+
+@media (max-width: 900px) {
+  .panel-split,
+  .panel-split--3,
+  .panel-split--3x2,
+  .panel-split:has(+ .panel-divider),
+  .panel-divider + .panel-split:not(.panel-split--after-heading) {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    margin-block: 0;
+    row-gap: 0;
+  }
+
+  .panel-split > .panel-stack,
+  .panel-split--3x2 > .panel-stack:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+    padding-block: 0;
+  }
+
+  .panel-split--after-heading > .panel-stack {
+    padding-top: 0;
+  }
+
+  .panel-split--3x2 > .panel-divider {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .panel-divider.panel-divider--vertical {
+    width: auto;
+    height: 0;
+    align-self: stretch;
+    margin-block: 0.35rem;
+    margin-inline: calc(-1 * var(--panel-padding, 1rem));
+    background-color: transparent;
+    border-top: 1px solid var(--border);
+  }
+}
+
+.demo-colour-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.demo-colour-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.demo-colour-swatch {
+  flex: 0 0 auto;
+  width: var(--control-height);
+  height: var(--control-height);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.demo-colour-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.demo-colour-name {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.demo-colour-meta .panel-hint {
+  margin: 0;
+}
+
+.demo-banner-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.demo-banner-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.demo-banner-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Page navigation (headings + jump up/down) */
+
+.page-nav {
+  --scroll-progress: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(18rem, 32vw);
+  z-index: 50;
+  pointer-events: none;
+}
+
+.page-nav-trigger {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  /* Compact (overlaps main): only jumps capture; edge-hover enables the full strip. */
+  pointer-events: none;
+}
+
+/* Gutter mode — strip sits clear of main, so the full zone can capture hover. */
+.page-nav--edge-hover .page-nav-trigger {
+  pointer-events: auto;
+}
+
+/* Compact mode — after opening via jumps, keep the strip live so the panel stays reachable. */
+.page-nav:not(.page-nav--edge-hover) .page-nav-trigger:hover {
+  pointer-events: auto;
+}
+
+.page-nav-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.page-nav-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+  width: min(16rem, calc(100vw - 3rem));
+  background: transparent;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s, visibility 0.15s;
+}
+
+.page-nav-trigger:hover .page-nav-panel,
+.page-nav-panel:focus-within {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.page-nav-panel[hidden] {
+  display: none;
+}
+
+.page-nav-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.375rem;
+}
+
+.page-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  max-width: 100%;
+}
+
+.page-nav-item--tier {
+  gap: 0.125rem;
+}
+
+.page-nav-sublist {
+  margin: 0;
+  padding: 0.125rem 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.125rem;
+}
+
+.page-nav-link {
+  display: block;
+  padding: 0.25rem 0;
+  color: var(--text);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: right;
+  text-decoration: none;
+}
+
+.page-nav-link--tier {
+  color: var(--text);
+}
+
+.page-nav-link--section {
+  padding: 0.2rem 0;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.page-nav-link:hover {
+  color: var(--accent);
+}
+
+.page-nav-link:focus-visible {
+  color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.page-nav-jumps {
+  position: relative;
+  width: 5.5rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  pointer-events: auto;
+}
+
+.page-nav-jump-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 6px;
+  background: conic-gradient(
+    from -90deg,
+    var(--accent) calc(var(--scroll-progress) * 360deg),
+    var(--border) 0
+  );
+  padding: 2px;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.page-nav-jump-inner {
+  position: absolute;
+  inset: 2px;
+  z-index: 2;
+  display: flex;
+  border-radius: 4px;
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(31, 35, 40, 0.12);
+  overflow: hidden;
+}
+
+:root[data-theme="dark"] .page-nav-jump-inner {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.page-nav-jump {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.page-nav-jump-up {
+  border-right: 1px solid var(--border);
+}
+
+.page-nav-jump:focus-visible {
+  outline: none;
+  background: var(--code-bg);
+}
+
+.page-nav-icon-svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Footer */
+
+body > footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.footer-meta {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  line-height: 1;
+}
+
+.footer-meta-copy {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.footer-meta-sep {
+  color: var(--muted);
+  user-select: none;
+}
+
+.footer-version {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  cursor: default;
+}
+
+/* Match .footer-meta-copy gap so · / “also see” spacing matches other entries */
+#footer-also-see-host:not(:empty) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.footer-also-see.dropdown {
+  position: relative;
+  display: inline;
+  align-self: center;
+  /* Keep the menu above sticky chrome when not using fixed positioning. */
+  z-index: 60;
+}
+
+.footer-also-see-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.015em;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  line-height: inherit;
+  cursor: pointer;
+}
+
+.footer-also-see-trigger:hover,
+.footer-also-see-trigger:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+/* Column count is chosen per menu in render-shell.js to minimise trailing gaps. */
+.footer-also-see .footer-also-see-menu {
+  --also-see-column-width: 18rem;
+  /* Text inset lives on the items so topic separators can still run edge to edge. */
+  --also-see-item-inset: 1rem;
+
+  top: auto;
+  bottom: calc(100% + 4px);
+  display: grid;
+  grid-template-columns: repeat(var(--also-see-columns, 1), minmax(0, 1fr));
+  align-content: start;
+  gap: 0.35rem 0.5rem;
+  box-sizing: border-box;
+  width: min(
+    100vw - 2rem,
+    calc(var(--also-see-columns, 1) * var(--also-see-column-width))
+  );
+  /* `.dropdown-menu` sets `min-width: 100%`, which is the viewport once fixed. */
+  min-width: 0;
+  max-width: min(100vw - 2rem, 40rem);
+  /* No inline padding so topic separators run edge to edge; items pad their own text. */
+  padding: 0.5rem 0;
+}
+
+.footer-also-see-topic {
+  display: grid;
+  /* Same columns as the menu; upgraded to subgrid when supported. */
+  grid-template-columns: repeat(var(--also-see-columns, 1), minmax(0, 1fr));
+  grid-column: 1 / -1;
+  align-content: start;
+  gap: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@supports (grid-template-columns: subgrid) {
+  .footer-also-see-topic {
+    grid-template-columns: subgrid;
+  }
+}
+
+.footer-also-see-topic-label {
+  grid-column: 1 / -1;
+  padding: 0.35rem var(--also-see-item-inset) 0.25rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  white-space: normal;
+  user-select: none;
+  pointer-events: none;
+}
+
+.footer-also-see-topic:not(:first-child) > .footer-also-see-topic-label {
+  margin-top: 0.15rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer-also-see-topic--ungrouped:not(:first-child) {
+  margin-top: 0.15rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer-also-see-topic-links {
+  display: contents;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Stretch each cell so links sharing a row match the tallest one. */
+.footer-also-see-topic-links > li {
+  display: flex;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-also-see-topic-links .dropdown-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.4rem var(--also-see-item-inset);
+  white-space: normal;
+}
+
+/* Nested-grid fallback when `display: contents` is unavailable. */
+@supports not (display: contents) {
+  .footer-also-see-topic-links {
+    display: grid;
+    grid-template-columns: repeat(var(--also-see-columns, 1), minmax(0, 1fr));
+    grid-column: 1 / -1;
+  }
+}
+
+/* Too narrow for side-by-side cells: stack every link in one column. */
+@media (max-width: 25rem) {
+  .footer-also-see .footer-also-see-menu,
+  .footer-also-see-topic,
+  .footer-also-see-topic-links {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+body > footer a {
+  color: var(--accent);
+}
+
+.external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.015em;
+}
+
+.external-link-icon {
+  width: 0.875em;
+  height: 0.875em;
+  flex-shrink: 0;
+}
+
+/* Theme toggle */
+
+.theme-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-height);
+  height: var(--control-height);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.theme-toggle-btn:not(:last-child) {
+  border-right: 1px solid var(--border);
+}
+
+.theme-toggle-btn:hover {
+  color: var(--text);
+  background: var(--code-bg);
+}
+
+.theme-toggle-btn[aria-pressed="true"] {
+  color: var(--text);
+  background: var(--code-bg);
+}
+
+.theme-toggle-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.theme-icon {
+  width: 1rem;
+  height: 1rem;
+}

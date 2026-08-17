@@ -1,3 +1,11 @@
+import { APP_CONFIG } from "./config.js";
+import { initShell } from "./shell/shell.js";
+import { mountIcon } from "./utils/icons.js";
+import { initCombo } from "./components/combo.js";
+import { initToggleButton } from "./components/toggle-button.js";
+import { initAboutDialog } from "./components/about-dialog.js";
+import { initCodeBlock } from "./components/code-block.js";
+import { initTutorial } from "./components/tutorial.js";
 import { transform } from "./transform.js";
 import { renderHighlighted } from "./highlight.js";
 import {
@@ -5,17 +13,7 @@ import {
   fetchExampleManifest,
   pickRandomExample,
 } from "./examples.js";
-import {
-  saveCaretOffset,
-  getSelectionOffsets,
-  restoreCaretOffset,
-  readPlainText,
-  selectElementContents,
-  lineNumbersText,
-} from "./editor.js";
-import { initIcons, mountIcon } from "./icons.js";
-import { initTooltips } from "./tooltip.js";
-import { initTheme, initThemeToggle } from "./theme.js";
+import { selectElementContents } from "./editor.js";
 import {
   getMappingForTransform,
   loadDefaultMapping,
@@ -24,16 +22,29 @@ import {
 } from "./mapping-store.js";
 import {
   initMappingDialog,
-  isMappingDialogOpen,
-  resetMappingToDefault,
+  requestMappingReset,
   refreshMappingEditorAvailability,
 } from "./mapping-dialog.js";
-import { initAboutDialog, isAboutDialogOpen } from "./about-dialog.js";
+import { initPageNavPanel } from "./shell/page-nav.js";
 
-const inputEl = document.getElementById("input");
-const inputGutterEl = document.getElementById("input-gutter");
+initShell();
+
+/* This tool is a single-viewport editor — hide the shell’s floating page-nav
+   jumps (and heading strip) rather than leaving them over the code panes. */
+initPageNavPanel()?.destroy();
+document.getElementById("page-nav")?.remove();
+
+const inputCodeBlockEl = document.getElementById("input-code-block");
+const outputCodeBlockEl = document.getElementById("output-code-block");
+const inputCodeBlock = initCodeBlock(inputCodeBlockEl);
+const outputCodeBlock = initCodeBlock(outputCodeBlockEl);
+const inputEl = inputCodeBlockEl.querySelector(".code-block-editor");
+const inputHighlightEl = document.getElementById("input-highlight");
 const outputHighlightEl = document.getElementById("output-highlight");
-const outputGutterEl = document.getElementById("output-gutter");
+const outputPreEl = outputHighlightEl.closest("pre");
+inputEl.placeholder = "Insert your M code here";
+outputHighlightEl.dataset.placeholder =
+  "Transformed code appears here";
 const exampleCombo = document.getElementById("example-combo");
 const exampleBtn = document.getElementById("example-btn");
 const exampleMenuBtn = document.getElementById("example-menu-btn");
@@ -70,7 +81,6 @@ let mapping = {};
 let mappingState = null;
 let examples = [];
 let lastLoadedExampleFile = null;
-let exampleMenuOpen = false;
 let lastRenames = null;
 let inputText = "";
 let outputText = "";
@@ -84,20 +94,9 @@ function getStepHighlightEnabled() {
   return stored !== "false";
 }
 
-function setStepHighlightEnabled(enabled) {
-  localStorage.setItem(STEP_HIGHLIGHT_STORAGE_KEY, enabled ? "true" : "false");
-  stepHighlightToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
-  stepHighlightLegend.classList.toggle("is-disabled", !enabled);
-}
-
 function getSyntaxHighlightEnabled() {
   const stored = localStorage.getItem(SYNTAX_HIGHLIGHT_STORAGE_KEY);
   return stored !== "false";
-}
-
-function setSyntaxHighlightEnabled(enabled) {
-  localStorage.setItem(SYNTAX_HIGHLIGHT_STORAGE_KEY, enabled ? "true" : "false");
-  syntaxHighlightToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
 }
 
 function getVerboseNamesEnabled() {
@@ -106,45 +105,26 @@ function getVerboseNamesEnabled() {
   return stored === "true";
 }
 
-function setVerboseNamesEnabled(enabled) {
-  localStorage.setItem(VERBOSE_NAMES_STORAGE_KEY, enabled ? "true" : "false");
-  verboseNamesToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
-  verboseNamesToggle.setAttribute(
-    "aria-label",
-    enabled ? "Verbose steps" : "Simple steps"
-  );
-  verboseNamesToggle.dataset.tooltip = enabled
-    ? "Verbose steps"
-    : "Simple steps";
-}
-
 function getAlwaysNumberEnabled() {
   return localStorage.getItem(ALWAYS_NUMBER_STORAGE_KEY) === "true";
 }
 
-function setAlwaysNumberEnabled(enabled) {
-  localStorage.setItem(ALWAYS_NUMBER_STORAGE_KEY, enabled ? "true" : "false");
-  alwaysNumberToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
-  alwaysNumberToggle.setAttribute(
-    "aria-label",
-    enabled ? "Number repeated steps" : "Always number steps"
-  );
-  alwaysNumberToggle.dataset.tooltip = enabled
-    ? "Always number steps"
-    : "Number repeated steps";
-}
+let stepHighlightEnabled = getStepHighlightEnabled();
+let syntaxHighlightEnabled = getSyntaxHighlightEnabled();
+let verboseNamesEnabled = getVerboseNamesEnabled();
+let alwaysNumberEnabled = getAlwaysNumberEnabled();
 
 function getTransformOptions() {
   return {
-    namingMode: getVerboseNamesEnabled() ? "verbose" : "numbered",
-    alwaysNumber: getAlwaysNumberEnabled(),
+    namingMode: verboseNamesEnabled ? "verbose" : "numbered",
+    alwaysNumber: alwaysNumberEnabled,
   };
 }
 
 function getHighlightOptions() {
   return {
-    stepHighlightEnabled: getStepHighlightEnabled(),
-    syntaxHighlightEnabled: getSyntaxHighlightEnabled(),
+    stepHighlightEnabled,
+    syntaxHighlightEnabled,
   };
 }
 
@@ -208,43 +188,24 @@ function filterLiveWarnings(warnings, text) {
 }
 
 function updateInputDisplay(caret) {
-  inputGutterEl.textContent = lineNumbersText(inputText);
-
-  if (!inputText) {
-    inputEl.innerHTML = "";
-    inputEl.classList.add("is-empty");
-    return;
+  if (inputCodeBlock.getSource() !== inputText) {
+    inputCodeBlock.setSource(inputText);
   }
-
-  inputEl.classList.remove("is-empty");
-  inputEl.innerHTML = renderHighlighted(
-    inputText,
-    "input",
-    lastRenames,
-    getHighlightOptions()
-  );
+  inputHighlightEl.innerHTML = inputText
+    ? renderHighlighted(inputText, "input", lastRenames, getHighlightOptions())
+    : "";
 
   if (caret !== undefined) {
-    restoreCaretOffset(inputEl, caret);
+    inputEl.setSelectionRange(caret, caret);
   }
 }
 
 function updateOutputHighlight() {
-  outputGutterEl.textContent = lineNumbersText(outputText);
-
-  if (!outputText) {
-    outputHighlightEl.textContent = "";
-    outputHighlightEl.classList.add("is-empty");
-    return;
-  }
-
-  outputHighlightEl.classList.remove("is-empty");
-  outputHighlightEl.innerHTML = renderHighlighted(
-    outputText,
-    "output",
-    lastRenames,
-    getHighlightOptions()
-  );
+  outputCodeBlock.setSource(outputText);
+  outputHighlightEl.classList.toggle("is-empty", !outputText);
+  outputHighlightEl.innerHTML = outputText
+    ? renderHighlighted(outputText, "output", lastRenames, getHighlightOptions())
+    : "";
 }
 
 function runTransform(caret) {
@@ -258,7 +219,7 @@ function runTransform(caret) {
   copyBtn.disabled = !outputText;
 
   if (caret === undefined && document.activeElement === inputEl) {
-    caret = saveCaretOffset(inputEl);
+    caret = inputEl.selectionStart;
   }
 
   updateInputDisplay(caret);
@@ -279,13 +240,13 @@ function cancelPendingInputEdit() {
 }
 
 function handleInputEdit() {
-  const caret = saveCaretOffset(inputEl);
-  inputText = readPlainText(inputEl);
+  const caret = inputEl.selectionStart;
+  inputText = inputEl.value;
   cancelPendingInputEdit();
   inputEditTimer = setTimeout(() => {
     inputEditTimer = null;
     runTransform(
-      document.activeElement === inputEl ? saveCaretOffset(inputEl) : caret
+      document.activeElement === inputEl ? inputEl.selectionStart : caret
     );
   }, INPUT_EDIT_DEBOUNCE_MS);
 }
@@ -298,7 +259,17 @@ function runTransformNow(caret) {
 function setInputText(text, caret) {
   cancelPendingInputEdit();
   inputText = text;
+  inputCodeBlock.setSource(text);
   runTransform(caret ?? text.length);
+}
+
+function rerunFromToggle() {
+  if (document.activeElement === inputEl) {
+    inputText = inputEl.value;
+  }
+  runTransformNow(
+    document.activeElement === inputEl ? inputEl.selectionStart : undefined
+  );
 }
 
 async function loadMapping() {
@@ -331,10 +302,10 @@ function setMapping(nextMapping) {
   mapping = nextMapping;
   refreshMappingState();
   if (document.activeElement === inputEl) {
-    inputText = readPlainText(inputEl);
+    inputText = inputEl.value;
   }
   const caret =
-    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
+    document.activeElement === inputEl ? inputEl.selectionStart : undefined;
   runTransformNow(caret);
 }
 
@@ -354,7 +325,7 @@ async function copyOutput() {
 
 copyBtn.addEventListener("click", copyOutput);
 
-outputHighlightEl.addEventListener("keydown", (e) => {
+outputPreEl.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "a") {
     e.preventDefault();
     if (outputText) {
@@ -363,77 +334,72 @@ outputHighlightEl.addEventListener("keydown", (e) => {
   }
 });
 
-setStepHighlightEnabled(getStepHighlightEnabled());
-setSyntaxHighlightEnabled(getSyntaxHighlightEnabled());
-setVerboseNamesEnabled(getVerboseNamesEnabled());
-setAlwaysNumberEnabled(getAlwaysNumberEnabled());
-
 function refreshHighlights() {
   const caret =
-    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined;
+    document.activeElement === inputEl ? inputEl.selectionStart : undefined;
   updateInputDisplay(caret);
   updateOutputHighlight();
 }
 
-stepHighlightToggle.addEventListener("click", () => {
-  const enabled = stepHighlightToggle.getAttribute("aria-pressed") !== "true";
-  setStepHighlightEnabled(enabled);
-  refreshHighlights();
+/* Toolbar toggles — template toggle-button drives aria-pressed; the app keeps
+   inline glyph SVGs, storage, and dynamic tooltip / aria-label copy. */
+
+initToggleButton(stepHighlightToggle, {
+  defaultPressed: stepHighlightEnabled,
+  onChange: ({ pressed, source }) => {
+    stepHighlightEnabled = pressed;
+    localStorage.setItem(STEP_HIGHLIGHT_STORAGE_KEY, pressed ? "true" : "false");
+    stepHighlightLegend.classList.toggle("is-disabled", !pressed);
+    if (source !== "init") refreshHighlights();
+  },
 });
 
-syntaxHighlightToggle.addEventListener("click", () => {
-  const enabled = syntaxHighlightToggle.getAttribute("aria-pressed") !== "true";
-  setSyntaxHighlightEnabled(enabled);
-  refreshHighlights();
+initToggleButton(syntaxHighlightToggle, {
+  defaultPressed: syntaxHighlightEnabled,
+  onChange: ({ pressed, source }) => {
+    syntaxHighlightEnabled = pressed;
+    localStorage.setItem(SYNTAX_HIGHLIGHT_STORAGE_KEY, pressed ? "true" : "false");
+    if (source !== "init") refreshHighlights();
+  },
 });
 
-verboseNamesToggle.addEventListener("click", () => {
-  const enabled = verboseNamesToggle.getAttribute("aria-pressed") !== "true";
-  setVerboseNamesEnabled(enabled);
-  if (document.activeElement === inputEl) {
-    inputText = readPlainText(inputEl);
-  }
-  runTransformNow(
-    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined
-  );
+initToggleButton(verboseNamesToggle, {
+  defaultPressed: verboseNamesEnabled,
+  onChange: ({ pressed, source }) => {
+    verboseNamesEnabled = pressed;
+    localStorage.setItem(VERBOSE_NAMES_STORAGE_KEY, pressed ? "true" : "false");
+    verboseNamesToggle.setAttribute(
+      "aria-label",
+      pressed ? "Verbose steps" : "Simple steps"
+    );
+    verboseNamesToggle.dataset.tooltip = pressed
+      ? "Verbose steps"
+      : "Simple steps";
+    if (source !== "init") rerunFromToggle();
+  },
 });
 
-alwaysNumberToggle.addEventListener("click", () => {
-  const enabled = alwaysNumberToggle.getAttribute("aria-pressed") !== "true";
-  setAlwaysNumberEnabled(enabled);
-  if (document.activeElement === inputEl) {
-    inputText = readPlainText(inputEl);
-  }
-  runTransformNow(
-    document.activeElement === inputEl ? saveCaretOffset(inputEl) : undefined
-  );
+initToggleButton(alwaysNumberToggle, {
+  defaultPressed: alwaysNumberEnabled,
+  onChange: ({ pressed, source }) => {
+    alwaysNumberEnabled = pressed;
+    localStorage.setItem(ALWAYS_NUMBER_STORAGE_KEY, pressed ? "true" : "false");
+    alwaysNumberToggle.setAttribute(
+      "aria-label",
+      pressed ? "Number repeated steps" : "Always number steps"
+    );
+    alwaysNumberToggle.dataset.tooltip = pressed
+      ? "Always number steps"
+      : "Number repeated steps";
+    if (source !== "init") rerunFromToggle();
+  },
 });
+
+/* Examples — template combo (split button + popup menu) */
 
 function setExampleControlsEnabled(enabled) {
   exampleBtn.disabled = !enabled;
   exampleMenuBtn.disabled = !enabled;
-}
-
-function closeExampleMenu() {
-  if (!exampleMenuOpen) return;
-  exampleMenuOpen = false;
-  exampleMenu.classList.add("hidden");
-  exampleMenuBtn.setAttribute("aria-expanded", "false");
-}
-
-function openExampleMenu() {
-  if (!examples.length) return;
-  exampleMenuOpen = true;
-  exampleMenu.classList.remove("hidden");
-  exampleMenuBtn.setAttribute("aria-expanded", "true");
-}
-
-function toggleExampleMenu() {
-  if (exampleMenuOpen) {
-    closeExampleMenu();
-  } else {
-    openExampleMenu();
-  }
 }
 
 function renderExampleMenu() {
@@ -446,11 +412,8 @@ function renderExampleMenu() {
       button.type = "button";
       button.className = "combo-menu-item";
       button.setAttribute("role", "menuitem");
+      button.dataset.value = file;
       button.textContent = label;
-      button.addEventListener("click", () => {
-        closeExampleMenu();
-        loadExampleByName(file);
-      });
 
       item.appendChild(button);
       return item;
@@ -489,26 +452,13 @@ async function loadExamples() {
   }
 }
 
-exampleBtn.addEventListener("click", () => {
-  loadRandomExample();
-});
-
-exampleMenuBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  toggleExampleMenu();
-});
-
-document.addEventListener("click", (e) => {
-  if (!exampleCombo.contains(e.target)) {
-    closeExampleMenu();
-  }
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    if (isMappingDialogOpen() || isAboutDialogOpen()) return;
-    closeExampleMenu();
-  }
+initCombo(exampleCombo, {
+  onMainClick: () => {
+    loadRandomExample();
+  },
+  onSelect: ({ value }) => {
+    if (value) loadExampleByName(value);
+  },
 });
 
 clearBtn.addEventListener("click", () => {
@@ -516,7 +466,7 @@ clearBtn.addEventListener("click", () => {
   inputEl.focus();
 });
 
-inputEl.closest(".code-editor")?.addEventListener("click", (e) => {
+inputCodeBlockEl.addEventListener("click", (e) => {
   if (inputEl.contains(e.target)) return;
   inputEl.focus();
 });
@@ -527,8 +477,8 @@ inputEl.addEventListener("compositionstart", () => {
 
 inputEl.addEventListener("compositionend", () => {
   isComposing = false;
-  const caret = saveCaretOffset(inputEl);
-  inputText = readPlainText(inputEl);
+  const caret = inputEl.selectionStart;
+  inputText = inputEl.value;
   runTransformNow(caret);
 });
 
@@ -537,18 +487,12 @@ inputEl.addEventListener("input", () => {
   handleInputEdit();
 });
 
-inputEl.addEventListener("paste", (e) => {
-  e.preventDefault();
-  cancelPendingInputEdit();
-  inputText = readPlainText(inputEl);
-  const pasted = e.clipboardData.getData("text/plain");
-  const { start, end } = getSelectionOffsets(inputEl);
-  inputText = inputText.slice(0, start) + pasted + inputText.slice(end);
-  runTransformNow(start + pasted.length);
+mappingResetBannerBtn.addEventListener("click", () => {
+  requestMappingReset();
 });
 
-mappingResetBannerBtn.addEventListener("click", () => {
-  resetMappingToDefault();
+document.addEventListener(APP_CONFIG.themeChangeEvent, () => {
+  refreshHighlights();
 });
 
 initMappingDialog({
@@ -558,11 +502,58 @@ initMappingDialog({
 loadMapping().then(() => {
   refreshMappingEditorAvailability();
 });
-initAboutDialog();
+initAboutDialog({
+  dialogEl: document.getElementById("about-dialog"),
+  openTriggers: [document.getElementById("about-open-btn")],
+});
+initTutorial({
+  id: "pqm-overview",
+  startTriggers: [document.getElementById("start-tour-btn")],
+  steps: [
+    {
+      target: ".panes",
+      title: "Input / Output",
+      body: "Insert your M code, the transformed output will be generated automatically.",
+      position: "right",
+    },
+    {
+      target: ".toolbar-mapping",
+      title: "Step mapping",
+      body: "Customise the mapping with your own step names and identifiers.",
+      position: "bottom",
+    },
+    {
+      target: "#verbose-names-toggle",
+      title: "Step name style",
+      body: "Switch between short names (default) and more descriptive step names. Verbose mode attempts to extract a descriptor from the step function.",
+      position: "bottom",
+    },
+    {
+      target: "#always-number-toggle",
+      title: "Number repeated steps",
+      body: "Choose between numbering recurring identical steps (default) or numbering all steps.",
+      position: "bottom",
+    },
+    {
+      target: "#syntax-highlight-toggle",
+      title: "Syntax highlighting",
+      body: "Turn syntax highlighting on or off.",
+      position: "bottom",
+    },
+    {
+      target: "#step-highlight-toggle",
+      title: "Step highlighting",
+      body: "Show or hide legend definition. The legend helps visually identify the transformations.",
+      position: "bottom",
+    },
+    {
+      target: "#example-btn",
+      title: "Try it",
+      body: "Load an example to see the transformation in action.",
+      position: "bottom",
+      interactive: true,
+      advanceOn: "click",
+    },
+  ],
+});
 loadExamples();
-initIcons();
-initTooltips();
-initTheme();
-initThemeToggle(document.getElementById("theme-toggle"));
-
-document.addEventListener("pqm-theme-change", refreshHighlights);

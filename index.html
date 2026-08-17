@@ -4,32 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PQM Stepper</title>
-    <link rel="icon" href="app/res/icon/icon.svg" type="image/svg+xml" />
-    <link rel="icon" href="app/res/icon/icon.png" type="image/png" />
-    <link rel="apple-touch-icon" href="app/res/icon/icon.png" />
-    <link
-      id="prism-light"
-      rel="stylesheet"
-      href="app/vendor/prism/prism.min.css"
-    />
-    <link
-      id="prism-dark"
-      rel="stylesheet"
-      href="app/vendor/prism/prism-tomorrow.min.css"
-      disabled
-    />
+    <script>
+      window.__MICROAPP__ = {
+        themeStorageKey: "pqm-theme",
+        appIcon: "",
+        appIconLight: "app/res/app-light.svg",
+        appIconDark: "app/res/app-dark.svg",
+      };
+    </script>
+    <link rel="icon" href="app/res/app-light.svg" type="image/svg+xml" data-brand-icon />
     <script src="app/theme-init.js"></script>
     <link rel="stylesheet" href="app/styles.css" />
+    <link rel="stylesheet" href="app/prism.css" />
   </head>
   <body>
     <header>
       <div class="site-brand">
         <img
-          src="app/res/icon/icon.svg"
-          alt=""
-          class="site-logo"
+          src="app/res/app-light.svg"
+          alt="PQM Stepper"
+          class="site-logo brand-icon--light"
           width="40"
           height="40"
+        />
+        <img
+          src="app/res/app-dark.svg"
+          alt=""
+          class="site-logo brand-icon--dark"
+          width="40"
+          height="40"
+          aria-hidden="true"
         />
         <h1>Power Query M Stepper</h1>
       </div>
@@ -39,12 +43,12 @@
       </p>
     </header>
 
-    <main>
+    <main id="main">
       <div id="mapping-banner" class="banner banner-warning hidden" role="status">
         <span class="banner-icon" data-icon="warning" data-icon-class="banner-icon-svg"></span>
         <div class="banner-body mapping-banner-body">
           <span id="mapping-banner-text" class="mapping-banner-text"></span>
-          <button type="button" id="mapping-reset-banner-btn" class="btn mapping-banner-btn">
+          <button type="button" id="mapping-reset-banner-btn" class="btn btn-danger mapping-banner-btn">
             Reset to default
           </button>
         </div>
@@ -76,218 +80,162 @@
         <button type="button" id="copy-btn" class="btn btn-primary" disabled>
           Copy output
         </button>
-        <button
-          type="button"
-          id="verbose-names-toggle"
-          class="btn btn-icon toolbar-spacer"
-          aria-pressed="true"
-          aria-label="Verbose steps"
-          data-tooltip="Verbose steps"
-          data-tooltip-position="bottom"
-        >
-          <svg class="btn-icon-svg verbose-names-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <text
-              class="verbose-names-glyph verbose-names-glyph-numbered"
-              x="10"
-              y="10.5"
-              text-anchor="middle"
-              dominant-baseline="middle"
-              font-size="14"
-              font-weight="600"
-              fill="currentColor"
-            >A</text>
-            <text
-              class="verbose-names-glyph verbose-names-glyph-verbose"
-              x="10"
-              y="10.5"
-              text-anchor="middle"
-              dominant-baseline="middle"
-              font-size="11"
-              font-weight="600"
-              fill="currentColor"
-            >Ab</text>
-          </svg>
-        </button>
-        <button
-          type="button"
-          id="always-number-toggle"
-          class="btn btn-icon"
-          aria-pressed="false"
-          aria-label="Number repeated steps"
-          data-tooltip="Always number steps"
-          data-tooltip-position="bottom"
-        >
-          <svg class="btn-icon-svg always-number-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <text
-              class="always-number-glyph always-number-glyph-off"
-              x="10"
-              y="10.5"
-              text-anchor="middle"
-              dominant-baseline="middle"
-              font-size="14"
-              font-weight="600"
-              fill="currentColor"
-            >1</text>
-            <text
-              class="always-number-glyph always-number-glyph-on"
-              x="10"
-              y="10.5"
-              text-anchor="middle"
-              dominant-baseline="middle"
-              font-size="11"
-              font-weight="600"
-              fill="currentColor"
-            >1+</text>
-          </svg>
-        </button>
-        <button
-          type="button"
-          id="syntax-highlight-toggle"
-          class="btn btn-icon"
-          aria-pressed="true"
-          aria-label="Syntax highlighting"
-          data-tooltip="Toggle syntax highlighting"
-          data-tooltip-position="bottom"
-        >
-          <svg class="btn-icon-svg syntax-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <path
-              d="M4 6h12M4 10h12M4 14h8"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button>
-        <button
-          type="button"
-          id="step-highlight-toggle"
-          class="btn btn-icon"
-          aria-pressed="true"
-          aria-label="Step highlighting"
-          data-tooltip="Toggle step highlighting"
-          data-tooltip-position="bottom"
-        >
-          <svg class="btn-icon-svg highlight-icon" viewBox="0 0 20 20" aria-hidden="true">
-            <rect class="highlight-icon-swatch hl-blue" x="2" y="2" width="7" height="7" rx="1.5" />
-            <rect class="highlight-icon-swatch hl-green" x="11" y="2" width="7" height="7" rx="1.5" />
-            <rect class="highlight-icon-swatch hl-amber" x="2" y="11" width="7" height="7" rx="1.5" />
-            <rect class="highlight-icon-swatch hl-red" x="11" y="11" width="7" height="7" rx="1.5" />
-          </svg>
-        </button>
-        <span id="step-highlight-legend" class="legend">
-          <span
-            class="legend-swatch hl-blue"
-            data-tooltip="Original step name at its definition (let … =)"
+        <div class="toolbar-end">
+          <span class="toolbar-mapping">
+            edit
+            <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button>
+            <span id="mapping-version-label" class="mapping-version-label" aria-hidden="true"></span>
+          </span>
+          <button
+            type="button"
+            id="verbose-names-toggle"
+            class="btn btn-icon"
+            aria-pressed="true"
+            aria-label="Verbose steps"
+            data-tooltip="Verbose steps"
             data-tooltip-position="bottom"
-          >Definition</span>
-          <span
-            class="legend-swatch hl-green"
-            data-tooltip="Renamed step name at its definition in the output"
+          >
+            <svg class="btn-icon-svg verbose-names-icon" viewBox="0 0 20 20" aria-hidden="true">
+              <text
+                class="verbose-names-glyph verbose-names-glyph-numbered"
+                x="10"
+                y="10.5"
+                text-anchor="middle"
+                dominant-baseline="middle"
+                font-size="14"
+                font-weight="600"
+                fill="currentColor"
+              >A</text>
+              <text
+                class="verbose-names-glyph verbose-names-glyph-verbose"
+                x="10"
+                y="10.5"
+                text-anchor="middle"
+                dominant-baseline="middle"
+                font-size="11"
+                font-weight="600"
+                fill="currentColor"
+              >Ab</text>
+            </svg>
+          </button>
+          <button
+            type="button"
+            id="always-number-toggle"
+            class="btn btn-icon"
+            aria-pressed="false"
+            aria-label="Number repeated steps"
+            data-tooltip="Always number steps"
             data-tooltip-position="bottom"
-          >New Definition</span>
-          <span
-            class="legend-swatch hl-amber"
-            data-tooltip="Original step name used later in the query"
+          >
+            <svg class="btn-icon-svg always-number-icon" viewBox="0 0 20 20" aria-hidden="true">
+              <text
+                class="always-number-glyph always-number-glyph-off"
+                x="10"
+                y="10.5"
+                text-anchor="middle"
+                dominant-baseline="middle"
+                font-size="14"
+                font-weight="600"
+                fill="currentColor"
+              >1</text>
+              <text
+                class="always-number-glyph always-number-glyph-on"
+                x="10"
+                y="10.5"
+                text-anchor="middle"
+                dominant-baseline="middle"
+                font-size="11"
+                font-weight="600"
+                fill="currentColor"
+              >1+</text>
+            </svg>
+          </button>
+          <button
+            type="button"
+            id="syntax-highlight-toggle"
+            class="btn btn-icon"
+            aria-pressed="true"
+            aria-label="Syntax highlighting"
+            data-icon="syntax-highlight"
+            data-icon-class="btn-icon-svg syntax-icon"
+            data-tooltip="Toggle syntax highlighting"
             data-tooltip-position="bottom"
-          >Reference</span>
-          <span
-            class="legend-swatch hl-red"
-            data-tooltip="Renamed step name used later in the query"
+          ></button>
+          <button
+            type="button"
+            id="step-highlight-toggle"
+            class="btn btn-icon"
+            aria-pressed="true"
+            aria-label="Step highlighting"
+            data-icon="step-highlight"
+            data-icon-class="btn-icon-svg highlight-icon"
+            data-tooltip="Toggle step highlighting"
             data-tooltip-position="bottom"
-          >New Reference</span>
-        </span>
+          ></button>
+        </div>
       </div>
 
       <div class="panes">
-        <label class="pane">
-          <span class="pane-label">Input</span>
-          <div class="code-editor">
-            <div class="code-editor-scroll">
-              <div id="input-gutter" class="line-gutter" aria-hidden="true">1</div>
-              <pre
-                id="input"
-                class="code-input-editable language-powerquery"
-                contenteditable="true"
-                spellcheck="false"
-                role="textbox"
-                aria-multiline="true"
-                data-placeholder="Paste your let ... in block here"
-              ></pre>
+        <section class="pane" aria-labelledby="input-pane-heading">
+          <div class="pane-heading">
+            <h2 id="input-pane-heading" class="section-title" data-heading-link>Input</h2>
+            <span id="step-highlight-legend" class="legend" role="list" aria-label="Step highlight legend">
+              <span
+                class="legend-chip legend-chip-hl-blue"
+                role="listitem"
+                data-tooltip="Original step definition"
+                data-tooltip-position="bottom"
+              >Definition</span>
+              <span
+                class="legend-chip legend-chip-hl-green"
+                role="listitem"
+                data-tooltip="Renamed step definition"
+                data-tooltip-position="bottom"
+              >New Definition</span>
+              <span
+                class="legend-chip legend-chip-hl-amber"
+                role="listitem"
+                data-tooltip="Original step referenced in the query"
+                data-tooltip-position="bottom"
+              >Reference</span>
+              <span
+                class="legend-chip legend-chip-hl-red"
+                role="listitem"
+                data-tooltip="Renamed step referenced in the query"
+                data-tooltip-position="bottom"
+              >New Reference</span>
+            </span>
+          </div>
+          <div
+            id="input-code-block"
+            class="code-block pqm-code-block"
+            data-code-mode="edit"
+            data-code-toolbar="none"
+            data-code-surface-actions="none"
+            data-code-editor-label="Power Query M input"
+          >
+            <div class="code-block-body">
+              <pre class="language-powerquery"><code id="input-highlight" class="language-powerquery"></code></pre>
             </div>
           </div>
-        </label>
+        </section>
 
-        <label class="pane">
-          <span class="pane-label">Output</span>
-          <div class="code-editor code-editor-readonly">
-            <div class="code-editor-scroll">
-              <div id="output-gutter" class="line-gutter" aria-hidden="true">1</div>
-              <pre
-                id="output-highlight"
-                class="code-output language-powerquery"
-                tabindex="0"
-                data-placeholder="Transformed M code appears here automatically"
-              ></pre>
+        <section class="pane" aria-labelledby="output-pane-heading">
+          <h2 id="output-pane-heading" class="section-title" data-heading-link>Output</h2>
+          <div
+            id="output-code-block"
+            class="code-block pqm-code-block"
+            data-code-mode="select"
+            data-code-toolbar="none"
+            data-code-surface-actions="none"
+          >
+            <div class="code-block-body">
+              <pre class="language-powerquery" tabindex="0"><code id="output-highlight" class="language-powerquery"></code></pre>
             </div>
           </div>
-        </label>
+        </section>
       </div>
     </main>
-
-    <footer>
-      <p class="footer-meta">
-        <span>
-          edit
-          <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button> <span id="mapping-version-label" class="mapping-version-label" aria-hidden="true"></span>
-          · report an
-          <a href="https://github.com/filcuk/pqm-stepper/issues" target="_blank">issue</a>
-          · star on
-          <a href="https://github.com/filcuk/pqm-stepper" target="_blank">GitHub</a>
-          · microapp by
-        </span>
-        <a class="footer-brand" href="https://github.com/filcuk" target="_blank">
-          <span class="footer-brand-icon" role="img" aria-label="Filcuk"></span>
-        </a>
-      </p>
-      <div
-        id="theme-toggle"
-        class="theme-toggle"
-        role="group"
-        aria-label="Color theme"
-      >
-        <button
-          type="button"
-          class="theme-toggle-btn"
-          data-theme-mode="light"
-          data-icon="light-mode"
-          data-icon-class="theme-icon"
-          aria-label="Light theme"
-          aria-pressed="false"
-          title="Light"
-        ></button>
-        <button
-          type="button"
-          class="theme-toggle-btn"
-          data-theme-mode="dark"
-          data-icon="dark-mode"
-          data-icon-class="theme-icon"
-          aria-label="Dark theme"
-          aria-pressed="false"
-          title="Dark"
-        ></button>
-        <button
-          type="button"
-          class="theme-toggle-btn"
-          data-theme-mode="auto"
-          data-icon="auto-mode"
-          data-icon-class="theme-icon"
-          aria-label="System theme"
-          aria-pressed="false"
-          title="System"
-        ></button>
-      </div>
-    </footer>
 
     <div
       id="mapping-dialog"
@@ -296,27 +244,63 @@
       aria-modal="true"
       aria-labelledby="mapping-dialog-title"
     >
-      <div class="modal-backdrop" data-close></div>
+      <div class="modal-backdrop" data-dialog-close></div>
       <div class="modal-panel">
         <header class="modal-header">
           <h2 id="mapping-dialog-title">Step mapping</h2>
-          <button type="button" class="modal-close" aria-label="Close">&times;</button>
+          <button type="button" class="modal-close" aria-label="Close" data-dialog-close>&times;</button>
         </header>
-        <p class="modal-hint">Keys are Power Query step names; values are target identifiers.</p>
+        <p class="modal-hint">Custom mapping is stored in your browser.</p>
         <div id="mapping-dialog-error" class="modal-error hidden" role="alert"></div>
-        <pre
-          id="mapping-editor"
-          class="mapping-editor language-json"
-          contenteditable="true"
-          spellcheck="false"
-          role="textbox"
-          aria-multiline="true"
-        ></pre>
+        <div
+          id="mapping-code-block"
+          class="code-block pqm-code-block pqm-mapping-code-block"
+          data-code-mode="edit"
+          data-code-toolbar="none"
+          data-code-surface-actions="none"
+          data-code-editor-label="Step mapping JSON"
+        >
+          <div class="code-block-body">
+            <pre class="language-json"><code id="mapping-editor" class="language-json"></code></pre>
+          </div>
+        </div>
         <footer class="modal-footer">
-          <button type="button" id="mapping-reset-btn" class="btn">Reset to default</button>
+          <button type="button" id="mapping-reset-btn" class="btn btn-danger" disabled>
+            Reset to default
+          </button>
           <div class="modal-footer-actions">
-            <button type="button" id="mapping-cancel-btn" class="btn">Cancel</button>
+            <button type="button" id="mapping-cancel-btn" class="btn" data-dialog-close>Cancel</button>
             <button type="button" id="mapping-apply-btn" class="btn btn-primary">Apply</button>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <div
+      id="mapping-reset-dialog"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mapping-reset-dialog-title"
+    >
+      <div class="modal-backdrop" data-dialog-close></div>
+      <div class="modal-panel mapping-reset-panel">
+        <header class="modal-header">
+          <h2 id="mapping-reset-dialog-title">Reset mapping to default?</h2>
+          <button type="button" class="modal-close" aria-label="Close" data-dialog-close>&times;</button>
+        </header>
+        <div class="modal-body">
+          <p>
+            Your custom step mapping and any unapplied edits will be discarded,
+            restoring the built-in default. This cannot be undone.
+          </p>
+        </div>
+        <footer class="modal-footer">
+          <div class="modal-footer-actions">
+            <button type="button" id="mapping-reset-cancel-btn" class="btn" data-dialog-close>Cancel</button>
+            <button type="button" id="mapping-reset-confirm-btn" class="btn btn-danger">
+              Reset to default
+            </button>
           </div>
         </footer>
       </div>
@@ -329,30 +313,49 @@
       aria-modal="true"
       aria-labelledby="about-dialog-title"
     >
-      <div class="modal-backdrop" data-close></div>
+      <div class="modal-backdrop" data-dialog-close></div>
       <div class="modal-panel">
         <header class="modal-header">
           <h2 id="about-dialog-title">What does this do?</h2>
-          <button type="button" class="modal-close" aria-label="Close">&times;</button>
+          <button type="button" class="modal-close" aria-label="Close" data-dialog-close>&times;</button>
         </header>
         <div class="modal-body" id="about-dialog-body">
           <p>
-            Power Query names each transformation step for you. Those
-            names often appear as quoted identifiers like <code>#&quot;Changed Type&quot;</code>
-            or <code>#&quot;Filtered Rows 1&quot;</code>. This clutters the code,
-            making each step harder to scan and reference.
+            Power Query creates automatic steps names, which often require <em>escape sequences</em>,  
+            like <code>#&quot;Changed Type&quot;</code> or <code>#&quot;Filtered Rows 1&quot;</code>. 
+            This clutters the code, making each step harder to scan and reference.
           </p>
           <p>
-            PQM Stepper helps to rename those steps to short, consistent identifiers using a mapping
-            schema all in one go. The logic stays the same, only the step names change, so queries become
-            easier to read and maintain.
+            PQM Stepper <em>instantly transforms</em> default steps to short, consistent identifiers.
           </p>
-          <div id="about-extra-content" class="about-extra-content hidden"></div>
+          <p class="about-extra-block hidden" data-about-stage data-about-next-label="Uhh...">
+            <em>Okay</em>, so Power Query is the data-cleaning bit of Excel and Power BI.
+            Every button you click adds a <em>step</em> to the query. 
+            But the step names contain hash, quotes, spaces, the works.
+            We shorten and clean them up, that's all.
+          </p>
+          <p class="about-extra-block hidden" data-about-stage>
+            Big button make steps. Step name very long. Name complicated. Brain hurt.
+            We give, you fix. Put in big box. Comes nice below. Short name good.
+            Magic? No. Tool.
+          </p>
         </div>
         <footer class="modal-footer">
-          <button type="button" id="about-confused-btn" class="btn">Huh?</button>
+          <button type="button" class="btn" data-about-confused>Huh?</button>
+          <a
+            href="https://pbskids.org/games/play/coloring/33484"
+            class="btn hidden"
+            data-about-final
+            data-no-external-icon
+          >I don't get it</a>
           <div class="modal-footer-actions">
-            <button type="button" id="about-close-btn" class="btn btn-primary">Got it</button>
+            <button
+              type="button"
+              id="start-tour-btn"
+              class="btn"
+              data-dialog-close
+            >Guided tour</button>
+            <button type="button" id="about-close-btn" class="btn btn-primary" data-dialog-close>Got it</button>
           </div>
         </footer>
       </div>
@@ -360,6 +363,7 @@
 
     <script src="app/vendor/prism/prism.min.js"></script>
     <script src="app/vendor/prism/prism-powerquery.min.js"></script>
+    <script src="app/vendor/prism/prism-line-numbers.min.js"></script>
     <script type="module" src="app/main.js"></script>
   </body>
 </html>

@@ -1,0 +1,210 @@
+/* Chips — selectable tags and removable input chips */
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-height: 1.75rem;
+  /* Extra bottom padding optically centres Latin caps (baseline sits low). */
+  padding: 0 0.9rem 1px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition: border-color var(--control-hover-ms) ease-out, background var(--control-hover-ms) ease-out, color var(--control-hover-ms) ease-out;
+}
+
+button.chip {
+  cursor: pointer;
+}
+
+button.chip:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  transition-duration: 0s;
+}
+
+button.chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button.chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chip[aria-pressed="true"],
+.chip.is-selected {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip[aria-pressed="true"]:hover:not(:disabled),
+.chip.is-selected:hover:not(:disabled),
+button.chip.chip--removable:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  color: var(--text);
+}
+
+.chip-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 24rem;
+  min-width: 0;
+}
+
+.chip-input-control {
+  display: contents;
+}
+
+.chip-input-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chip-input-list:empty {
+  display: none;
+}
+
+.chip-filter-results {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--text);
+  font-size: 0.875rem;
+}
+
+.chip-filter-results li[hidden] {
+  display: none;
+}
+
+/* Legend — coloured category chips (charts, code highlights, etc.) */
+
+.legend {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-height: 1.75rem;
+  padding: 0 0.9rem 1px;
+  border: 1px solid var(--legend-border, var(--border));
+  border-radius: 999px;
+  background: var(--legend-color, var(--surface));
+  color: var(--text);
+  font: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    border-color var(--control-hover-ms) ease-out,
+    background var(--control-hover-ms) ease-out,
+    color var(--control-hover-ms) ease-out,
+    opacity var(--control-hover-ms) ease-out;
+}
+
+.legend-chip--1 {
+  --legend-color: var(--legend-1);
+  --legend-border: var(--legend-1-border);
+}
+
+.legend-chip--2 {
+  --legend-color: var(--legend-2);
+  --legend-border: var(--legend-2-border);
+}
+
+.legend-chip--3 {
+  --legend-color: var(--legend-3);
+  --legend-border: var(--legend-3-border);
+}
+
+.legend-chip--4 {
+  --legend-color: var(--legend-4);
+  --legend-border: var(--legend-4-border);
+}
+
+.legend-chip--5 {
+  --legend-color: var(--legend-5);
+  --legend-border: var(--legend-5-border);
+}
+
+.legend-chip--6 {
+  --legend-color: var(--legend-6);
+  --legend-border: var(--legend-6-border);
+}
+
+.legend-chip--7 {
+  --legend-color: var(--legend-7);
+  --legend-border: var(--legend-7-border);
+}
+
+.legend-chip--8 {
+  --legend-color: var(--legend-8);
+  --legend-border: var(--legend-8-border);
+}
+
+.legend-chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+button.legend-chip {
+  cursor: pointer;
+}
+
+button.legend-chip:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--legend-border, var(--border)) 70%, #FFFFFF);
+  background: color-mix(in srgb, var(--legend-color, var(--surface)) 90%, #FFFFFF);
+  transition-duration: 0s;
+}
+
+button.legend-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button.legend-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.legend-chip.is-inactive,
+button.legend-chip[aria-pressed="false"] {
+  opacity: 0.45;
+}

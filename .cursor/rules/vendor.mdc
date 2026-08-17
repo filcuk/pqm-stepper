@@ -1,0 +1,38 @@
+---
+description: Vendor assets live under app/vendor/; components own access — no per-vendor seam files in app/components/
+globs: app/components/**,app/vendor/**,app/**/toastui*,app/**/prism*
+alwaysApply: false
+---
+
+# Vendor access — no seam files in `app/components/`
+
+## Layout
+
+| Location | Contents |
+| -------- | -------- |
+| `app/vendor/` | Upstream bytes only (UMD bundles, ESM trees, README pins). Never our wrappers or version helpers. |
+| `app/components/<id>.js` | Product component: owns vendor access, documents load order, exports pinned version constants when useful. |
+| `app/utils/` | Shared infra only — extract a vendor helper here **only** when **two or more** components need the same accessors. |
+
+## Do
+
+- Access UMD globals from the component (`window.Prism`, `window.toastui`, …) with a readiness check before use
+- Import vendored ESM with relative paths from the component (and document any import-map bare specifiers in the component header)
+- Keep version pins / refresh notes in the component file header (or exported `*_VERSION` consts), matching the catalogue id
+
+## Do not
+
+- Add a per-vendor seam file under `app/components/` (e.g. `toastui-editor.js`, `prism.js`, `tanstack-charts.js`) when only one component uses that vendor
+- Put template-owned adapter code inside `app/vendor/`
+- Invent a second access pattern for a new vendor — follow the owning component
+
+## When a shared seam is justified
+
+If a second component needs the same vendor API, move the accessors to `app/utils/<name>.js` (infrastructure layer), not a new file in `app/components/`. Keep the product `initX` modules thin wrappers around that helper.
+
+## Examples in this repo
+
+- **Prism** — `code-block.js` reads `window.Prism` directly
+- **Toast UI** — `rich-text-editor.js` owns `window.toastui` access and `TOASTUI_EDITOR_VERSION`
+- **TanStack Charts** (when present) — `charts.js` imports from `app/vendor/tanstack-charts/` and pins versions there
+- **Mermaid** (when present) — `diagram.js` imports from `app/vendor/mermaid/` and pins `MERMAID_VERSION` there

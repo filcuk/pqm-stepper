@@ -6,8 +6,8 @@ let
     #"Trimmed Text" = Table.TransformColumns(Source, {{"Email", Text.Trim, type text}, {"Phone", Text.Trim, type text}}),
     #"Lowercased Text" = Table.TransformColumns(#"Trimmed Text", {{"Email", Text.Lower, type text}}),
     #"Split Column by Delimiter" = Table.SplitColumn(#"Lowercased Text", "FullName", Splitter.SplitTextByDelimiter(" ", QuoteStyle.Csv), {"First", "Last"}),
-    #"Combined Columns" = Table.CombineColumns(#"Split Column by Delimiter", {"First", "Last"}, Combiner.CombineTextByDelimiter(" ", QuoteStyle.None), "DisplayName"),
-    #"Replaced Value" = Table.ReplaceValue(#"Combined Columns", "n/a", "", Replacer.ReplaceText, {"Phone"}),
+    #"Merged Columns" = Table.CombineColumns(#"Split Column by Delimiter", {"First", "Last"}, Combiner.CombineTextByDelimiter(" ", QuoteStyle.None), "DisplayName"),
+    #"Replaced Value" = Table.ReplaceValue(#"Merged Columns", "n/a", "", Replacer.ReplaceText, {"Phone"}),
     #"Added Custom" = Table.AddColumn(#"Replaced Value", "Has Email", each [Email] <> null and [Email] <> "")
 in
     #"Added Custom"

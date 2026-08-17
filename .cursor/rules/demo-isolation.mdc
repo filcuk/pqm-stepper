@@ -1,0 +1,26 @@
+---
+description: Keep demo-only markup out of shared shell, utils, and layout APIs
+globs: demo.html,app/demo.js,app/shell/**/*.js,app/css/layout.css,app/utils/**/*.js
+alwaysApply: false
+---
+
+# Demo isolation — do not leak showcase chrome into shared code
+
+Demo visual primitives use shared generic classes such as `.section-panel`, `.panel-title`, `.panel-hint`, `.panel-row`, `.panel-inline`, and `.panel-grid`. Only catalogue-specific wiring or visualisation in `demo.html` / `app/demo.js` may remain **`demo-*`** prefixed.
+
+## Never
+
+- Reference `demo-*` class names from `app/shell/`, `app/utils/`, or other shared modules
+- Add selectors for `demo-*` in shared CSS that shell/components depend on (prefer generic names under `app/css/`)
+- Teach sticky, page-nav, or other shell behaviour to only work with demo-prefixed markup
+
+## When demo needs layout that shell also uses
+
+1. Give it a **generic** name (e.g. `.content-section`, `.content-tier`, `.section-title`, `.panel-split`)
+2. Document it in `USAGE.md` as a reusable layout pattern
+3. Use that generic name in both the demo and shared JS/CSS
+
+## Allowed `demo-*` usage
+
+- Catalogue-specific classes that exist only in `demo.html` / `app/demo.js` and their demo-only CSS (for example `.demo-colour-*` and `.demo-banner-*`)
+- Element ids like `demo-combobox` for demo wiring

@@ -1,0 +1,465 @@
+/**
+ * Fork-owned styles. Never overwritten by template sync.
+ * App-specific rules for PQM Stepper: code editors, step-highlight
+ * colours, toolbar glyph toggles, and the mapping dialog/banner.
+ */
+
+/* ---------- Brand accent (manage-color) ---------- */
+
+:root {
+  --accent: #3b2c83;
+}
+
+:root[data-theme="dark"] {
+  --accent: #9280e5;
+}
+
+/* Light-mode links: brighter than the button fill, which stays #3b2c83. */
+.btn-link,
+.tagline a {
+  color: #6349da;
+}
+
+.btn-link:hover:not(:disabled),
+.tagline a:hover {
+  color: color-mix(in srgb, #6349da 80%, #000000);
+}
+
+:root[data-theme="dark"] .btn-link,
+:root[data-theme="dark"] .tagline a {
+  color: var(--accent);
+}
+
+:root[data-theme="dark"] .btn-link:hover:not(:disabled),
+:root[data-theme="dark"] .tagline a:hover {
+  color: var(--accent-hover);
+}
+
+/* ---------- App tokens (step-highlight palette, code accents) ---------- */
+
+:root {
+  --legend-text: #424a53;
+  --hl-blue: rgba(56, 139, 253, 0.22);
+  --hl-green: rgba(46, 160, 67, 0.2);
+  --hl-amber: rgba(210, 153, 34, 0.28);
+  --hl-red: rgba(255, 99, 99, 0.22);
+  --hl-icon-blue: #0969da;
+  --hl-icon-green: #1a7f37;
+  --hl-icon-amber: #bf8700;
+  --hl-icon-red: #cf222e;
+  --hl-border-blue: var(--hl-icon-blue);
+  --hl-border-green: var(--hl-icon-green);
+  --hl-border-amber: var(--hl-icon-amber);
+  --hl-border-red: var(--hl-icon-red);
+}
+
+:root[data-theme="dark"] {
+  --legend-text: #c3ccd5;
+  --hl-blue: rgba(56, 139, 253, 0.34);
+  --hl-green: rgba(46, 160, 67, 0.32);
+  --hl-amber: rgba(210, 153, 34, 0.30);
+  --hl-red: rgba(255, 99, 99, 0.26);
+  --hl-icon-blue: #58a6ff;
+  --hl-icon-green: #3fb950;
+  --hl-icon-amber: #e3b341;
+  --hl-icon-red: #ff7b72;
+  --hl-border-blue: #39658b;
+  --hl-border-green: #23772b;
+  --hl-border-amber: #896800;
+  --hl-border-red: #8b2e34;
+}
+
+/* ---------- Layout ---------- */
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.toolbar-end {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.toolbar-mapping {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.mapping-version-label {
+  color: var(--muted);
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+/* ---------- Toolbar glyph toggles (app-owned inline SVGs) ---------- */
+
+.btn-icon[aria-pressed="false"] {
+  color: var(--muted);
+}
+
+.verbose-names-icon,
+.always-number-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.verbose-names-glyph,
+.always-number-glyph {
+  font-family: inherit;
+}
+
+.highlight-icon-swatch {
+  stroke: var(--border);
+  stroke-width: 0.75;
+}
+
+.highlight-icon .hl-blue {
+  fill: var(--hl-icon-blue);
+}
+
+.highlight-icon .hl-green {
+  fill: var(--hl-icon-green);
+}
+
+.highlight-icon .hl-amber {
+  fill: var(--hl-icon-amber);
+}
+
+.highlight-icon .hl-red {
+  fill: var(--hl-icon-red);
+}
+
+.btn-icon[aria-pressed="false"] .highlight-icon-swatch {
+  opacity: 0.35;
+}
+
+.btn-icon[aria-pressed="false"] .syntax-icon {
+  opacity: 0.45;
+}
+
+.btn-icon[aria-pressed="true"] .verbose-names-glyph-numbered {
+  display: none;
+}
+
+.btn-icon[aria-pressed="false"] .verbose-names-glyph-verbose {
+  display: none;
+}
+
+.btn-icon[aria-pressed="true"] .always-number-glyph-off {
+  display: none;
+}
+
+.btn-icon[aria-pressed="false"] .always-number-glyph-on {
+  display: none;
+}
+
+/* ---------- Step-highlight legend (template legend chips) ---------- */
+
+#step-highlight-legend {
+  color: var(--legend-text);
+  font-size: 0.75rem;
+}
+
+#step-highlight-legend .legend-chip {
+  cursor: help;
+}
+
+#step-highlight-legend.is-disabled {
+  opacity: 0.45;
+}
+
+.legend-chip-hl-blue {
+  --legend-color: var(--hl-blue);
+  --legend-border: var(--hl-border-blue);
+}
+
+.legend-chip-hl-green {
+  --legend-color: var(--hl-green);
+  --legend-border: var(--hl-border-green);
+}
+
+.legend-chip-hl-amber {
+  --legend-color: var(--hl-amber);
+  --legend-border: var(--hl-border-amber);
+}
+
+.legend-chip-hl-red {
+  --legend-color: var(--hl-red);
+  --legend-border: var(--hl-border-red);
+}
+
+/* ---------- Mapping banner ---------- */
+
+#mapping-banner .mapping-banner-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.mapping-banner-text {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.mapping-banner-btn {
+  flex-shrink: 0;
+}
+
+/* ---------- Code editor panes ---------- */
+
+.panes {
+  display: grid;
+  /* minmax(0, …): long code lines must scroll inside the pane, not widen it */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  flex: 1;
+  min-height: 400px;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
+  min-width: 0;
+}
+
+.pane-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.pane-heading .section-title {
+  flex-shrink: 0;
+}
+
+.pane-heading .legend {
+  margin-left: auto;
+}
+
+.pqm-code-block {
+  display: flex;
+  flex-direction: column;
+  max-width: none;
+  width: 100%;
+  flex: 1;
+  min-height: 360px;
+  min-width: 0;
+  --code-tab-size: 4;
+}
+
+.pqm-code-block:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.pqm-code-block > .code-block-body,
+.pqm-code-block .code-block-editor-stack,
+.pqm-code-block .code-block-body > pre,
+.pqm-code-block .code-block-editor-stack > pre {
+  flex: 1;
+  min-height: 360px;
+  height: 100%;
+}
+
+/* Edit mode nests `pre` in the editor stack; stretch it so the line-number
+   gutter band reaches the bottom of the pane instead of ending with the text. */
+.pqm-code-block .code-block-editor-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mapping editor: the panel must have a definite height or nested flex +
+   absolutely positioned highlight/textarea collapse to a 1px strip. */
+#mapping-dialog .modal-panel {
+  height: 85vh;
+  overflow: hidden;
+}
+
+.pqm-mapping-code-block {
+  width: auto;
+  margin: 0 1.25rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pqm-mapping-code-block > .code-block-body,
+.pqm-mapping-code-block .code-block-editor-stack {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pqm-mapping-code-block > .code-block-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.pqm-mapping-code-block .code-block-editor-stack {
+  position: relative;
+}
+
+.pqm-mapping-code-block .code-block-editor {
+  z-index: 1;
+}
+
+/* Viewport-sized highlight; content-sized `code` so textarea scrollTop
+   actually moves the JSON (stretch would make pre.scrollHeight === clientHeight). */
+#mapping-dialog .pqm-mapping-code-block .code-block-body pre[class*="language-"],
+#mapping-dialog .pqm-mapping-code-block .code-block-body pre[class*="language-"].line-numbers {
+  position: absolute;
+  inset: 0;
+  flex: none;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  align-items: flex-start;
+}
+
+#mapping-dialog .pqm-mapping-code-block .code-block-body pre[class*="language-"].line-numbers > code {
+  height: auto;
+  align-self: flex-start;
+}
+
+.pqm-code-block code.is-empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  opacity: 0.7;
+  pointer-events: none;
+  white-space: pre;
+}
+
+/* Edit-mode placeholder lives on the transparent textarea (supports newlines). */
+.pqm-code-block .code-block-editor::placeholder {
+  color: var(--muted);
+  -webkit-text-fill-color: var(--muted);
+  opacity: 0.7;
+  white-space: pre;
+}
+
+#output-highlight::selection,
+#output-highlight *::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+:root[data-theme="dark"] #output-highlight::selection,
+:root[data-theme="dark"] #output-highlight *::selection {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* Prism tokens inside editors — step-highlight backgrounds stay visible */
+#input-highlight .token,
+#output-highlight .token {
+  background: transparent;
+}
+
+#input-highlight .hl-blue,
+#input-highlight .hl-green,
+#input-highlight .hl-amber,
+#input-highlight .hl-red,
+#output-highlight .hl-blue,
+#output-highlight .hl-green,
+#output-highlight .hl-amber,
+#output-highlight .hl-red {
+  border-radius: 2px;
+  transition: box-shadow 0.12s ease-out;
+}
+
+#input-highlight .hl-blue,
+#output-highlight .hl-blue {
+  background: var(--hl-blue);
+}
+
+#input-highlight .hl-green,
+#output-highlight .hl-green {
+  background: var(--hl-green);
+}
+
+#input-highlight .hl-amber,
+#output-highlight .hl-amber {
+  background: var(--hl-amber);
+}
+
+#input-highlight .hl-red,
+#output-highlight .hl-red {
+  background: var(--hl-red);
+}
+
+/* Legend hover: ring + glow the matching step highlights in both panes. */
+
+:root:has(#step-highlight-legend:not(.is-disabled) .legend-chip-hl-blue:hover)
+  :is(#input-highlight, #output-highlight)
+  .hl-blue {
+  box-shadow:
+    0 0 0 1.5px var(--hl-icon-blue),
+    0 0 8px color-mix(in srgb, var(--hl-icon-blue) 55%, transparent);
+}
+
+:root:has(#step-highlight-legend:not(.is-disabled) .legend-chip-hl-green:hover)
+  :is(#input-highlight, #output-highlight)
+  .hl-green {
+  box-shadow:
+    0 0 0 1.5px var(--hl-icon-green),
+    0 0 8px color-mix(in srgb, var(--hl-icon-green) 55%, transparent);
+}
+
+:root:has(#step-highlight-legend:not(.is-disabled) .legend-chip-hl-amber:hover)
+  :is(#input-highlight, #output-highlight)
+  .hl-amber {
+  box-shadow:
+    0 0 0 1.5px var(--hl-icon-amber),
+    0 0 8px color-mix(in srgb, var(--hl-icon-amber) 55%, transparent);
+}
+
+:root:has(#step-highlight-legend:not(.is-disabled) .legend-chip-hl-red:hover)
+  :is(#input-highlight, #output-highlight)
+  .hl-red {
+  box-shadow:
+    0 0 0 1.5px var(--hl-icon-red),
+    0 0 8px color-mix(in srgb, var(--hl-icon-red) 55%, transparent);
+}
+
+/* ---------- Mapping / about dialog extras ---------- */
+
+.mapping-reset-panel {
+  max-width: 28rem;
+}
+
+.modal-hint {
+  margin: 0;
+  padding: 0 1.25rem 0.75rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.modal-error {
+  margin: 0 1.25rem 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--banner-error-bg);
+  color: var(--banner-error-text);
+  font-size: 0.8125rem;
+}
+
+.about-extra-block {
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px dashed var(--border);
+}

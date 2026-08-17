@@ -1,0 +1,168 @@
+﻿.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Buttons */
+
+.btn {
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: var(--control-height);
+  padding: 0 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color var(--control-hover-ms) ease-out, background var(--control-hover-ms) ease-out;
+}
+
+/* Anchors styled as buttons — including the external-link icon they may gain */
+a.btn {
+  gap: 0.375rem;
+  text-decoration: none;
+  color: var(--text);
+}
+
+a.btn:hover {
+  color: var(--text);
+}
+
+/* Compact height — works with labeled and icon buttons */
+.btn-slim {
+  min-height: var(--control-height-slim);
+  height: var(--control-height-slim);
+  padding: 0 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  color: var(--text);
+  transition-duration: 0s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: var(--accent-fg);
+}
+
+a.btn.btn-primary,
+a.btn.btn-primary:hover {
+  color: var(--accent-fg);
+}
+
+/* Primary destructive action (delete, reset, irreversible confirm) */
+.btn-danger {
+  background: var(--banner-error-border);
+  color: #ffffff;
+  border-color: var(--banner-error-border);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--banner-error-text);
+  border-color: var(--banner-error-text);
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .btn-danger:hover:not(:disabled) {
+  color: #0d1117;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-height);
+  min-width: var(--control-height);
+  height: var(--control-height);
+  min-height: var(--control-height);
+  padding: 0;
+  color: var(--text);
+}
+
+.btn-icon.btn-slim {
+  width: var(--control-height-slim);
+  min-width: var(--control-height-slim);
+  height: var(--control-height-slim);
+  min-height: var(--control-height-slim);
+  padding: 0;
+}
+
+.btn-toggle[aria-pressed="true"] {
+  background: var(--code-bg);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* Both states are actions, not an on/off indicator — keep the default look */
+.btn-toggle.btn-toggle--always-active[aria-pressed="true"] {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn-toggle.btn-toggle--always-active[aria-pressed="true"]:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+.btn-toggle:has(.btn-toggle-label) {
+  gap: 0.375rem;
+}
+
+.btn-icon-svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.btn-slim .btn-icon-svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.help-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.btn-link {
+  font: inherit;
+  font-size: inherit;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.btn-link:hover:not(:disabled) {
+  color: var(--accent-hover);
+  background: transparent;
+}
+

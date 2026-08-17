@@ -1,0 +1,2576 @@
+{
+  "schemaVersion": 2,
+  "templateVersion": "0.12.0",
+  "generatedAt": "2026-08-16T10:23:46.291Z",
+  "source": "filcuk/sma1-framework",
+  "appOwned": [
+    "app/main.js",
+    "app/demo.js",
+    "app/config.js",
+    "app/styles.css",
+    "app/css/app.css",
+    "app/utils/icons-app.js",
+    "app/res/",
+    "index.html",
+    "demo.html"
+  ],
+  "appOwnedFields": {
+    "app/version.js": [
+      "APP_VERSION"
+    ]
+  },
+  "derived": {
+    "app/css/template.css": {
+      "generator": "css-index",
+      "sha256": "4556ce24199200e40a16d6780a44fad0440733e6f8656611be28f6a0809aba5a"
+    }
+  },
+  "files": {
+    "app/components/about-dialog.js": {
+      "sha256": "d3f2bfe947f8083a890459b1b5edda62790e6650af6c7e34f645b0b635211193"
+    },
+    "app/components/accordion.js": {
+      "sha256": "e65229543af29d705e262cabc0a595350d62fec0c2f50e67d158d0c3a540059d"
+    },
+    "app/components/badge.js": {
+      "sha256": "ddbde42721c3f3f439c0e80493eb2857211c918249dd971149d8d10d3aea01d7"
+    },
+    "app/components/banner.js": {
+      "sha256": "715504dbfb0448c1a88d3752ef922ef8d818c0e722138d1a146b3ce85863dadc"
+    },
+    "app/components/charts.js": {
+      "sha256": "f0b5a1d826940dbbf6ffa14bbd9c6c606b9e5835349c59d81f19f9082db936cc"
+    },
+    "app/components/checkbox.js": {
+      "sha256": "9b982c2ac7f694df706189460ab2f780abfe7563d880e64c21d78622edfa24e3"
+    },
+    "app/components/chip.js": {
+      "sha256": "ea5960e31a19da5a29c99a93d8d8659e4d1b6f41dbc1b44159ccdb19b02c56fe"
+    },
+    "app/components/code-block.js": {
+      "sha256": "007526ca24962ac1c5d71efef266b93841ce91b1e235b2bb6207d71637c1e024"
+    },
+    "app/components/color-input.js": {
+      "sha256": "3ac48a3018c93a7d069967caee75d1fc5186f839e42dd14d22be05c582ca6e92"
+    },
+    "app/components/color-picker/index.js": {
+      "sha256": "bb9d0f6eb9d570d7a6efaea9c661960df9f2e6854dab9f93cf33714d05b97d83"
+    },
+    "app/components/color-picker/panel.js": {
+      "sha256": "dfaa5f077af2acd6d7fcf10e52c15cf64a15d959a9e25c7851518bbfbf913a64"
+    },
+    "app/components/color-set/index.js": {
+      "sha256": "4add3bbdf2051eaf8c07ac66731ac36ddc621570ac6ed65b28053e09ead9d127"
+    },
+    "app/components/color-set/panel.js": {
+      "sha256": "2c912d2a27176c7a95ec2b8aab69a3a93cacca3a77093082c80dce007b58e845"
+    },
+    "app/components/color-set/registry.js": {
+      "sha256": "50866e663a5d869536463e317db427a59c03e6eab7f03838b47021390c8450fe"
+    },
+    "app/components/color-set/sets/basic.js": {
+      "sha256": "cb04740c780236fd497fcb419d11d0a44014c721d277790d1c492b8b7c686b93"
+    },
+    "app/components/color-set/sets/flat-ui.js": {
+      "sha256": "604b20ad0988bd9bf936b88892972da5a7a31779525c0781c2867564acd07588"
+    },
+    "app/components/color-set/sets/fluent.js": {
+      "sha256": "592fe352428ea5c4a9e527eefd34e0fd741261b7a2ecce0039d5a1ff36b0d20e"
+    },
+    "app/components/color-set/sets/index.js": {
+      "sha256": "89358e926fc93ca7ec7740ccc24f838d09b02d06396bb8e03a828c4289741258"
+    },
+    "app/components/color-set/sets/material.js": {
+      "sha256": "375225356f8378dec4bb6af9af147d416ce611a7b4f029f7635e1b97a227d63a"
+    },
+    "app/components/color-set/sets/metro.js": {
+      "sha256": "d1e90734d15e0412e1d2892c18ee2b888544b58a6f803f40fd5f266da08dab71"
+    },
+    "app/components/color-set/sets/tailwind.js": {
+      "sha256": "a5ed1e1e435e36257b3b2db90a4f82da7c55d5f6ef127ea97e991886a41c9ba2"
+    },
+    "app/components/color-set/sets/web-safe.js": {
+      "sha256": "03afa4f0e89e289aa3e2a186db826361fa15a7d41e5a207b8de3f71a052cb17d"
+    },
+    "app/components/combo.js": {
+      "sha256": "a0a43f7e59f6f8e13ec4f6e89e1f96d02cfd1283dbaa868fcd511140b9bdb04f"
+    },
+    "app/components/combobox.js": {
+      "sha256": "d012718f4374c3af6b03f6399a244733278951b6668617ed888dc5618813f64e"
+    },
+    "app/components/date-picker/calendar.js": {
+      "sha256": "97363b28d82da42733d867150fba07d7d55bb9d4b663f3057362b901194877be"
+    },
+    "app/components/date-picker/index.js": {
+      "sha256": "a360f2d1d9c72ac65d462ef948fd4ebd22bef348ee56a0210714c420aa76576f"
+    },
+    "app/components/date-picker/parse.js": {
+      "sha256": "c070ae61a509bc2eab3601276790ac290fc93666c94269a2978740f2aca8cb9b"
+    },
+    "app/components/diagram.js": {
+      "sha256": "cd325876fb0d5d7560080386e822cd117321204f1f28597d9e1cec91efa1410b"
+    },
+    "app/components/dialog.js": {
+      "sha256": "81103e0d8b908fc495a21f3a503a92c1f01f06a45460fcd4e9f0efe9519a4a33"
+    },
+    "app/components/dropdown-toggle.js": {
+      "sha256": "83a1c4bb73cbe958b2db9f13a4913f4fe62a2449fb8a0f673b31303e78d44e94"
+    },
+    "app/components/dropdown.js": {
+      "sha256": "10ea68596439e5598ed2b5a328f70709aa2c29c2442b49fd1829414cb3ff480f"
+    },
+    "app/components/duration-input.js": {
+      "sha256": "0e3fdf08e6ead7f544db175162e49a6cb504a93302d1cee55e77a86278cbc9d9"
+    },
+    "app/components/expand.js": {
+      "sha256": "9b3f0ac0631f11ea21fd3b998de9bd1d33115e437860f3456171a3a070bde437"
+    },
+    "app/components/expandable-surface.js": {
+      "sha256": "3959fb2b66ade2f81fed6ab7e90713b929242a54239e66c8577b3cf6eb3f7660"
+    },
+    "app/components/file-download.js": {
+      "sha256": "a059ed3f44f61a53fd7035688f0cac0796050e240645caeca6d65a8232d32b81"
+    },
+    "app/components/file-dropzone.js": {
+      "sha256": "d397a2b989468b7bf91f49db3cabaa340ad3c9a2fede9f00cb9ed9aad6ee884d"
+    },
+    "app/components/image-preview.js": {
+      "sha256": "f71b5af2bed051ad23f292f5552d2cb2be05e1dc3f01a840caa5e633734c1262"
+    },
+    "app/components/legend.js": {
+      "sha256": "ee74a433af15e03283650c54775a8ae3e8ea12b17e89d45dbf9414a78e081773"
+    },
+    "app/components/pagination.js": {
+      "sha256": "be41f293004dcbc0f15111d3b15b9ee35609bd314e7180f1d8938e4618611a75"
+    },
+    "app/components/popover.js": {
+      "sha256": "07c77e9b2b72282dd9e594c55bd32c0e5ac09e16456c01639cc9370643e13aa2"
+    },
+    "app/components/progress-bar.js": {
+      "sha256": "59666e299ef56baa1a1e51eeea7e430b32b514e46717cee2bc422837600233fb"
+    },
+    "app/components/progress-indicator.js": {
+      "sha256": "d757d5234d16110d89136612ae8c51078500fdb60d67bc98386e2677f32172b5"
+    },
+    "app/components/rich-text-editor.js": {
+      "sha256": "f742ee2cf6c7bd0c662646c15f08d09089c85ea2fbfe8b0ee74c28813576c5a1"
+    },
+    "app/components/segmented-control.js": {
+      "sha256": "da46f5c892bb605f92e385cd7037281b70d9c4323876c4ff725007172d2151ef"
+    },
+    "app/components/slider.js": {
+      "sha256": "d33e0abe0f79cd9ccd1498bb17e2a1fd4cf7c361f33c565996beb2bb90a14941"
+    },
+    "app/components/spinner.js": {
+      "sha256": "01171c4add024fb8e3ad2422ec41f4d99bd3130d40fcf188827ee5111697d342"
+    },
+    "app/components/stepper.js": {
+      "sha256": "0d3fcada4160cc4a912607b341d946bc18a02511dfcd9e47d478ac7cb28f22df"
+    },
+    "app/components/table.js": {
+      "sha256": "8ac06a8b91a68bd93b0741bbfa82ce993bdf35765b7c2d0bdbf331577b335194"
+    },
+    "app/components/tabs.js": {
+      "sha256": "43709468cd60d208a356de53347d85b6dbb2ca3caa9d2f7cfb75659f52c984e4"
+    },
+    "app/components/tabular-input.js": {
+      "sha256": "482f54c360cf314c7e7391f2a8156c7cf9bd995dc892074c56eaafcc5212b597"
+    },
+    "app/components/time-picker.js": {
+      "sha256": "9711eaa4ac76d29244d0f5a77c303a48837ce7eb9813ea4fb05a5338d3a5d547"
+    },
+    "app/components/time-picker/field.js": {
+      "sha256": "3d556429b03a088357cbedf1b35dce5fafb5782238b46e9af11b45edc7a80a95"
+    },
+    "app/components/time-picker/index.js": {
+      "sha256": "6d149a21871c02611af377e975b76b9f36207e2439b66ed6d365346e4a60406e"
+    },
+    "app/components/time-picker/panel.js": {
+      "sha256": "f0cb3dbbe4cf8b6d9fb2a7d9fc94dae4d4ef13c3f27f7a01804c66bb1d52893a"
+    },
+    "app/components/toggle-button.js": {
+      "sha256": "42c834104fde855b9f4f08bcebcc5768b2ff27fdbef3884469d8cde007de37f9"
+    },
+    "app/components/toggle.js": {
+      "sha256": "aee44b761098d8f7b779b954a4275cca4dea95f95c8a475006f111a0f32b0598"
+    },
+    "app/components/tooltip.js": {
+      "sha256": "7a518b16783da12b9868b9dfe7e7bc939abdc96367555d7ee7fde27f96de22f2"
+    },
+    "app/components/tutorial.js": {
+      "sha256": "41ef40f0f6c4dcb2616881f142fd04c905904256999f99568896b858600c352f"
+    },
+    "app/css/code-block.css": {
+      "sha256": "f8d9d8f49cc5cca8f72e6d0c5a55208d7b1a20da36afb92fa44763db13363594"
+    },
+    "app/css/controls-badges.css": {
+      "sha256": "74d52ca34230dc95f2f7557eb863e02df07651585bdec3d0632951a77d5ec928"
+    },
+    "app/css/controls-buttons.css": {
+      "sha256": "820177992b2110044e6d9c29ca73a517796b8cc91528625fb28dc9c8ef317b72"
+    },
+    "app/css/controls-charts.css": {
+      "sha256": "6b491aaf5adc9c75310b63ed3acb962db791460ab86261625d8a91146965f286"
+    },
+    "app/css/controls-chips.css": {
+      "sha256": "4a5a685a02775527a9d7263270b457b8994e39838e0501a1fce567f9cc29ff92"
+    },
+    "app/css/controls-color.css": {
+      "sha256": "150bbb11447e82597dfc9225286ea5cbfeb52cc9f0208265423934a61926b5b9"
+    },
+    "app/css/controls-diagram.css": {
+      "sha256": "fab5be1880d5ec4004035474183a4b461ae72232819d67f9aaa7c14f504efa1d"
+    },
+    "app/css/controls-disclosure.css": {
+      "sha256": "2853382c0386badb73f3090132f35fd744d9ee57995174e4ff4372c634c57f69"
+    },
+    "app/css/controls-fields.css": {
+      "sha256": "f179e6eee1b9b61952eff1b52a12e2f0de3a14d6ad8090ef2e5fdea7c5c8c74f"
+    },
+    "app/css/controls-file.css": {
+      "sha256": "2dd93b29594da190aaa6b6a12f019e1a99fbce834ea928970106a9e83a0b4df3"
+    },
+    "app/css/controls-image.css": {
+      "sha256": "5588c5e7d60b18d21a5350d90f8e6a7e07b76e746ae831e4891b38fe51df48d1"
+    },
+    "app/css/controls-menus.css": {
+      "sha256": "3d583f7c1572077865a5779cc597f0a7f9ce4a9433e0dee4ad14afad7174a667"
+    },
+    "app/css/controls-section-panel.css": {
+      "sha256": "e3d7ee5ff1cc095f894b04eee22f28ac577b0840b3d84b8a6098c34c80ed06f2"
+    },
+    "app/css/controls-tabular-input.css": {
+      "sha256": "e63764fba1fbd95acc81e69314be87c4047cdfb827c808d003870126692eead7"
+    },
+    "app/css/controls-widgets.css": {
+      "sha256": "37cd4a0203dd05919821e873eae87cb4873022196cfe97572b47826bb5ed9b3b"
+    },
+    "app/css/layout.css": {
+      "sha256": "bb08ccdf4eb8d7f0f844026762fa9e38a96640323121073d6654639314f4f4f2"
+    },
+    "app/css/overlays.css": {
+      "sha256": "f5e690965a7ee2569e85bcdcb31f86c872930a8ebbff9ccecb55cd67837530c2"
+    },
+    "app/css/rich-text-editor.css": {
+      "sha256": "4d84f29a1bf8293bab17152f535c189b419677af04be7e66cde3b135ef292693"
+    },
+    "app/css/table.css": {
+      "sha256": "9ff4e8c9eb6eaad983885fdf27f528b370ab5eb21d692ba3c5d58e119e0d8d3f"
+    },
+    "app/css/tutorial.css": {
+      "sha256": "c5386d468d0dd1af74448d977e6e9d2c8bc9d41a41ec7fe5e84e72e5cc397042"
+    },
+    "app/prism.css": {
+      "sha256": "310795b886280e2cbd427bb727db90f2bd111f7197229e6a9880c98d8274929e"
+    },
+    "app/shell/also-see.js": {
+      "sha256": "931ce20360fdc71b1c59a603409626f6ea24787df7d23865732e058fdab2a6c0"
+    },
+    "app/shell/external-link.js": {
+      "sha256": "6a1e0d52b04d6f115419de2bac85b2e5581a7e0212fa6d6a32c64a8d0bb45fdc"
+    },
+    "app/shell/heading-link.js": {
+      "sha256": "656dd0292c1e551dded5afc6c93855ec332f3be49955c20db007954e1e453985"
+    },
+    "app/shell/page-nav.js": {
+      "sha256": "aef37fd63efd4589457bdbd1e859e980c73835dadcb4af752c99c4a8ea004ee9"
+    },
+    "app/shell/render-shell.js": {
+      "sha256": "42f60de4596666fa537334eb10683589282f34b61e6b8576334cba50270132a3"
+    },
+    "app/shell/shell.js": {
+      "sha256": "7bc59c18faeecf7bcce15d586547c00c76fdc908a832c1206d9b4e4fdc2f165a"
+    },
+    "app/shell/sticky.js": {
+      "sha256": "4fbe8284625f6a7865bae63153aeced7ed46221f498875dc9e18e7e054bbe77a"
+    },
+    "app/shell/theme.js": {
+      "sha256": "3b992e024cb2af8673730e9ab8cd8c100bd71fb7b4e6f549c0c8c161a8aee6aa"
+    },
+    "app/shell/title-numbering.js": {
+      "sha256": "71f81d3e79c02e755243aafedd79a05bcd369d74317739fdf412ca6dbe26320c"
+    },
+    "app/theme-init.js": {
+      "sha256": "148c7609d71307e19f47b04282e196716f559033589cafb6563a79a784b7c606"
+    },
+    "app/toastui-editor.css": {
+      "sha256": "3f9f55c503dec155b391c71c7a3ab3ed5c659de5df5695084831155e51e95f0b"
+    },
+    "app/tokens.css": {
+      "sha256": "b2ddd5b1c927cad0320725052d404df62f05d041d56844ab0a4e29b6a2bc58f2"
+    },
+    "app/utils/also-see-svg.js": {
+      "sha256": "af1ff194fde0ba9ffe09edf885fde4562bac5f14592fd2f348c366296447e854"
+    },
+    "app/utils/brand-icon.js": {
+      "sha256": "8d639a2da4e1538534dedc42305150a0158d7d12703f017b7d568a8a73d70c13"
+    },
+    "app/utils/clipboard.js": {
+      "sha256": "b8821da634ea9c1eb85771e1f2d3fd54f3085cf64116040adc449cd342f12def"
+    },
+    "app/utils/color.js": {
+      "sha256": "b17da2f325d37b2719d374dd2ab1f0f68c2a7232317fb17d19ab6cb52a60447a"
+    },
+    "app/utils/document-listeners.js": {
+      "sha256": "af0b66fc6147906c9049c7425cec5b735dea048ce182ca28a55e34598c173c57"
+    },
+    "app/utils/dom.js": {
+      "sha256": "634496f84e49d4691f091de0effa74653d5c6f972532977d0e3adbee3975cc9b"
+    },
+    "app/utils/icons-template.js": {
+      "sha256": "3c5435bee06cc42dacd6dfa09231b4bf8dac66fa7829501d870a24cd23a9e930"
+    },
+    "app/utils/icons.js": {
+      "sha256": "219ca86cb4b8a7bd91033a3cb229d6c031357a2de039fe9f09311238ba9b6ebd"
+    },
+    "app/utils/menu.js": {
+      "sha256": "d3dd6ac565d600b06f8a8925487c782f8495a11f2ba202a0602333afd78fba53"
+    },
+    "app/utils/sanitize-svg.js": {
+      "sha256": "433ca97df4ed3a0ad45c227448d0606a019a4be70215f3a0648eca0ab2b1f0ce"
+    },
+    "app/vendor/d3-scale/README.md": {
+      "sha256": "b4ecd72cc23d8f3309030c5df852dfb87f56e39e70c3760610bca10e5d585dbd"
+    },
+    "app/vendor/d3-scale/d3-scale.esm.js": {
+      "sha256": "f9efd9872eef04ecd48defcae5135e846fd85f50203f94894878a54b7321295d"
+    },
+    "app/vendor/d3-shape/README.md": {
+      "sha256": "933080b783092c6ccb4b0ec612cc80d2a53b8a629d7534aa3931ab994c5d3d0f"
+    },
+    "app/vendor/d3-shape/d3-shape.esm.js": {
+      "sha256": "fab52e0c0c9b2c80054fdbe65328aa47df64f2879cb985ef7ba525c44f56b8b4"
+    },
+    "app/vendor/mermaid/README.md": {
+      "sha256": "0b6e7babb5842cc790f4ef37c584d767659ffdce8f138114927fa21dd9096246"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/abnfDiagram-QNN2D4NM.mjs": {
+      "sha256": "8cc0474c098d63399e2909d979cc37eac599d8fe91d291f06825d34c42dbc75f"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/architecture-TIHT7OUA-V6N4J3SY.mjs": {
+      "sha256": "4ac3013dba07e4b82798d7dddda3601d1d98e338dcca6a5c5a5778b0fe6c50ce"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/architectureDiagram-OT7VKSJ7.mjs": {
+      "sha256": "a32f14543226eeeb20d7f4877a1959e6d2e8578ae1ff3ccdb935b48137b62192"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/blockDiagram-54WLDVWM.mjs": {
+      "sha256": "b1e39763cb98f70d9a104bb3c2971f62748353d9a8700957be4ca36bcb8563cd"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/c4Diagram-X2LASM7V.mjs": {
+      "sha256": "6ab7de31018a24845fca48e8a855bb8a213f00ca603de5afbcd60ee189cb0892"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-224SPVON.mjs": {
+      "sha256": "106897ed01950fdb24ea92cbea810b72911f6566d4b2f4c0e684744d0f1370b4"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-2AEHWXPW.mjs": {
+      "sha256": "7746258e13606fce8dc8dde32041da7f3b3492fb1669f006dc647833db25b6d0"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-2SREHG4O.mjs": {
+      "sha256": "632ba06aa573dc5a0f78f15c8fb4ef5245d781057249f7c22ed7f98c1b7d87b2"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-4RFN2BYJ.mjs": {
+      "sha256": "23314130df2cb3093e6f4b5d6e9429a6c9f38f752f608ae9da214d57c478576f"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-5IMINLNL.mjs": {
+      "sha256": "ed3c40c332ee25f9c86e89507f2a6d18edefda66eadfb38ef3aeb59b95dad2b2"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-5VCL7Z4A.mjs": {
+      "sha256": "923319fb47f66b4ec1eda16c8e2b7c86c3126dd30e670772c61fdfd40bd1fed3"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-66DQ2XMT.mjs": {
+      "sha256": "09bd00c04cf0908c651ba73cf22a6aaab2291adfa4ce7ee5f8b835c7619bcf3c"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-6BELYETK.mjs": {
+      "sha256": "1c6ee1bae6d50d9d180b8ae92749d06102129ea24996883c31a005f6b61e5d45"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-6L755F7B.mjs": {
+      "sha256": "0b9a069e0153247af990b2cf2be0dbc045476c3bff9c22f9422fd8f3439db25e"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-7CWYLC5S.mjs": {
+      "sha256": "d6424d8a07495baaf4fc5f0da05daca8e7f0541bb053ca08cfd8dc43ed3d69a0"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-7FYTHRHK.mjs": {
+      "sha256": "d8289e52f9933b146725db036cf8c935df33378aea95d8b37e8232ca7c1efd30"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-A7VWPJGB.mjs": {
+      "sha256": "ba5b5a18fe4b1954330d9de580a751be692d0a89d828b262e938032902f50ec0"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-AQ6EADP3.mjs": {
+      "sha256": "13f83482f9731f6ed320746bf4f69aaaff5e1efdda94f64cd9ea6d9030b868c2"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-AZZRMDJM.mjs": {
+      "sha256": "e5c109a799a86fc58b75bbb2cbdb72a6570c8c29821037d181ebe019db0beab1"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-BI6VK774.mjs": {
+      "sha256": "97caa6db4057b3f102a4aa7f3628a740b72b1b2fb9a0c4a978ddf864a39f31a5"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-D6VWDJW2.mjs": {
+      "sha256": "e7813fbe9401a041c7c35f894c99457de7404e58e5351f3ea6440c526b71bb00"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-DMV4VAQV.mjs": {
+      "sha256": "0ccc30de1d64e92deaf38b6b00c214bb779e09ea961e4521cb26430fe992a13e"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-E5QJAATJ.mjs": {
+      "sha256": "5ea63a7706949a88f363221d082e1b20157240b1706248b100bb0f6ce060882e"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-EQFTRU2I.mjs": {
+      "sha256": "726433c36797f3de029d5bef36c2280e301d8bb817c35d06b4650d7081222cb2"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-FWYVLQTC.mjs": {
+      "sha256": "0ff4679432bf2790874085155cead21924fd47314042584a7bfe4a741de9d893"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-HNC4WDU7.mjs": {
+      "sha256": "edb2b880152a63227abfb2cda85c8951c6ca83689262d1a0af8be5f79af1cf05"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-JQRUD6KW.mjs": {
+      "sha256": "ab31e28cd7a9246443f102d2d34e07740bb9a872d1a6a65deb165f163a641517"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-KRXBNO2N.mjs": {
+      "sha256": "45d2e1a6271e678ca3823e6da3bead7effbc3f4b9f751ed9109c98c4b01af561"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-L5GCOVLC.mjs": {
+      "sha256": "87fc9c74c9711e04eceaf9b2e10d107aac440c92b25198e654c02003838c50bf"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-LAHSG3N2.mjs": {
+      "sha256": "880de71ecb9daf937713d50fde8dd59e6c47e7740363b1c5325ec8e90d55dfce"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-LIEV3EAG.mjs": {
+      "sha256": "e6d431e84c685d0eca811a02f62708a25f9191171d7d384e2521268a46422300"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-LORZLZWG.mjs": {
+      "sha256": "e442d27ddebdb1d5d0f65ec5a13696fbf8d92e958d99c3058e23d824d3669c54"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-NLANEA3F.mjs": {
+      "sha256": "5801b60996da2185fba046d4aa0fe182e9c9d23d98b5c3c8551123effb05b88f"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-NV3KIAZN.mjs": {
+      "sha256": "879f555c3214d46d025211ee3dd4a5bb1270231881293b2ba16693859806de99"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-OIYT25JQ.mjs": {
+      "sha256": "104e929ab1b4bb27bc06b6b4fc4d8044fea9a3e41616135adbd0ac494f1efacf"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-PE7DX7ZZ.mjs": {
+      "sha256": "23a90cf695611fbf9374e44e3687724486e653e618482cbb5d20cd83ea4da0f7"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-Q67WD55A.mjs": {
+      "sha256": "67288f0cece7b95af7cb6e07c51860bd0025aaf94e57192d5b887c83ab66cf65"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-RRFMTAIC.mjs": {
+      "sha256": "57eb88c3f76b7bdca544c02cb4bd19d4e277ad8740137dd99abacc49c588ee7c"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-SATU7PGQ.mjs": {
+      "sha256": "3f5a8d735b17e5566e8526db97931630f3dc023a66393e5bee323078181e88db"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-STOV2HOB.mjs": {
+      "sha256": "b9dcf40a130db7675f59151f77ea069438782074fa847001abcd6bb82b8d9b02"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-SZD42YQK.mjs": {
+      "sha256": "5f5b653e2ad2d2a925bd9b10fcbf3b9e9b643b5f67b543a2458de72b5e344850"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-T5OCTHI4.mjs": {
+      "sha256": "bcf848310d29d090f623a39375c36b19f4c78c0856bddd8a68b3998a729f2fdc"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-TFPGFQPA.mjs": {
+      "sha256": "bedd980a8d969ac2fd0cf65633a48ee76e2a23a4b41f7add4eb7175965cdf2a6"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-TGVD4F4B.mjs": {
+      "sha256": "1c0dcb6d16633abe5274036a5c42bea1c4d0f8e555e3fdd333d1d09d7dbcf251"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-TZUXEDM2.mjs": {
+      "sha256": "2e90f11fbef8a2af7791a6e0e83603e66fda48451d205bf73d4a3411e45c227f"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-UAT7B5JY.mjs": {
+      "sha256": "7f6130fbe2367c45cf18f97e096e1dbd89d97eeae961d3db84199acb477633eb"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-VE5CLXGZ.mjs": {
+      "sha256": "86b0d4f0e161df3400dccac0e4b6e4b2aa5983cf3c2edee3dfa4915f07d6a501"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-VJFVEZTB.mjs": {
+      "sha256": "92784a322b0d08145c6e960c7d4393c2d2e24c24a6acfc528234dfd71d265592"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-VY5UBI4V.mjs": {
+      "sha256": "9b63597072ca997a7b50812a5f4857df16e4ce48b262e9a3553802db3e12dfe3"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-W44A43WB.mjs": {
+      "sha256": "5ea884c347e3c61eae14a29442ea017a28b22734d600dc7bed957b6fd3dbfd8e"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-WJBAP47W.mjs": {
+      "sha256": "8085f24dfc8725939304f3fb08c6205b3fa73a149b2edb2aa39354082d7bae34"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-XNMVGMAZ.mjs": {
+      "sha256": "fada21c58ead432eba08b4e3ceff3a93f69c6effcf8da0e964814fc4a2e2ddbe"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/classDiagram-VPOSVPXH.mjs": {
+      "sha256": "a8e86a4efa33e5586e0a2ca892d8fdce841e702b8d1ad0b5db376c597da2f21c"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/classDiagram-v2-5VFNUXQA.mjs": {
+      "sha256": "a8e86a4efa33e5586e0a2ca892d8fdce841e702b8d1ad0b5db376c597da2f21c"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/cose-bilkent-RZA4XIPR.mjs": {
+      "sha256": "3168d10108921bb3ae573fbd234e0ac9f098e1018be5cacc71a982540203390a"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/cynefin-VYW2F7L2-2VAHYKR6.mjs": {
+      "sha256": "afce7dab0d785151d10d91441beaf531466127a39da9dcbe4af78d3cf5b90cb9"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/cynefinDiagram-TR7LZUCG.mjs": {
+      "sha256": "dd2f1b11edd387b1ef8092f85c7c2bf1d037599302e9b0b3aa2d2a058d2c20ee"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/dagre-K64A6Z3X.mjs": {
+      "sha256": "37059ad4e595124f5c01acc8c4a3e947d1aae65ba13b6f3ac0cc472851f5f583"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-2TLGJV2N.mjs": {
+      "sha256": "2620dc74f497425b10dec50fc5394950f154c4553d3e6744024fcc23a2bced1d"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-JCD7PQ7C.mjs": {
+      "sha256": "b9568d1fc56c3f5feb711cce8fd72f17eb9e057a9a45377045a71e94ed834f99"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-KFBZAVDW.mjs": {
+      "sha256": "28ecdc47084618e53724e347cdb8752f4f2c98df64c68f4b5f23e07003ed8ade"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-L7DVE3PN.mjs": {
+      "sha256": "909d15a0595af3cff1a5a8e0bd961acd2ba61807687ebc7b17a3497a8a95d5a7"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-YP3FGXHI.mjs": {
+      "sha256": "7f53e9a9456182444856e90546ebf456cb4a87c56c5fccba3c6e0f618855bb42"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/ebnfDiagram-DRHRQJWO.mjs": {
+      "sha256": "e6781dbd0bfd1c2bd7ce4845a91d72a41711eb09db11b9f41283b1fa045b04d0"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/erDiagram-SZLJLQMB.mjs": {
+      "sha256": "ab9eb3bc85e34b781edcbf18438a4fb04d5e4fd5a06d6e17b2cf68c655cba802"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/eventmodeling-45OFAUF4-AOUJWSLX.mjs": {
+      "sha256": "d555ca9f11aa3b68df01a7039059bba40496f495a2b69a868cafa093d9d3e4ae"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/flowDiagram-BWE6NHOH.mjs": {
+      "sha256": "5b15abcda20994d677304f8a20885ba05d15f34b86ee5a83e7e876c46234b5a4"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/ganttDiagram-2QTCJSNI.mjs": {
+      "sha256": "3d42a65abe137ab3f7b5496c7307fd2a9f621701eb2f56d4e3f840e1af17ba12"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/gitGraph-TEB2WS4Q-U5VWYIBC.mjs": {
+      "sha256": "e5650c42c15412f8b9b1cf23391af06ace863c4cff567f7e7cdb930adcef4452"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/gitGraphDiagram-VVZAVV5G.mjs": {
+      "sha256": "af49840a3fb6951b001568f652df5918aec59206f8903058dba112fb690c2710"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/info-DKCQHKI2-DX6KST54.mjs": {
+      "sha256": "81f3b2fbcf14edaea2ddc199347e5a6c9d61b9e86d9d51bd436ebc3df9886eb7"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/infoDiagram-FY4PZKRE.mjs": {
+      "sha256": "60e2f5c54df06a066556ef1388767027f5fe60f58e07d5be9ae29bc56dd94920"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/ishikawaDiagram-4JDSWWDM.mjs": {
+      "sha256": "7d90f45026cb1280c5652822f7bb3c4fc7109643f1e64db00baa670fedea9060"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/journeyDiagram-QUS3FAKT.mjs": {
+      "sha256": "76ac7ef329cfe11e7971c6d671f769d5a03158facc42562be4a9570ac63c6be0"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/kanban-definition-D4L7SQKK.mjs": {
+      "sha256": "32d73055f2fddd603626a6fbefce0a2b38860e7b7872513430f3ad4eccb71027"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/katex-C5OPUE3Q.mjs": {
+      "sha256": "66f00e67b71a51efcf8562554ff3cfb7342653b0d6069ebbf7123451daa2e8f3"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/mindmap-definition-66QP5TD6.mjs": {
+      "sha256": "3a9fda10f550bdc27188151dee33540080b7f44601c71b906e95c553f2be39ca"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/packet-7NZHBO7P-5WG45QPS.mjs": {
+      "sha256": "32d837cc69f0d75dedb9c8a90fd197908fe82c46907461bd94197a3c4d2991fd"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/pegDiagram-YKIO5C6U.mjs": {
+      "sha256": "5b3c792dea867c40bea08d01a39ce547d252c6b90f5710c430734bccc1088df3"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/pie-RZYD4A2V-2OCZ2VTD.mjs": {
+      "sha256": "7be075f26467b22a9c9230d78fa8a6aec5f1364003fb19748e63bad346bd2002"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/pieDiagram-YPY3TKG5.mjs": {
+      "sha256": "bab921e9aa5c53bb1ade6da09b5fa4fc22e06b7e2e0be53387e91a8b0300bcee"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/quadrantDiagram-VO5QLCXA.mjs": {
+      "sha256": "5e96b5bd10fa1c295b42ca1d88247feac2fdc47bfa407f2e3b7330b128b6a629"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/radar-I7S5WNFK-EPLSA35B.mjs": {
+      "sha256": "1f579c758a9c08674e38e18a5b1411112838f510117654e8e4a87e395ff26dc7"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/railroad-3IZDKUUU-PWFQV6Y6.mjs": {
+      "sha256": "66d82b33cdd8c6dc3f894771e88b380a7658f54acc3dca436385e0497b5baca8"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/railroad-abnf-AHOZXSZD-JYYJX3BS.mjs": {
+      "sha256": "b1277bd74b3a88611bfce9f1a1cde5c5ae09f7494e783a7f1e01815014085c26"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/railroad-ebnf-EBAXGLYW-RBZ4ONAP.mjs": {
+      "sha256": "6b7b97ef5c73b69b68a4809ea94268bde2e63d672fc77ee56f948e63beb1a31f"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/railroad-peg-LSFZ7HO6-KHNPXGPG.mjs": {
+      "sha256": "178487c55bec3ed0a2d314f7ee94785b8d7fd4658da62b390ff8cd826d173cf9"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/railroadDiagram-M77LTMSB.mjs": {
+      "sha256": "60955c6fa4eca979f74c4b2c481340be2ec551da7ecb149169fec47531cb4beb"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/requirementDiagram-RASO5HTO.mjs": {
+      "sha256": "031401a68d05092f5bb9d4be78370d5c923ed5e645c0276be25e70fd6bf52705"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/sankeyDiagram-F32LOJ6L.mjs": {
+      "sha256": "6547e92123d0bd92141f020b23118f9db01d6164244409a81e95326c87f9f1b9"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/sequenceDiagram-URATNSBD.mjs": {
+      "sha256": "4c4320145ba3fa1bcabf35a2c1727751aa1a04eb1562109bf4e180021e79eaaf"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/sizeCapture-5GORAGP4.mjs": {
+      "sha256": "d35e060aabccb4c14e76f544a9925631e0b3dcea95dca128ee0ffe0ae3c803f9"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/stateDiagram-DODFXNG5.mjs": {
+      "sha256": "20192ba1375f8a4514011684bd9eaae84179eda27839b5f855a8e6b5813c3822"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/stateDiagram-v2-JNMM5JRA.mjs": {
+      "sha256": "df796fb6e5f565c9459747fc12f8517681c69bc5d445542b85d4fa924c5e2dd2"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/swimlanes-OSWOYLSK.mjs": {
+      "sha256": "3a55f16fc5f66e97e6bb9796d5e4ec6c11bfaea99f1c7b9e3dd8e72557783a5d"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/swimlanesDiagram-RHGX2RDE.mjs": {
+      "sha256": "3ba8f8856da56301a4245cb8ad4de84ff0b11c479b14592e630813bfa3776c7e"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/timeline-definition-WJXWRH4I.mjs": {
+      "sha256": "057ca125014108b2beb17051dfc4095659ce3659213fabd83da27d0abcfc85f1"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/treeView-QDETBFTQ-EHYTSQNO.mjs": {
+      "sha256": "a2ef50a12f4e175fbb3b667120b93f651aba5410a048d7c89166c65020dad021"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/treemap-6X3UGDF4-CCWCF7EK.mjs": {
+      "sha256": "774b6f3b3618277e4b6945fb7146fbfa55a1db620c4da67bdb447be9fd0de952"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/vennDiagram-K3VCMQLI.mjs": {
+      "sha256": "085712065e78ef0b659a2334b38bd8189fc6d57c4ec84f149b96b6f9d57b3371"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/wardley-OPB4EBWU-6OWERDVT.mjs": {
+      "sha256": "29b7ba6345d13795aad38877a9affcab31b17a8928cb15ab043c09f58a14d6a4"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/wardleyDiagram-XK6FUAWV.mjs": {
+      "sha256": "3235351fd70c2b61bb6a5c9a39348d45ca69546814b7381e434450b8b5115ac2"
+    },
+    "app/vendor/mermaid/chunks/mermaid.esm.min/xychartDiagram-5VRUVLCW.mjs": {
+      "sha256": "7bf49322c642d586ee588758f9c9dc60605040d1182305383ff23dd90f5a3b4a"
+    },
+    "app/vendor/mermaid/mermaid.esm.min.mjs": {
+      "sha256": "028ee006287b85ea6ee0a670f5d9f10e22e8e46e33c7e345fbf1f60d443a5c21"
+    },
+    "app/vendor/prism/prism-line-numbers.min.js": {
+      "sha256": "f5c99feed70b757a4ab0f8bfd80584f773db6694e9e0ce2dab3164fa55a89a35"
+    },
+    "app/vendor/prism/prism-python.min.js": {
+      "sha256": "ed4385685bcf2d4935c8dbbab4bde16603da1329e092d2bf36c3dadd67e9a85c"
+    },
+    "app/vendor/prism/prism.min.js": {
+      "sha256": "11d136a060e78db4a558573a4fdc1a282c89f014c79de9221334d8c971707d0d"
+    },
+    "app/vendor/tanstack-charts/README.md": {
+      "sha256": "477cf3b4b0d288624e106a9a29d45c7de72d3a3217ebde994100c1be0973eed8"
+    },
+    "app/vendor/tanstack-charts/adapter-renderer.js": {
+      "sha256": "db8321786abe4810f1f319a6a2a85b5390544c265b41c4e5ba27a0a693724cde"
+    },
+    "app/vendor/tanstack-charts/adapter-shared.js": {
+      "sha256": "15bb5d34b46c5e5f2f1423ff08fd48d83bd503999236b6c34a534c496083a2b6"
+    },
+    "app/vendor/tanstack-charts/adapter.js": {
+      "sha256": "4e7595c9d3e6f0baeaecca3e9d0665583c811e7441cd825e5402ef0956af099e"
+    },
+    "app/vendor/tanstack-charts/area-x.js": {
+      "sha256": "e777af70f5579d24862ec05dc8eb95c59718d1a7f8b2c89cda794045f52845c2"
+    },
+    "app/vendor/tanstack-charts/area.js": {
+      "sha256": "c7bececf1707211f97b04423e6ce2a3f01c01de88591fb4233cb276f40ca7351"
+    },
+    "app/vendor/tanstack-charts/arrow-geometry.js": {
+      "sha256": "a83deabc181861d2aede6bf88a8a1749fad06e8c881cac316147fada1a92db93"
+    },
+    "app/vendor/tanstack-charts/arrow.js": {
+      "sha256": "45c30bf466dbdce8441bbe3824e9d518c8ccd109641ecf7d3531792584d34f17"
+    },
+    "app/vendor/tanstack-charts/band.js": {
+      "sha256": "5a4633a8ff7fd3cb0ffc884a8b515975de3301acf6d639eea57a87e138ddba12"
+    },
+    "app/vendor/tanstack-charts/bar.js": {
+      "sha256": "ce02769ac0328a49fe836b3e298a0d473f97bed55acd28a64d6ca4aa181db930"
+    },
+    "app/vendor/tanstack-charts/box.js": {
+      "sha256": "5e5162320ed2f4928503588482e610297fc0b4c67c84e7939a07aaee7bc761f7"
+    },
+    "app/vendor/tanstack-charts/canvas.js": {
+      "sha256": "b522a35f9a76b3fe62d6a1d6e6a072e5c105e841fa03fe2d9a8219eb198746ee"
+    },
+    "app/vendor/tanstack-charts/composite-motion-internal.js": {
+      "sha256": "50f924e383dda41e6117ccd10cea18931fdbeb91410cf502761a84b59124c8cb"
+    },
+    "app/vendor/tanstack-charts/configured-scale.js": {
+      "sha256": "acf376eb1421cf198ffe0fb6f4091d7ff1c27d243f7f849d98a72f467477be7f"
+    },
+    "app/vendor/tanstack-charts/crosshair-resolver.js": {
+      "sha256": "6b0461c79ad89216fb114a50324bf43716df47f6f0faca7e76b3118ba2e579a3"
+    },
+    "app/vendor/tanstack-charts/crosshair.js": {
+      "sha256": "bafbcb18ff5b707abade0bf0c1f6069f5392fccdd518f6b0218921431c3770d0"
+    },
+    "app/vendor/tanstack-charts/cursor-host-contract.js": {
+      "sha256": "bd5d7a8c1eab2b6e5ca6d9e96928d96afb7b1ba35f9bb285ae508762980045b1"
+    },
+    "app/vendor/tanstack-charts/cursor-host.js": {
+      "sha256": "a485227692ebb6e9b8213ef96fca0de0387eee3d439465d8cfbb814886e3231f"
+    },
+    "app/vendor/tanstack-charts/cursor-public.js": {
+      "sha256": "0dca3d4903a69ab8e40ba03c71706978dc70b3e21017b078c62c9c735eddb39a"
+    },
+    "app/vendor/tanstack-charts/cursor.js": {
+      "sha256": "aba2a6fa0e1345dad4310c987f58600c830c82a4cfae75bcd55547a60998133d"
+    },
+    "app/vendor/tanstack-charts/d3-area-x.js": {
+      "sha256": "dc1efae99015f0e23fb1320eaf0bb747aa1d21c4cf43e582b171048ed25637ec"
+    },
+    "app/vendor/tanstack-charts/d3-shape.js": {
+      "sha256": "475c38bdde2de106396f404a9f51a83896a4f067c9a694017e1d4c54a46e4ffb"
+    },
+    "app/vendor/tanstack-charts/difference.js": {
+      "sha256": "2da48711f7c3d338ff8fc6dbf474f3ae860b4673be6e772b8e5c59ac758da1a2"
+    },
+    "app/vendor/tanstack-charts/dodge-internal.js": {
+      "sha256": "a28ff8c0ff2579fb10cbaacda8803be30271e3effdf0c14c5e3ee7c554b80028"
+    },
+    "app/vendor/tanstack-charts/dodge.js": {
+      "sha256": "f7384377aad754b20e5281ae16f9fc8a7511d4fe7f81fbb52756a6734e6e436f"
+    },
+    "app/vendor/tanstack-charts/dom-text.js": {
+      "sha256": "6df694ad94f81c516a8cfff3ce9adf34157ecd7f935790bd018a1b28b0a0a95a"
+    },
+    "app/vendor/tanstack-charts/dom-types.js": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "app/vendor/tanstack-charts/dom.js": {
+      "sha256": "60b1ad6f28adef829d52d6b98f92b79b91c4f27ac0d0f1dceba786357d9443cb"
+    },
+    "app/vendor/tanstack-charts/dot-layout.js": {
+      "sha256": "97f1d603be23f2fc257f160b5377a1d363ce87c904af75631cc90f370b1ceadb"
+    },
+    "app/vendor/tanstack-charts/dot.js": {
+      "sha256": "e4ac513233f643d3f06c118d8e211b247dd4b329def6f94050e19a556096ed30"
+    },
+    "app/vendor/tanstack-charts/export.js": {
+      "sha256": "a63ae772ab5022c90dc02690912bc574f7909f6b4b7878f16102261777fb7697"
+    },
+    "app/vendor/tanstack-charts/facet.js": {
+      "sha256": "8daa5f4879b0d8eb42d59f03234cda295c72754bd2072bce5e14346fbacdd681"
+    },
+    "app/vendor/tanstack-charts/focus-disabled.js": {
+      "sha256": "4863daa68c980521c580eda8b2f62aca671884f2a8f1b35dbaab62a3cc28869c"
+    },
+    "app/vendor/tanstack-charts/focus-guide.js": {
+      "sha256": "fc34adec93259a5f632e3d235b15cabe36b26062ba4abadc26f681b5c0422d2e"
+    },
+    "app/vendor/tanstack-charts/focus-layer.js": {
+      "sha256": "5304da4a63d7662f13324aadcdadcc8d26d8d7a7fb9381e3253323db08d58f0b"
+    },
+    "app/vendor/tanstack-charts/focus-mark.js": {
+      "sha256": "d59cb0fcd387412568b73bf367266a98e467817fc9b965a7d4ac88dd3d207e85"
+    },
+    "app/vendor/tanstack-charts/focus-presentation.js": {
+      "sha256": "baa8f40ad84d482dc9406a192d1ae12bc1808ffe2b9a4336fe4c6e3f1d6efab2"
+    },
+    "app/vendor/tanstack-charts/focus.js": {
+      "sha256": "3ec768feaf9774f9394c367d962112262b670fd905bdbb4602b82532fefbeb0f"
+    },
+    "app/vendor/tanstack-charts/frame.js": {
+      "sha256": "ba6bfd4eddacb66cdbfb4521552a527a500c25e285dca8824b8dc873e2627428"
+    },
+    "app/vendor/tanstack-charts/geo.js": {
+      "sha256": "7b4d56b8f4751437ee8d6b8ca38fef83f99b130013ec015ab0cc97397976a050"
+    },
+    "app/vendor/tanstack-charts/group.js": {
+      "sha256": "15d4be1364f6138eb1b2d7be36bc4783ba74ddf5f9c911114f487c6ff7173f8f"
+    },
+    "app/vendor/tanstack-charts/guide-layout.js": {
+      "sha256": "dceba54521ba0a9bbd7a17616d86dc76d780ef7bc0e195cfeca247dd398bf086"
+    },
+    "app/vendor/tanstack-charts/guide-nodes-internal.js": {
+      "sha256": "2d1ea520959047d6c8f1428a46a13296cba991ac9020b0888f85120bcac578ff"
+    },
+    "app/vendor/tanstack-charts/hexagon.js": {
+      "sha256": "534165da29a79e1e2c18060ef41b030c91c968cc4e42953b6eab78e8075c9c8c"
+    },
+    "app/vendor/tanstack-charts/hierarchy-flat-internal.js": {
+      "sha256": "a89285b77518e60cc77afa756c3923a2e9bbcba08460aed1f88e768fc57c750c"
+    },
+    "app/vendor/tanstack-charts/hierarchy-sunburst.js": {
+      "sha256": "b9f9d61aabbb30626da942e4dabb30c963cb0877ec569ed69eb7b450ef325731"
+    },
+    "app/vendor/tanstack-charts/hierarchy-tree.js": {
+      "sha256": "6ca187c664c5dbebbcd6fd7aee8314948ee42000671a93aa08f82d8aea948a75"
+    },
+    "app/vendor/tanstack-charts/hierarchy-treemap.js": {
+      "sha256": "6f73cd08bae2b97ef76f4fced7717f303776e2fec6b8d4f3f9f799f57b4110bd"
+    },
+    "app/vendor/tanstack-charts/index.js": {
+      "sha256": "72c7de57e8dc756aa00c9718f2784d0259591fe1d456a3542e0cbc102a3ec490"
+    },
+    "app/vendor/tanstack-charts/interaction-axis-internal.js": {
+      "sha256": "86678925155a276f760541d0b322c4215999c29482777974c114376dfe66d312"
+    },
+    "app/vendor/tanstack-charts/interaction-brush.js": {
+      "sha256": "341af506d8867c9d30a4842792f7aa80924434fa3b0a016bb8546d6b3ab4990a"
+    },
+    "app/vendor/tanstack-charts/interaction-cursor.js": {
+      "sha256": "6b864138355bdf83746654c1722ffd5564bbe1472390b9cec6dd4031bf2952bc"
+    },
+    "app/vendor/tanstack-charts/interaction-handle.js": {
+      "sha256": "2df1317ffab1f6d3db9c83531f86d5671feb16f6962ee182e8759841a09a8ec7"
+    },
+    "app/vendor/tanstack-charts/interaction-range-internal.js": {
+      "sha256": "205d8a82753afe9a371b8881736380f75a59a075945df821f634390dd595467a"
+    },
+    "app/vendor/tanstack-charts/interaction-signal.js": {
+      "sha256": "c24377dae1410f95ac18e973522ef0edb60c59b1aaa94cd8c8d2161056023920"
+    },
+    "app/vendor/tanstack-charts/interaction-zoom.js": {
+      "sha256": "9d7edd025618993c6083b31887bab56c6710311ddde4b31221bf88ab39f3a802"
+    },
+    "app/vendor/tanstack-charts/interaction.js": {
+      "sha256": "7d5cbeb7989736977d896ffa611e1289adb7a181d2737996c9d057063931d5eb"
+    },
+    "app/vendor/tanstack-charts/interactive-legend.js": {
+      "sha256": "1c20966c0434cc7e1c741edb1ae9f734e733483af2fdc4a1c52b65050bf644cd"
+    },
+    "app/vendor/tanstack-charts/legend-layout-internal.js": {
+      "sha256": "7a95d952902e4fe6d8c8ab8700eb24db039c1ae3a6c933913139c7aeecfe110f"
+    },
+    "app/vendor/tanstack-charts/legend-static.js": {
+      "sha256": "20a346054b96a08e273dfc8b6922a382b41b110f0cba828d718e9f17a9cd7943"
+    },
+    "app/vendor/tanstack-charts/legend.js": {
+      "sha256": "9e3d0dad44d7eafccbd246e76789d0c732b76a4253dc51eafc9d6739b24f1cef"
+    },
+    "app/vendor/tanstack-charts/line.js": {
+      "sha256": "9503209a0abfbd19eb2624c2853019d18193526a2d3c92e8559ed1e406e045c5"
+    },
+    "app/vendor/tanstack-charts/link.js": {
+      "sha256": "a2f4e13e85781953802fb8f675c0d5d60d80fe8b770787df76c920db5f1033f4"
+    },
+    "app/vendor/tanstack-charts/mapped-spacing-internal.js": {
+      "sha256": "8ac66dbc404f43e3d15d4c24e95617d0404d531758a3836566d36a03aa6df041"
+    },
+    "app/vendor/tanstack-charts/mark-composite-internal.js": {
+      "sha256": "f775dae5fbf8d38261e1f977ee734b2aaa83a0220b66a3c54e177a0ba9c370bf"
+    },
+    "app/vendor/tanstack-charts/mark-composite.js": {
+      "sha256": "3205069019d87f36225aa9bd10feed59eac0ac8636548aa53a2a98a86992fc2b"
+    },
+    "app/vendor/tanstack-charts/mark-decorative-internal.js": {
+      "sha256": "9a81d74ab04b62c5798c2a760445c09531d017ad6d8d763d9d96bffa78de1ebf"
+    },
+    "app/vendor/tanstack-charts/mark-decorative.js": {
+      "sha256": "1748618c21978d5277363548d2b2be58a2df5d1cce7ab538379acd087446d3bc"
+    },
+    "app/vendor/tanstack-charts/mark-scene-filter-internal.js": {
+      "sha256": "6e0df83d8ef45bbbe6f45d6744a4b53153b76180993846a17aa7384c315bcddf"
+    },
+    "app/vendor/tanstack-charts/mark-state-transition.js": {
+      "sha256": "350ad15e63653108ebb838ec46d2b4c4c21c3d850df3e0b5a7c55617535759a0"
+    },
+    "app/vendor/tanstack-charts/mark-state.js": {
+      "sha256": "e0e247c1d4a636a7d766ed8b5b377041d700b38cfa810ef4d77c3027e8ac59ed"
+    },
+    "app/vendor/tanstack-charts/mark-with-scale-values.js": {
+      "sha256": "c1fe5e2f3960206f72ce3e8afcfd493f3e1383c37da805df67ee9ffe66c5683e"
+    },
+    "app/vendor/tanstack-charts/mark.js": {
+      "sha256": "b7f37d973d0a5db3dc15d7cc9af6eb8fb0b0353a4c7dff1fabb1a327705db50a"
+    },
+    "app/vendor/tanstack-charts/motion-path.js": {
+      "sha256": "d206f3b2c06c45d03c8fe3253245609364b34a517fc665b31dc8270079070f4c"
+    },
+    "app/vendor/tanstack-charts/motion.js": {
+      "sha256": "eb93989896884b027242bb82aa2304968e0992ca7ce09a0d3759cc21a83b3f32"
+    },
+    "app/vendor/tanstack-charts/nearest.js": {
+      "sha256": "681f3664acc365174d449b58ac481f4c62a23f31805efd66f15f6b7966e1dd6e"
+    },
+    "app/vendor/tanstack-charts/network-force.js": {
+      "sha256": "fa326b276e6fad957f89da96700258fc89bca8dfdc761868d3bd1f38b034f598"
+    },
+    "app/vendor/tanstack-charts/network-graph-internal.js": {
+      "sha256": "eff0a585712c1d3878f12e46e32f6a53c728648684c77cf7bf458cfc970883b1"
+    },
+    "app/vendor/tanstack-charts/network-sankey.js": {
+      "sha256": "65824df2e3ea3c49d50018ab53a79e61999255df41c51a25c9ce6dea04b9e0d5"
+    },
+    "app/vendor/tanstack-charts/polar-mark-internal.js": {
+      "sha256": "9304c6d1ad8d724cb328879fad73d40cf76dea3995aa94040a2b06f8940fe0e6"
+    },
+    "app/vendor/tanstack-charts/polar-pie.js": {
+      "sha256": "bb2b2a16998fafa90792bdbc5642af23bd2d01926d67747824f28f924da10229"
+    },
+    "app/vendor/tanstack-charts/polar-sector-internal.js": {
+      "sha256": "7c2bbb48b27c01a7a0ff8f95a3ba95ac8295b81b00f8742e4580c17880d0c6fd"
+    },
+    "app/vendor/tanstack-charts/polar.js": {
+      "sha256": "c28780089c6a56c924d9018f66d9c89fa07e4d511638cfecbcf98e7868c2b8cb"
+    },
+    "app/vendor/tanstack-charts/proportional-interval-internal.js": {
+      "sha256": "b119621c55cc0eb71aecc30f971ab3d3d4d314fde48e73138b79697d0778d8dd"
+    },
+    "app/vendor/tanstack-charts/reconcile.js": {
+      "sha256": "bcbb87f5a6a0199dbc6c22fd0d07306fbf269811b30d65131eff58d1519337f8"
+    },
+    "app/vendor/tanstack-charts/rect.js": {
+      "sha256": "29c9cdeedfb445c3387e710a3609e6cbeaa77aff28bf13053fd73158ed3a54be"
+    },
+    "app/vendor/tanstack-charts/regression.js": {
+      "sha256": "14f7200bfce918321002f06144b951aa1acc4112924777ba029c44012bbb1d30"
+    },
+    "app/vendor/tanstack-charts/renderer.js": {
+      "sha256": "57ee0983f043637e31875eacd73a67d8d00e254f44368c27795179c5b68e4c94"
+    },
+    "app/vendor/tanstack-charts/resolved-layout-child.js": {
+      "sha256": "8e6dcc80543cea7daf436f92e0ad35025cc3cc680e0fb30874b7ea118953eb3e"
+    },
+    "app/vendor/tanstack-charts/resolved-layout-position.js": {
+      "sha256": "288d3f86163be282ea25b5cfa3bf8010e356669dfd71dc590e61c08edf37d257"
+    },
+    "app/vendor/tanstack-charts/ridgeline.js": {
+      "sha256": "be478a849243977321037e00409637bed3f6ae4c00f72a7afbe8bd777429a083"
+    },
+    "app/vendor/tanstack-charts/rule.js": {
+      "sha256": "2501584d3ca60306528e79f8085729d73af6fced06fa5832e50dde5cd7efcf41"
+    },
+    "app/vendor/tanstack-charts/runtime.js": {
+      "sha256": "0b64677145f8333c75c351ec3b4f1c9fddf060842582b176a289edc687975a64"
+    },
+    "app/vendor/tanstack-charts/scale-input.js": {
+      "sha256": "9e138bc715c9d46f9f1d1815951602bdb4b6563a7c45b7c7a2f3a8d2f00d8b73"
+    },
+    "app/vendor/tanstack-charts/scales.js": {
+      "sha256": "13c0f66c264db476320e96a06cebc7b0014c55f09e91171eefdcd1644a3c95ff"
+    },
+    "app/vendor/tanstack-charts/scales/band-kernel.js": {
+      "sha256": "586155cf8adfe41c9258bc8e1584cf0e78360ca5388371a6c1ab601c5f4aac75"
+    },
+    "app/vendor/tanstack-charts/scales/band.js": {
+      "sha256": "b21aee54870fbf8f223208385dab4b59a0843aba8568cfabb8945c053532bf88"
+    },
+    "app/vendor/tanstack-charts/scales/intern.js": {
+      "sha256": "60475a716cf7b6d4647a8143f95a87a34d826befc0c8b00c5e48ec5ebec848c5"
+    },
+    "app/vendor/tanstack-charts/scales/linear.js": {
+      "sha256": "f4124cc2816302c28fd1fd3e6f3c3b267fa4a516ac2e63dc9e50c7288ab117d7"
+    },
+    "app/vendor/tanstack-charts/scales/ordinal.js": {
+      "sha256": "27db408be5730547b744ca32e039cc217f39fc5997e2fd72e0b65b4e80c4ac4b"
+    },
+    "app/vendor/tanstack-charts/scales/point.js": {
+      "sha256": "3b5321e1f17f8c678532e3bbd4c9172538f8b3f283883d22f41d3d99ed0c9f71"
+    },
+    "app/vendor/tanstack-charts/scales/ticks.js": {
+      "sha256": "12220ddda4c5678056445af99d7e78b390a84357b08a8c22d4f20d0be731cafc"
+    },
+    "app/vendor/tanstack-charts/scene-child-id-internal.js": {
+      "sha256": "143ec120fd59a4341bca80eaea1e166d87935217cc68e21d0c56127ba0901487"
+    },
+    "app/vendor/tanstack-charts/scene-embed-internal.js": {
+      "sha256": "79526940ea4497de718f3d718929055e1a4155aee13c50c5adce163f2fa4c77f"
+    },
+    "app/vendor/tanstack-charts/scene-point-map.js": {
+      "sha256": "caed7c72e9ac2abd4d6d1d94d34c3f24f0c95739244f38ce9be0d2415598c983"
+    },
+    "app/vendor/tanstack-charts/scene-point-ownership-internal.js": {
+      "sha256": "6264a17dcd237066103baaa80df0f8de84b6bdd48beab854769a3d1683f9e116"
+    },
+    "app/vendor/tanstack-charts/scene-source.js": {
+      "sha256": "ce969a8cb4e4f7b487de7a6c32a4bbfaf4a506675b0a01c88a9da4f7ec4d3abd"
+    },
+    "app/vendor/tanstack-charts/scene.js": {
+      "sha256": "481ff1f83ec54e2e26e202f7d9181ad50f296f18d1d533917eed65c4c87dbd6c"
+    },
+    "app/vendor/tanstack-charts/selection.js": {
+      "sha256": "850c79231ec041e39cd13c82043794849cbd04ea0f1722f1612cca04450355f2"
+    },
+    "app/vendor/tanstack-charts/spatial-contour-internal.js": {
+      "sha256": "3ac7e9bcadb6d93513d540cdab3f9fd2c610bf7df9da06f173be5b4147bed248"
+    },
+    "app/vendor/tanstack-charts/spatial-contour.js": {
+      "sha256": "6e3cfaf95a097a039075ac29ec790c84298ac09b218b600f16fc5486f1fd5ef5"
+    },
+    "app/vendor/tanstack-charts/spatial-delaunay-internal.js": {
+      "sha256": "55d39482229a74e0abd85e0f2f4c5da438f3bae9ffd6dfc6e0ab5ea990b39b6f"
+    },
+    "app/vendor/tanstack-charts/spatial-delaunay.js": {
+      "sha256": "a4fe4355a3e18dc73d8ec99b26e9512ded2653ab7c4ef29a593a28bdc00a138d"
+    },
+    "app/vendor/tanstack-charts/spatial-density.js": {
+      "sha256": "b06330117c49b9b3b071d4fb67c0bc56d70f9b7c1ec1b1b8d68555425fc29537"
+    },
+    "app/vendor/tanstack-charts/spatial-group-internal.js": {
+      "sha256": "ec9888547d07801fa8d5d6f4b7b9c48295523e0d30be2f5721e7258d034d6a5c"
+    },
+    "app/vendor/tanstack-charts/spatial-hexbin.js": {
+      "sha256": "dee505c0103c199ec465954c3814fae737b35460de49f237e3f2eb7ace041e58"
+    },
+    "app/vendor/tanstack-charts/spatial-voronoi-internal.js": {
+      "sha256": "d32ebbc9143a959832319138fb748444770f36cec6999921d1db98fe0f81fd84"
+    },
+    "app/vendor/tanstack-charts/spatial-voronoi.js": {
+      "sha256": "b0dcb39762cd60d28fca02f980a4ff1472a32352a084a8df0636f900f83cc3aa"
+    },
+    "app/vendor/tanstack-charts/spring.js": {
+      "sha256": "17fa5aab336e86e92f3e873c1f4b81c2a14525523fc5b83b66d47b4314aea830"
+    },
+    "app/vendor/tanstack-charts/stack-internal.js": {
+      "sha256": "9038e75f46daf739d5dec5c1250f7631132a2e7c574f269e65d9e3d5cb268b9f"
+    },
+    "app/vendor/tanstack-charts/stack.js": {
+      "sha256": "b940999faab440bd30037cc5e4c41d6d0f14a659d93b7d70ef315b01d2a9181a"
+    },
+    "app/vendor/tanstack-charts/svg-coordinates.js": {
+      "sha256": "90d592d00e6e93d8ce08d23f762c493fdfcbc8be99bd3e12c325e8b6b55c68c1"
+    },
+    "app/vendor/tanstack-charts/svg-focus-guide-layer.js": {
+      "sha256": "98282b4a40b2db1a993a674e208c92e3f68a113e7229b67964e688aefcca2454"
+    },
+    "app/vendor/tanstack-charts/svg-focus-guide-serializer.js": {
+      "sha256": "35e8867728b4f02db5ab16a034d7dc7f4347a0c95e136bf3784bf43fb07dc6cd"
+    },
+    "app/vendor/tanstack-charts/svg-renderer.js": {
+      "sha256": "947acd2da22295a15443f10db5f6c0e94fe416c26837bf6cfc0ac81b4a374046"
+    },
+    "app/vendor/tanstack-charts/svg-resources.js": {
+      "sha256": "d4e28d54ab15622df5f989cc3bf1015ad28e8db97e9302dcc874cbbb2c9b6cfe"
+    },
+    "app/vendor/tanstack-charts/svg-surface.js": {
+      "sha256": "0d3740383b834036c6d938f8ad39ef5d8cb4bf17d31cf509e713430352d16158"
+    },
+    "app/vendor/tanstack-charts/svg.js": {
+      "sha256": "7e8685b4a45be15288343e8afd599a162fc50f9bd3c8bfe82e6ed576b23aa91d"
+    },
+    "app/vendor/tanstack-charts/text.js": {
+      "sha256": "664de8bb30ebd1b0471ef7b59920d6ed2beb87362a46100d463d0dc9d7eaf5bc"
+    },
+    "app/vendor/tanstack-charts/tick.js": {
+      "sha256": "f62f191b8c908a32ea3c4316e109eeb0cd2d9972918de2b14c8fd046b23964cc"
+    },
+    "app/vendor/tanstack-charts/tooltip-model.js": {
+      "sha256": "a7f9ed6376884390204ad1edb47e2563795aae6bb933086defe697288f709911"
+    },
+    "app/vendor/tanstack-charts/tooltip-placement.js": {
+      "sha256": "e9db8124640e380274e12314b117d42ecfa0667ab5e6f138339bf82ff2620396"
+    },
+    "app/vendor/tanstack-charts/tooltip-portal.js": {
+      "sha256": "b2dd853d70cf4ffce22e5a719b021a61b70ad71c424973260c72f246a7f28b96"
+    },
+    "app/vendor/tanstack-charts/tooltip-position.js": {
+      "sha256": "8f05f41f1adc71f287f440cec57c5111eeb8248c7acc3fd3d9ab61c5c577c105"
+    },
+    "app/vendor/tanstack-charts/tooltip.js": {
+      "sha256": "afb468f93e2d2afe6acb4f3294f8207b4c02125020d358f4b28b7bc29cec8092"
+    },
+    "app/vendor/tanstack-charts/transform-bin-time.js": {
+      "sha256": "ae8cf168d7c9de6a9eb212b8e50c1c061f70f786759c429e15633d398e2a4b81"
+    },
+    "app/vendor/tanstack-charts/transform-bin-xy.js": {
+      "sha256": "4e38884330cc08ea360d574d9cc7de1b4b44696310cd83bea83e267cb827030b"
+    },
+    "app/vendor/tanstack-charts/transform-bin.js": {
+      "sha256": "6a0862e9a53eeb6151c067dce8978c91b1823cc7fc17f1367268966799efb44d"
+    },
+    "app/vendor/tanstack-charts/transform-cumulative.js": {
+      "sha256": "c968358ace49437a51010096ecf4d42c65cc78f58434f03913960fedc8973873"
+    },
+    "app/vendor/tanstack-charts/transform-fold.js": {
+      "sha256": "189ce9ffe552fb89a93b3a5ec95cdd821564afa19f5e08edc47edf142bac0119"
+    },
+    "app/vendor/tanstack-charts/transform-group.js": {
+      "sha256": "c056f81c9a44a1cdf972c21122a0beb746ed621795c06d760409e0008b612de9"
+    },
+    "app/vendor/tanstack-charts/transform-internal.js": {
+      "sha256": "58f8a5f598e565437e69b3901cc1b187497984dd43c15c5069586676a37f0c89"
+    },
+    "app/vendor/tanstack-charts/transform-mosaic.js": {
+      "sha256": "795c74d835ea8a390f76ab7eb29788fb95f07080c5c5f5196d55cad545940145"
+    },
+    "app/vendor/tanstack-charts/transform-normalize.js": {
+      "sha256": "b7589332517eced1d28da467915e0e97f6c14200d1d7b3093fd2856f3b0dd3cc"
+    },
+    "app/vendor/tanstack-charts/transform-rank.js": {
+      "sha256": "dd95d05dbb4ba318b8028f9719e1f6d88ba626b7bd1f47e1c39b75950f182ef4"
+    },
+    "app/vendor/tanstack-charts/transform-reduce-internal.js": {
+      "sha256": "db183fc7c86f1807c30b73d10c5e121ddc8026d1873d0455524ad1a06d204533"
+    },
+    "app/vendor/tanstack-charts/transform-reduce.js": {
+      "sha256": "7f69bd6118f9ecb8a27c9113a3968108a6a23d3bb169f771107b6e0c9c0f96f3"
+    },
+    "app/vendor/tanstack-charts/transform-rolling-window.js": {
+      "sha256": "52cbb6a5647491d9d41d6f557bd68f24252977d89844ab35125bd07c41a17388"
+    },
+    "app/vendor/tanstack-charts/transform-select.js": {
+      "sha256": "9462e5a3a622aa3ce54c9eb2099f03047d273af7f5e57016a1eca0b0549486df"
+    },
+    "app/vendor/tanstack-charts/transform-stack.js": {
+      "sha256": "40e2a19a1a5f2f0e880e8c3a1835a76489fd10ad1550545830b0056395ac91b6"
+    },
+    "app/vendor/tanstack-charts/transform-statistics-internal.js": {
+      "sha256": "7e0d8fc7b4a03cc9af16b27cd60b6f8b5dab8bd89916d8ddb49360a444c8b36a"
+    },
+    "app/vendor/tanstack-charts/transform-waterfall.js": {
+      "sha256": "cfac20c4f5cc216b09c29606aeeb6661abf4c890be017cdd204b135012f11d27"
+    },
+    "app/vendor/tanstack-charts/transform.js": {
+      "sha256": "0a4c06ff1b23924757472b98044d000b8b4c48f47cd0a8d263de483b987e2a75"
+    },
+    "app/vendor/tanstack-charts/types.js": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "app/vendor/tanstack-charts/universal-types.js": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "app/vendor/tanstack-charts/universal.js": {
+      "sha256": "df5be9b8ee8fdfc43f1872bb5fb71e4948682f708edbbb8a356b261c2bd1dd89"
+    },
+    "app/vendor/tanstack-charts/vector.js": {
+      "sha256": "c06c65cbd58927557f71634e23992c7192bfbcd4355858e23d6aab014e9e2ded"
+    },
+    "app/vendor/tanstack-charts/view-layout.js": {
+      "sha256": "1e871de51075be736f6659651e6c85a972374b09e9e5e264b00153b5ea2eea73"
+    },
+    "app/vendor/tanstack-charts/view.js": {
+      "sha256": "785fab0604eca8e4bc87af07273ff9d631ae6415d7187518a497c56523ff0298"
+    },
+    "app/vendor/tanstack-charts/violin.js": {
+      "sha256": "eacb9bbcc22917a2014a6c34bc7a98d3999595e77a3d465d2a66e797dff5ef14"
+    },
+    "app/vendor/tanstack-charts/waffle.js": {
+      "sha256": "665932f756a28805175e3fc26beb0d6d81b766b6f5a023216ddda9baa845f8d4"
+    },
+    "app/vendor/toastui-editor-plugin-table-merged-cell/toastui-editor-plugin-table-merged-cell.min.css": {
+      "sha256": "f9e22de132b84d5547733353be9b7ea8bbc55c1afad1432a5745cccc50c76005"
+    },
+    "app/vendor/toastui-editor-plugin-table-merged-cell/toastui-editor-plugin-table-merged-cell.min.js": {
+      "sha256": "ac263df29380d0b05b8bae680ea9706ce40ea8d2e4fae4faa3eb1a2f602153b0"
+    },
+    "app/vendor/toastui-editor/theme/toastui-editor-dark.min.css": {
+      "sha256": "68d4eb725ef9040c9713a4b140a2bcbfd38a8aee91f1b476bb9c2425b02ccd15"
+    },
+    "app/vendor/toastui-editor/toastui-editor-all.min.js": {
+      "sha256": "f50e1b7c0fc4e5d9a1ccd0d8be78cb3a950ccb3bf676fbf1627810c76aeaedd8"
+    },
+    "app/vendor/toastui-editor/toastui-editor.min.css": {
+      "sha256": "c70e24c68fefc205e8e504edc07fd6a5efd3044a623b4be7e3ac16cc8a736ed9"
+    },
+    "app/version.js": {
+      "sha256": "af6adb5120561eb6fc44ec03ee094d436daf8b5c450ff2295515dd735d4a99ab"
+    },
+    ".cursor/rules/demo-isolation.mdc": {
+      "sha256": "c04c50223d9417ac372fa394ffc84e84b602b5414b77f3c99b399e9b44906929"
+    },
+    ".cursor/rules/icons.mdc": {
+      "sha256": "62b3855317cc749c6082073602d4395767d0c8dc578ec28971c6c09775fcf077"
+    },
+    ".cursor/rules/usage-docs.mdc": {
+      "sha256": "7bf8d6c2ce63462b929d50e6c7646748e4a7232c5c68ce790a8778a9697ccd82"
+    },
+    ".cursor/rules/vendor.mdc": {
+      "sha256": "fdd604c1062cfb03da9aca9ee9d2609d5924d40192798bda3950dc192f410697"
+    },
+    ".cursor/skills/_shared/component-map.md": {
+      "sha256": "770d033f6be0bb9d8f0ca3e1660966785a1d7cdeb0644c4ac1297715597abf02"
+    },
+    ".cursor/skills/_shared/invariants.md": {
+      "sha256": "c5894ee77f4505215424fc0ac51e8e3fecbeb500c3869f783958a719fb51164b"
+    },
+    ".cursor/skills/add-icon/SKILL.md": {
+      "sha256": "7393b8d72b4d5e78a7e2a0666b4695797b13a1eea6a8cfa03289c84fd6302789"
+    },
+    ".cursor/skills/add-icon/scripts/fetch-icon.mjs": {
+      "sha256": "622f1d12f32b7f19100d6a94298a4808960b5f029512131594e15ffc3582542e"
+    },
+    ".cursor/skills/author-component/SKILL.md": {
+      "sha256": "b39a43799ebf81a7f48f492969c112a9c5c7f8f2640798c3170d5753c6c2f4ac"
+    },
+    ".cursor/skills/finalize-app/SKILL.md": {
+      "sha256": "1fa503b27e65b0f5b901112af92e85cf7bb1de9b093543c50a99b72c11c1d892"
+    },
+    ".cursor/skills/handle-assets/SKILL.md": {
+      "sha256": "074c69598d57bc4d82a691b73f99f885d4e300941c46ddaa531f16c08b7d93ff"
+    },
+    ".cursor/skills/health-check/SKILL.md": {
+      "sha256": "96bdf88f0f9818d73eb7ee3803e3a52b535140a2edbefa5ba4892e40c8b11df3"
+    },
+    ".cursor/skills/init-app/SKILL.md": {
+      "sha256": "5128bad42684fd911e05dfa957cd2926403815cb407bb1a1102103e22dfa8902"
+    },
+    ".cursor/skills/manage-color/SKILL.md": {
+      "sha256": "992c829286618a8cfa484d5cf4b60da070d55051e07292dfb0293096cf8b4a7c"
+    },
+    ".cursor/skills/manage-color/scripts/contrast.mjs": {
+      "sha256": "348c94a4ca9fda3dbac1f1ed02f631f3d8d0a04bfc78398503830fc805db7098"
+    },
+    ".cursor/skills/migrate-template/SKILL.md": {
+      "sha256": "ac1cb2d88c5cdb9dcf6a843677ce64c657f2cbc85419e63579baa9d4397f2a35"
+    },
+    ".cursor/skills/release-template/SKILL.md": {
+      "sha256": "3e0e1abe13c51b125444a6cd15955b1d58849f1aabb559221c1071b713519758"
+    },
+    ".cursor/skills/restore-component/SKILL.md": {
+      "sha256": "1658123fe04979895d5aab3e6e6794146f0ff718f191340e6228c7b331193cfc"
+    },
+    ".cursor/skills/sync-shell/SKILL.md": {
+      "sha256": "73090dee5ca403c5e99d980e5493a454ade2713950b39e23e4a4912aca7968f5"
+    }
+  },
+  "core": {
+    "files": [
+      "app/theme-init.js",
+      "app/version.js",
+      "app/tokens.css",
+      "app/shell/shell.js",
+      "app/shell/render-shell.js",
+      "app/shell/theme.js",
+      "app/shell/page-nav.js",
+      "app/shell/sticky.js",
+      "app/shell/title-numbering.js",
+      "app/shell/also-see.js",
+      "app/shell/external-link.js",
+      "app/shell/heading-link.js",
+      "app/utils/dom.js",
+      "app/utils/document-listeners.js",
+      "app/utils/clipboard.js",
+      "app/utils/icons.js",
+      "app/utils/icons-template.js",
+      "app/utils/brand-icon.js",
+      "app/utils/also-see-svg.js",
+      "app/utils/menu.js",
+      "app/components/tooltip.js",
+      "app/components/banner.js"
+    ],
+    "css": [
+      "layout.css",
+      "controls-buttons.css",
+      "overlays.css"
+    ],
+    "icons": [
+      "light-mode",
+      "dark-mode",
+      "auto-mode",
+      "chevron-up",
+      "chevron-down",
+      "arrow-outward",
+      "link"
+    ]
+  },
+  "infra": {
+    "dom": [
+      "app/utils/dom.js"
+    ],
+    "document-listeners": [
+      "app/utils/document-listeners.js"
+    ],
+    "clipboard": [
+      "app/utils/clipboard.js"
+    ],
+    "color": [
+      "app/utils/color.js"
+    ],
+    "icons": [
+      "app/utils/icons.js",
+      "app/utils/icons-template.js"
+    ],
+    "menu": [
+      "app/utils/menu.js"
+    ],
+    "config": [
+      "app/config.js"
+    ],
+    "brand-icon": [
+      "app/utils/brand-icon.js"
+    ],
+    "also-see-svg": [
+      "app/utils/also-see-svg.js"
+    ],
+    "sanitize-svg": [
+      "app/utils/sanitize-svg.js"
+    ]
+  },
+  "components": {
+    "tooltip": {
+      "files": [
+        "app/components/tooltip.js"
+      ],
+      "css": [
+        "overlays.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [],
+      "always": true
+    },
+    "banner": {
+      "files": [
+        "app/components/banner.js"
+      ],
+      "css": [
+        "overlays.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "note",
+        "info",
+        "success",
+        "important",
+        "warning",
+        "error"
+      ],
+      "infra": [
+        "dom"
+      ],
+      "always": true
+    },
+    "dialog": {
+      "files": [
+        "app/components/dialog.js"
+      ],
+      "css": [
+        "overlays.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom",
+        "document-listeners"
+      ]
+    },
+    "about-dialog": {
+      "files": [
+        "app/components/about-dialog.js",
+        "app/components/dialog.js"
+      ],
+      "css": [
+        "overlays.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom",
+        "document-listeners"
+      ],
+      "notes": "Also uses layout.css .tagline-link; wraps initDialog"
+    },
+    "popover": {
+      "files": [
+        "app/components/popover.js"
+      ],
+      "css": [
+        "overlays.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "clear"
+      ],
+      "infra": [
+        "dom",
+        "document-listeners",
+        "icons"
+      ],
+      "notes": "Speech-bubble card; optional action icons (e.g. chevrons)"
+    },
+    "tutorial": {
+      "files": [
+        "app/components/tutorial.js",
+        "app/components/popover.js"
+      ],
+      "css": [
+        "tutorial.css",
+        "overlays.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "clear",
+        "chevron-left",
+        "chevron-right"
+      ],
+      "infra": [
+        "dom",
+        "document-listeners",
+        "icons"
+      ],
+      "notes": "Spotlight tour; Escape priority 110; wraps initPopover"
+    },
+    "badge": {
+      "files": [
+        "app/components/badge.js"
+      ],
+      "css": [
+        "controls-badges.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "chip": {
+      "files": [
+        "app/components/chip.js"
+      ],
+      "css": [
+        "controls-chips.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "error"
+      ],
+      "infra": [
+        "dom",
+        "icons"
+      ]
+    },
+    "legend": {
+      "files": [
+        "app/components/legend.js"
+      ],
+      "css": [
+        "controls-chips.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [],
+      "notes": "Coloured category chips; slots 1–8; optional toggle; tooltips via data-tooltip / initShell"
+    },
+    "combobox": {
+      "files": [
+        "app/components/combobox.js"
+      ],
+      "css": [
+        "controls-fields.css",
+        "controls-badges.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom",
+        "document-listeners"
+      ],
+      "notes": "Multi via data-combobox-multi; multi also uses badge"
+    },
+    "date-picker": {
+      "files": [
+        "app/components/date-picker/index.js",
+        "app/components/date-picker/calendar.js",
+        "app/components/date-picker/parse.js",
+        "app/components/time-picker/index.js",
+        "app/components/time-picker/panel.js",
+        "app/components/time-picker/field.js"
+      ],
+      "css": [
+        "controls-fields.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "calendar",
+        "chevron-up",
+        "chevron-down"
+      ],
+      "infra": [
+        "dom",
+        "document-listeners",
+        "icons"
+      ],
+      "notes": "Optional side-by-side time panel"
+    },
+    "time-picker": {
+      "files": [
+        "app/components/time-picker.js",
+        "app/components/time-picker/index.js",
+        "app/components/time-picker/panel.js",
+        "app/components/time-picker/field.js"
+      ],
+      "css": [
+        "controls-fields.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "clock",
+        "chevron-up",
+        "chevron-down"
+      ],
+      "infra": [
+        "dom",
+        "document-listeners",
+        "icons"
+      ],
+      "notes": "Custom segmented popup; legacy native field fallback"
+    },
+    "duration-input": {
+      "files": [
+        "app/components/duration-input.js",
+        "app/components/time-picker/panel.js"
+      ],
+      "css": [
+        "controls-fields.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "clock",
+        "chevron-up",
+        "chevron-down"
+      ],
+      "infra": [
+        "dom",
+        "document-listeners",
+        "icons"
+      ],
+      "notes": "Inline segments + shared popup in duration mode"
+    },
+    "color-input": {
+      "files": [
+        "app/components/color-input.js"
+      ],
+      "css": [
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom",
+        "color"
+      ],
+      "notes": "Optional openOnClick nests/uses color-set and color-picker (keep those components when using open hooks)"
+    },
+    "color-set": {
+      "files": [
+        "app/components/color-set/index.js",
+        "app/components/color-set/panel.js",
+        "app/components/color-set/registry.js",
+        "app/components/color-set/sets/index.js",
+        "app/components/color-set/sets/basic.js",
+        "app/components/color-set/sets/fluent.js",
+        "app/components/color-set/sets/metro.js",
+        "app/components/color-set/sets/flat-ui.js",
+        "app/components/color-set/sets/material.js",
+        "app/components/color-set/sets/tailwind.js",
+        "app/components/color-set/sets/web-safe.js"
+      ],
+      "css": [
+        "controls-color.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom",
+        "document-listeners",
+        "color"
+      ]
+    },
+    "color-picker": {
+      "files": [
+        "app/components/color-picker/index.js",
+        "app/components/color-picker/panel.js",
+        "app/components/slider.js"
+      ],
+      "css": [
+        "controls-color.css",
+        "controls-menus.css",
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "chevron-down",
+        "palette"
+      ],
+      "infra": [
+        "dom",
+        "document-listeners",
+        "color",
+        "menu",
+        "icons"
+      ],
+      "notes": "Uses slider for RGB/CMYK/alpha channels; optional adjacent colour set via color-set"
+    },
+    "toggle": {
+      "files": [
+        "app/components/toggle.js"
+      ],
+      "css": [
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "check",
+        "remove"
+      ],
+      "infra": [
+        "dom",
+        "icons"
+      ]
+    },
+    "toggle-button": {
+      "files": [
+        "app/components/toggle-button.js"
+      ],
+      "css": [
+        "controls-buttons.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "fullscreen",
+        "fullscreen-exit"
+      ],
+      "infra": [
+        "dom",
+        "icons"
+      ],
+      "notes": "Pressed .btn-toggle; optional next-action label/icon swap; data-toggle-button-always-active"
+    },
+    "checkbox": {
+      "files": [
+        "app/components/checkbox.js"
+      ],
+      "css": [
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "segmented-control": {
+      "files": [
+        "app/components/segmented-control.js"
+      ],
+      "css": [
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "pagination": {
+      "files": [
+        "app/components/pagination.js"
+      ],
+      "css": [
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "progress-bar": {
+      "files": [
+        "app/components/progress-bar.js"
+      ],
+      "css": [
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "spinner": {
+      "files": [
+        "app/components/spinner.js"
+      ],
+      "css": [
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "slider": {
+      "files": [
+        "app/components/slider.js"
+      ],
+      "css": [
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "stepper": {
+      "files": [
+        "app/components/stepper.js"
+      ],
+      "css": [
+        "controls-widgets.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "combo": {
+      "files": [
+        "app/components/combo.js"
+      ],
+      "css": [
+        "controls-menus.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "menu"
+      ]
+    },
+    "dropdown": {
+      "files": [
+        "app/components/dropdown.js"
+      ],
+      "css": [
+        "controls-menus.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "menu"
+      ]
+    },
+    "dropdown-toggle": {
+      "files": [
+        "app/components/dropdown-toggle.js"
+      ],
+      "css": [
+        "controls-menus.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "menu"
+      ],
+      "notes": "Uses badge for selection count"
+    },
+    "expand": {
+      "files": [
+        "app/components/expand.js"
+      ],
+      "css": [
+        "controls-disclosure.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "chevron-right"
+      ],
+      "infra": [
+        "dom",
+        "icons"
+      ]
+    },
+    "accordion": {
+      "files": [
+        "app/components/accordion.js"
+      ],
+      "css": [
+        "controls-disclosure.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "chevron-right"
+      ],
+      "infra": [
+        "dom",
+        "icons"
+      ]
+    },
+    "tabs": {
+      "files": [
+        "app/components/tabs.js"
+      ],
+      "css": [
+        "controls-disclosure.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "progress-indicator": {
+      "files": [
+        "app/components/progress-indicator.js"
+      ],
+      "css": [
+        "controls-disclosure.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [],
+      "infra": [
+        "dom"
+      ]
+    },
+    "file-dropzone": {
+      "files": [
+        "app/components/file-dropzone.js"
+      ],
+      "css": [
+        "controls-file.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "upload",
+        "error"
+      ],
+      "infra": [
+        "dom",
+        "icons"
+      ]
+    },
+    "file-download": {
+      "files": [
+        "app/components/file-download.js"
+      ],
+      "css": [
+        "controls-file.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "upload"
+      ],
+      "infra": [
+        "icons"
+      ]
+    },
+    "image-preview": {
+      "files": [
+        "app/components/image-preview.js"
+      ],
+      "css": [
+        "controls-image.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "download"
+      ],
+      "infra": [
+        "dom",
+        "icons",
+        "sanitize-svg"
+      ]
+    },
+    "code-block": {
+      "files": [
+        "app/components/code-block.js"
+      ],
+      "css": [
+        "code-block.css"
+      ],
+      "vendor": [
+        "app/vendor/prism/",
+        "app/prism.css"
+      ],
+      "vendorFiles": [
+        "app/vendor/prism/prism-line-numbers.min.js",
+        "app/vendor/prism/prism-python.min.js",
+        "app/vendor/prism/prism.min.js",
+        "app/prism.css"
+      ],
+      "icons": [
+        "clear",
+        "copy",
+        "paste",
+        "lines",
+        "highlight",
+        "fullscreen"
+      ],
+      "infra": [
+        "dom",
+        "clipboard",
+        "icons"
+      ]
+    },
+    "expandable-surface": {
+      "files": [
+        "app/components/expandable-surface.js"
+      ],
+      "css": [
+        "code-block.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "fullscreen",
+        "fullscreen-exit"
+      ],
+      "infra": [
+        "dom",
+        "document-listeners",
+        "icons"
+      ]
+    },
+    "table": {
+      "files": [
+        "app/components/table.js"
+      ],
+      "css": [
+        "table.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "chevron-up"
+      ],
+      "infra": [
+        "dom",
+        "icons"
+      ]
+    },
+    "tabular-input": {
+      "files": [
+        "app/components/tabular-input.js"
+      ],
+      "css": [
+        "controls-tabular-input.css"
+      ],
+      "vendor": [],
+      "vendorFiles": [],
+      "icons": [
+        "copy",
+        "paste",
+        "paste-special",
+        "plus",
+        "delete",
+        "remove",
+        "chevron-up",
+        "chevron-down"
+      ],
+      "infra": [
+        "dom",
+        "document-listeners",
+        "menu",
+        "icons",
+        "clipboard"
+      ]
+    },
+    "rich-text-editor": {
+      "files": [
+        "app/components/rich-text-editor.js",
+        "app/components/segmented-control.js"
+      ],
+      "css": [
+        "rich-text-editor.css",
+        "controls-widgets.css"
+      ],
+      "vendor": [
+        "app/vendor/toastui-editor/",
+        "app/vendor/toastui-editor-plugin-table-merged-cell/",
+        "app/toastui-editor.css"
+      ],
+      "vendorFiles": [
+        "app/vendor/toastui-editor/theme/toastui-editor-dark.min.css",
+        "app/vendor/toastui-editor/toastui-editor-all.min.js",
+        "app/vendor/toastui-editor/toastui-editor.min.css",
+        "app/vendor/toastui-editor-plugin-table-merged-cell/toastui-editor-plugin-table-merged-cell.min.css",
+        "app/vendor/toastui-editor-plugin-table-merged-cell/toastui-editor-plugin-table-merged-cell.min.js",
+        "app/toastui-editor.css"
+      ],
+      "icons": [],
+      "infra": [
+        "config",
+        "dom"
+      ],
+      "notes": "Mode switch uses segmented-control"
+    },
+    "charts": {
+      "files": [
+        "app/components/charts.js"
+      ],
+      "css": [
+        "controls-charts.css"
+      ],
+      "vendor": [
+        "app/vendor/tanstack-charts/",
+        "app/vendor/d3-scale/",
+        "app/vendor/d3-shape/"
+      ],
+      "vendorFiles": [
+        "app/vendor/tanstack-charts/README.md",
+        "app/vendor/tanstack-charts/adapter-renderer.js",
+        "app/vendor/tanstack-charts/adapter-shared.js",
+        "app/vendor/tanstack-charts/adapter.js",
+        "app/vendor/tanstack-charts/area-x.js",
+        "app/vendor/tanstack-charts/area.js",
+        "app/vendor/tanstack-charts/arrow-geometry.js",
+        "app/vendor/tanstack-charts/arrow.js",
+        "app/vendor/tanstack-charts/band.js",
+        "app/vendor/tanstack-charts/bar.js",
+        "app/vendor/tanstack-charts/box.js",
+        "app/vendor/tanstack-charts/canvas.js",
+        "app/vendor/tanstack-charts/composite-motion-internal.js",
+        "app/vendor/tanstack-charts/configured-scale.js",
+        "app/vendor/tanstack-charts/crosshair-resolver.js",
+        "app/vendor/tanstack-charts/crosshair.js",
+        "app/vendor/tanstack-charts/cursor-host-contract.js",
+        "app/vendor/tanstack-charts/cursor-host.js",
+        "app/vendor/tanstack-charts/cursor-public.js",
+        "app/vendor/tanstack-charts/cursor.js",
+        "app/vendor/tanstack-charts/d3-area-x.js",
+        "app/vendor/tanstack-charts/d3-shape.js",
+        "app/vendor/tanstack-charts/difference.js",
+        "app/vendor/tanstack-charts/dodge-internal.js",
+        "app/vendor/tanstack-charts/dodge.js",
+        "app/vendor/tanstack-charts/dom-text.js",
+        "app/vendor/tanstack-charts/dom-types.js",
+        "app/vendor/tanstack-charts/dom.js",
+        "app/vendor/tanstack-charts/dot-layout.js",
+        "app/vendor/tanstack-charts/dot.js",
+        "app/vendor/tanstack-charts/export.js",
+        "app/vendor/tanstack-charts/facet.js",
+        "app/vendor/tanstack-charts/focus-disabled.js",
+        "app/vendor/tanstack-charts/focus-guide.js",
+        "app/vendor/tanstack-charts/focus-layer.js",
+        "app/vendor/tanstack-charts/focus-mark.js",
+        "app/vendor/tanstack-charts/focus-presentation.js",
+        "app/vendor/tanstack-charts/focus.js",
+        "app/vendor/tanstack-charts/frame.js",
+        "app/vendor/tanstack-charts/geo.js",
+        "app/vendor/tanstack-charts/group.js",
+        "app/vendor/tanstack-charts/guide-layout.js",
+        "app/vendor/tanstack-charts/guide-nodes-internal.js",
+        "app/vendor/tanstack-charts/hexagon.js",
+        "app/vendor/tanstack-charts/hierarchy-flat-internal.js",
+        "app/vendor/tanstack-charts/hierarchy-sunburst.js",
+        "app/vendor/tanstack-charts/hierarchy-tree.js",
+        "app/vendor/tanstack-charts/hierarchy-treemap.js",
+        "app/vendor/tanstack-charts/index.js",
+        "app/vendor/tanstack-charts/interaction-axis-internal.js",
+        "app/vendor/tanstack-charts/interaction-brush.js",
+        "app/vendor/tanstack-charts/interaction-cursor.js",
+        "app/vendor/tanstack-charts/interaction-handle.js",
+        "app/vendor/tanstack-charts/interaction-range-internal.js",
+        "app/vendor/tanstack-charts/interaction-signal.js",
+        "app/vendor/tanstack-charts/interaction-zoom.js",
+        "app/vendor/tanstack-charts/interaction.js",
+        "app/vendor/tanstack-charts/interactive-legend.js",
+        "app/vendor/tanstack-charts/legend-layout-internal.js",
+        "app/vendor/tanstack-charts/legend-static.js",
+        "app/vendor/tanstack-charts/legend.js",
+        "app/vendor/tanstack-charts/line.js",
+        "app/vendor/tanstack-charts/link.js",
+        "app/vendor/tanstack-charts/mapped-spacing-internal.js",
+        "app/vendor/tanstack-charts/mark-composite-internal.js",
+        "app/vendor/tanstack-charts/mark-composite.js",
+        "app/vendor/tanstack-charts/mark-decorative-internal.js",
+        "app/vendor/tanstack-charts/mark-decorative.js",
+        "app/vendor/tanstack-charts/mark-scene-filter-internal.js",
+        "app/vendor/tanstack-charts/mark-state-transition.js",
+        "app/vendor/tanstack-charts/mark-state.js",
+        "app/vendor/tanstack-charts/mark-with-scale-values.js",
+        "app/vendor/tanstack-charts/mark.js",
+        "app/vendor/tanstack-charts/motion-path.js",
+        "app/vendor/tanstack-charts/motion.js",
+        "app/vendor/tanstack-charts/nearest.js",
+        "app/vendor/tanstack-charts/network-force.js",
+        "app/vendor/tanstack-charts/network-graph-internal.js",
+        "app/vendor/tanstack-charts/network-sankey.js",
+        "app/vendor/tanstack-charts/polar-mark-internal.js",
+        "app/vendor/tanstack-charts/polar-pie.js",
+        "app/vendor/tanstack-charts/polar-sector-internal.js",
+        "app/vendor/tanstack-charts/polar.js",
+        "app/vendor/tanstack-charts/proportional-interval-internal.js",
+        "app/vendor/tanstack-charts/reconcile.js",
+        "app/vendor/tanstack-charts/rect.js",
+        "app/vendor/tanstack-charts/regression.js",
+        "app/vendor/tanstack-charts/renderer.js",
+        "app/vendor/tanstack-charts/resolved-layout-child.js",
+        "app/vendor/tanstack-charts/resolved-layout-position.js",
+        "app/vendor/tanstack-charts/ridgeline.js",
+        "app/vendor/tanstack-charts/rule.js",
+        "app/vendor/tanstack-charts/runtime.js",
+        "app/vendor/tanstack-charts/scale-input.js",
+        "app/vendor/tanstack-charts/scales.js",
+        "app/vendor/tanstack-charts/scales/band-kernel.js",
+        "app/vendor/tanstack-charts/scales/band.js",
+        "app/vendor/tanstack-charts/scales/intern.js",
+        "app/vendor/tanstack-charts/scales/linear.js",
+        "app/vendor/tanstack-charts/scales/ordinal.js",
+        "app/vendor/tanstack-charts/scales/point.js",
+        "app/vendor/tanstack-charts/scales/ticks.js",
+        "app/vendor/tanstack-charts/scene-child-id-internal.js",
+        "app/vendor/tanstack-charts/scene-embed-internal.js",
+        "app/vendor/tanstack-charts/scene-point-map.js",
+        "app/vendor/tanstack-charts/scene-point-ownership-internal.js",
+        "app/vendor/tanstack-charts/scene-source.js",
+        "app/vendor/tanstack-charts/scene.js",
+        "app/vendor/tanstack-charts/selection.js",
+        "app/vendor/tanstack-charts/spatial-contour-internal.js",
+        "app/vendor/tanstack-charts/spatial-contour.js",
+        "app/vendor/tanstack-charts/spatial-delaunay-internal.js",
+        "app/vendor/tanstack-charts/spatial-delaunay.js",
+        "app/vendor/tanstack-charts/spatial-density.js",
+        "app/vendor/tanstack-charts/spatial-group-internal.js",
+        "app/vendor/tanstack-charts/spatial-hexbin.js",
+        "app/vendor/tanstack-charts/spatial-voronoi-internal.js",
+        "app/vendor/tanstack-charts/spatial-voronoi.js",
+        "app/vendor/tanstack-charts/spring.js",
+        "app/vendor/tanstack-charts/stack-internal.js",
+        "app/vendor/tanstack-charts/stack.js",
+        "app/vendor/tanstack-charts/svg-coordinates.js",
+        "app/vendor/tanstack-charts/svg-focus-guide-layer.js",
+        "app/vendor/tanstack-charts/svg-focus-guide-serializer.js",
+        "app/vendor/tanstack-charts/svg-renderer.js",
+        "app/vendor/tanstack-charts/svg-resources.js",
+        "app/vendor/tanstack-charts/svg-surface.js",
+        "app/vendor/tanstack-charts/svg.js",
+        "app/vendor/tanstack-charts/text.js",
+        "app/vendor/tanstack-charts/tick.js",
+        "app/vendor/tanstack-charts/tooltip-model.js",
+        "app/vendor/tanstack-charts/tooltip-placement.js",
+        "app/vendor/tanstack-charts/tooltip-portal.js",
+        "app/vendor/tanstack-charts/tooltip-position.js",
+        "app/vendor/tanstack-charts/tooltip.js",
+        "app/vendor/tanstack-charts/transform-bin-time.js",
+        "app/vendor/tanstack-charts/transform-bin-xy.js",
+        "app/vendor/tanstack-charts/transform-bin.js",
+        "app/vendor/tanstack-charts/transform-cumulative.js",
+        "app/vendor/tanstack-charts/transform-fold.js",
+        "app/vendor/tanstack-charts/transform-group.js",
+        "app/vendor/tanstack-charts/transform-internal.js",
+        "app/vendor/tanstack-charts/transform-mosaic.js",
+        "app/vendor/tanstack-charts/transform-normalize.js",
+        "app/vendor/tanstack-charts/transform-rank.js",
+        "app/vendor/tanstack-charts/transform-reduce-internal.js",
+        "app/vendor/tanstack-charts/transform-reduce.js",
+        "app/vendor/tanstack-charts/transform-rolling-window.js",
+        "app/vendor/tanstack-charts/transform-select.js",
+        "app/vendor/tanstack-charts/transform-stack.js",
+        "app/vendor/tanstack-charts/transform-statistics-internal.js",
+        "app/vendor/tanstack-charts/transform-waterfall.js",
+        "app/vendor/tanstack-charts/transform.js",
+        "app/vendor/tanstack-charts/types.js",
+        "app/vendor/tanstack-charts/universal-types.js",
+        "app/vendor/tanstack-charts/universal.js",
+        "app/vendor/tanstack-charts/vector.js",
+        "app/vendor/tanstack-charts/view-layout.js",
+        "app/vendor/tanstack-charts/view.js",
+        "app/vendor/tanstack-charts/violin.js",
+        "app/vendor/tanstack-charts/waffle.js",
+        "app/vendor/d3-scale/README.md",
+        "app/vendor/d3-scale/d3-scale.esm.js",
+        "app/vendor/d3-shape/README.md",
+        "app/vendor/d3-shape/d3-shape.esm.js"
+      ],
+      "icons": [],
+      "infra": [
+        "config"
+      ],
+      "notes": "Thin mountChart host; pages need an import map for d3-scale / d3-shape when using barY / barX"
+    },
+    "diagram": {
+      "files": [
+        "app/components/diagram.js"
+      ],
+      "css": [
+        "controls-diagram.css"
+      ],
+      "vendor": [
+        "app/vendor/mermaid/"
+      ],
+      "vendorFiles": [
+        "app/vendor/mermaid/README.md",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/abnfDiagram-QNN2D4NM.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/architecture-TIHT7OUA-V6N4J3SY.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/architectureDiagram-OT7VKSJ7.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/blockDiagram-54WLDVWM.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/c4Diagram-X2LASM7V.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-224SPVON.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-2AEHWXPW.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-2SREHG4O.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-4RFN2BYJ.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-5IMINLNL.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-5VCL7Z4A.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-66DQ2XMT.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-6BELYETK.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-6L755F7B.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-7CWYLC5S.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-7FYTHRHK.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-A7VWPJGB.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-AQ6EADP3.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-AZZRMDJM.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-BI6VK774.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-D6VWDJW2.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-DMV4VAQV.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-E5QJAATJ.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-EQFTRU2I.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-FWYVLQTC.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-HNC4WDU7.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-JQRUD6KW.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-KRXBNO2N.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-L5GCOVLC.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-LAHSG3N2.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-LIEV3EAG.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-LORZLZWG.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-NLANEA3F.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-NV3KIAZN.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-OIYT25JQ.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-PE7DX7ZZ.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-Q67WD55A.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-RRFMTAIC.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-SATU7PGQ.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-STOV2HOB.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-SZD42YQK.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-T5OCTHI4.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-TFPGFQPA.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-TGVD4F4B.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-TZUXEDM2.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-UAT7B5JY.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-VE5CLXGZ.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-VJFVEZTB.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-VY5UBI4V.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-W44A43WB.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-WJBAP47W.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/chunk-XNMVGMAZ.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/classDiagram-VPOSVPXH.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/classDiagram-v2-5VFNUXQA.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/cose-bilkent-RZA4XIPR.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/cynefin-VYW2F7L2-2VAHYKR6.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/cynefinDiagram-TR7LZUCG.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/dagre-K64A6Z3X.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-2TLGJV2N.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-JCD7PQ7C.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-KFBZAVDW.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-L7DVE3PN.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/diagram-YP3FGXHI.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/ebnfDiagram-DRHRQJWO.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/erDiagram-SZLJLQMB.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/eventmodeling-45OFAUF4-AOUJWSLX.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/flowDiagram-BWE6NHOH.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/ganttDiagram-2QTCJSNI.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/gitGraph-TEB2WS4Q-U5VWYIBC.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/gitGraphDiagram-VVZAVV5G.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/info-DKCQHKI2-DX6KST54.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/infoDiagram-FY4PZKRE.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/ishikawaDiagram-4JDSWWDM.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/journeyDiagram-QUS3FAKT.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/kanban-definition-D4L7SQKK.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/katex-C5OPUE3Q.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/mindmap-definition-66QP5TD6.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/packet-7NZHBO7P-5WG45QPS.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/pegDiagram-YKIO5C6U.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/pie-RZYD4A2V-2OCZ2VTD.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/pieDiagram-YPY3TKG5.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/quadrantDiagram-VO5QLCXA.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/radar-I7S5WNFK-EPLSA35B.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/railroad-3IZDKUUU-PWFQV6Y6.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/railroad-abnf-AHOZXSZD-JYYJX3BS.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/railroad-ebnf-EBAXGLYW-RBZ4ONAP.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/railroad-peg-LSFZ7HO6-KHNPXGPG.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/railroadDiagram-M77LTMSB.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/requirementDiagram-RASO5HTO.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/sankeyDiagram-F32LOJ6L.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/sequenceDiagram-URATNSBD.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/sizeCapture-5GORAGP4.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/stateDiagram-DODFXNG5.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/stateDiagram-v2-JNMM5JRA.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/swimlanes-OSWOYLSK.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/swimlanesDiagram-RHGX2RDE.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/timeline-definition-WJXWRH4I.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/treeView-QDETBFTQ-EHYTSQNO.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/treemap-6X3UGDF4-CCWCF7EK.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/vennDiagram-K3VCMQLI.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/wardley-OPB4EBWU-6OWERDVT.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/wardleyDiagram-XK6FUAWV.mjs",
+        "app/vendor/mermaid/chunks/mermaid.esm.min/xychartDiagram-5VRUVLCW.mjs",
+        "app/vendor/mermaid/mermaid.esm.min.mjs"
+      ],
+      "icons": [],
+      "infra": [
+        "config",
+        "dom"
+      ],
+      "notes": "Thin Mermaid host; ESM entry lazy-loads diagram chunks; theme follows light/dark"
+    }
+  },
+  "agent": {
+    "skills": {
+      "_shared": {
+        "files": [
+          ".cursor/skills/_shared/component-map.md",
+          ".cursor/skills/_shared/invariants.md"
+        ],
+        "always": true,
+        "forkFacing": true
+      },
+      "init-app": {
+        "files": [
+          ".cursor/skills/init-app/SKILL.md"
+        ],
+        "forkFacing": true
+      },
+      "migrate-template": {
+        "files": [
+          ".cursor/skills/migrate-template/SKILL.md"
+        ],
+        "forkFacing": true
+      },
+      "sync-shell": {
+        "files": [
+          ".cursor/skills/sync-shell/SKILL.md"
+        ],
+        "forkFacing": true
+      },
+      "restore-component": {
+        "files": [
+          ".cursor/skills/restore-component/SKILL.md"
+        ],
+        "forkFacing": true
+      },
+      "finalize-app": {
+        "files": [
+          ".cursor/skills/finalize-app/SKILL.md"
+        ],
+        "forkFacing": true
+      },
+      "handle-assets": {
+        "files": [
+          ".cursor/skills/handle-assets/SKILL.md"
+        ],
+        "forkFacing": true
+      },
+      "manage-color": {
+        "files": [
+          ".cursor/skills/manage-color/SKILL.md",
+          ".cursor/skills/manage-color/scripts/contrast.mjs"
+        ],
+        "forkFacing": true
+      },
+      "add-icon": {
+        "files": [
+          ".cursor/skills/add-icon/SKILL.md",
+          ".cursor/skills/add-icon/scripts/fetch-icon.mjs"
+        ],
+        "forkFacing": true
+      },
+      "health-check": {
+        "files": [
+          ".cursor/skills/health-check/SKILL.md"
+        ],
+        "forkFacing": true
+      },
+      "author-component": {
+        "files": [
+          ".cursor/skills/author-component/SKILL.md"
+        ],
+        "forkFacing": false
+      },
+      "release-template": {
+        "files": [
+          ".cursor/skills/release-template/SKILL.md"
+        ],
+        "forkFacing": false
+      }
+    },
+    "rules": [
+      ".cursor/rules/demo-isolation.mdc",
+      ".cursor/rules/icons.mdc",
+      ".cursor/rules/usage-docs.mdc",
+      ".cursor/rules/vendor.mdc"
+    ]
+  },
+  "deprecated": {},
+  "retired": {},
+  "cssOnly": {
+    "buttons": {
+      "css": [
+        "controls-buttons.css"
+      ],
+      "always": true
+    },
+    "toolbar": {
+      "css": [
+        "controls-buttons.css"
+      ],
+      "always": true
+    },
+    "fields": {
+      "css": [
+        "controls-fields.css"
+      ]
+    },
+    "section-panel": {
+      "css": [
+        "controls-section-panel.css"
+      ]
+    },
+    "callout": {
+      "css": [
+        "overlays.css"
+      ]
+    }
+  },
+  "cssPartialFeatures": {
+    "layout.css": [
+      "shell",
+      "page-nav",
+      "sticky",
+      "title-numbering",
+      "theme-toggle",
+      "about-dialog"
+    ],
+    "controls-buttons.css": [
+      "buttons",
+      "toolbar",
+      "toggle-button"
+    ],
+    "overlays.css": [
+      "tooltip",
+      "banner",
+      "dialog",
+      "about-dialog",
+      "callout",
+      "popover",
+      "tutorial"
+    ],
+    "tutorial.css": [
+      "tutorial"
+    ],
+    "code-block.css": [
+      "code-block",
+      "expandable-surface"
+    ],
+    "controls-badges.css": [
+      "badge",
+      "combobox",
+      "dropdown-toggle"
+    ],
+    "controls-chips.css": [
+      "chip",
+      "legend"
+    ],
+    "controls-fields.css": [
+      "fields",
+      "combobox",
+      "date-picker",
+      "time-picker",
+      "duration-input"
+    ],
+    "controls-widgets.css": [
+      "toggle",
+      "checkbox",
+      "segmented-control",
+      "pagination",
+      "progress-bar",
+      "spinner",
+      "slider",
+      "stepper",
+      "color-input",
+      "color-picker",
+      "rich-text-editor"
+    ],
+    "controls-section-panel.css": [
+      "section-panel"
+    ],
+    "controls-menus.css": [
+      "combo",
+      "dropdown",
+      "dropdown-toggle",
+      "color-picker"
+    ],
+    "controls-disclosure.css": [
+      "expand",
+      "accordion",
+      "tabs",
+      "progress-indicator"
+    ],
+    "controls-file.css": [
+      "file-dropzone",
+      "file-download"
+    ],
+    "controls-image.css": [
+      "image-preview"
+    ],
+    "controls-color.css": [
+      "color-set",
+      "color-picker"
+    ],
+    "controls-charts.css": [
+      "charts"
+    ],
+    "controls-diagram.css": [
+      "diagram"
+    ],
+    "rich-text-editor.css": [
+      "rich-text-editor"
+    ],
+    "table.css": [
+      "table"
+    ],
+    "controls-tabular-input.css": [
+      "tabular-input"
+    ]
+  },
+  "cssIndexOrder": [
+    "layout.css",
+    "code-block.css",
+    "controls-buttons.css",
+    "controls-badges.css",
+    "controls-chips.css",
+    "controls-fields.css",
+    "controls-widgets.css",
+    "controls-section-panel.css",
+    "controls-menus.css",
+    "controls-disclosure.css",
+    "controls-file.css",
+    "controls-image.css",
+    "controls-color.css",
+    "controls-charts.css",
+    "controls-diagram.css",
+    "overlays.css",
+    "tutorial.css",
+    "rich-text-editor.css",
+    "table.css",
+    "controls-tabular-input.css"
+  ]
+}

@@ -18,6 +18,7 @@ function getPrism() {
   return typeof globalThis.Prism !== "undefined" ? globalThis.Prism : null;
 }
 
+/** Prism core ships without JSON; register it so `language-json` blocks highlight. */
 function ensureJsonGrammar() {
   const Prism = getPrism();
   if (!Prism || Prism.languages.json) return Prism;
@@ -44,15 +45,6 @@ function ensureJsonGrammar() {
   return Prism;
 }
 
-function renderJsonHighlighted(text) {
-  if (!text) return "";
-
-  const Prism = ensureJsonGrammar();
-  if (!Prism?.languages?.json) return escapeHtml(text);
-
-  return Prism.highlight(text, Prism.languages.json, "json");
-}
-
 /**
  * Collect declared step names for highlighting.
  */
@@ -77,8 +69,8 @@ function overlapsDeclaration(start, end, declRanges) {
   return declRanges.some((d) => start < d.end && end > d.start);
 }
 
-const REF_BEFORE = /[(,\[\{\s=]/;
-const REF_AFTER = /[),\]\}\s,=]/;
+const REF_BEFORE = /[(,[{\s=]/;
+const REF_AFTER = /[),\]}\s,=]/;
 
 function isStepReference(text, start, end, declRanges, mask) {
   if (overlapsDeclaration(start, end, declRanges)) {
@@ -307,4 +299,4 @@ function renderStepOnlyHtml(text, stepRanges) {
   return html;
 }
 
-export { renderHighlighted, renderJsonHighlighted };
+export { renderHighlighted, ensureJsonGrammar };

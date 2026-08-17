@@ -1,0 +1,101 @@
+/* Guided tutorial overlay — spotlight hole + edge blockers */
+
+:root {
+  --tutorial-dim: rgba(31, 35, 40, 0.55);
+}
+
+:root[data-theme="dark"] {
+  --tutorial-dim: rgba(0, 0, 0, 0.7);
+}
+
+body.tutorial-open {
+  overflow: hidden;
+}
+
+.tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  pointer-events: none;
+}
+
+.tutorial-overlay[hidden],
+.tutorial-overlay.hidden {
+  display: none !important;
+}
+
+.tutorial-overlay__dim {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: var(--tutorial-dim);
+  pointer-events: auto;
+}
+
+.tutorial-overlay--full .tutorial-overlay__dim {
+  display: block;
+}
+
+.tutorial-overlay__spotlight {
+  position: fixed;
+  box-sizing: border-box;
+  border-radius: 6px;
+  box-shadow: 0 0 0 max(100vw, 100vh) var(--tutorial-dim);
+  pointer-events: none;
+}
+
+.tutorial-overlay__spotlight[hidden] {
+  display: none !important;
+}
+
+.tutorial-overlay__blocker {
+  position: fixed;
+  z-index: 1;
+  pointer-events: auto;
+  background: transparent;
+}
+
+.tutorial-overlay__blocker[hidden],
+.tutorial-overlay__blocker.hidden {
+  display: none !important;
+}
+
+/* Non-interactive: blockers also swallow clicks (footer is outside setPageInert). */
+.tutorial-overlay:not(.tutorial-overlay--interactive) .tutorial-overlay__blocker {
+  pointer-events: auto;
+}
+
+.popover--tutorial {
+  z-index: 160;
+  max-width: min(24rem, calc(100vw - 1.5rem));
+  pointer-events: auto;
+}
+
+.tutorial-step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tutorial-step-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.tutorial-step-content > :first-child {
+  margin-top: 0;
+}
+
+.tutorial-step-content > :last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popover--tutorial.is-open {
+    animation: none;
+  }
+}
