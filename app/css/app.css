@@ -378,6 +378,7 @@ main {
 #output-highlight .hl-amber,
 #output-highlight .hl-red {
   border-radius: 2px;
+  transition: box-shadow 0.12s ease-out;
 }
 
 #input-highlight .hl-blue,
@@ -398,6 +399,40 @@ main {
 #input-highlight .hl-red,
 #output-highlight .hl-red {
   background: var(--hl-red);
+}
+
+/* Legend hover: ring + glow the matching step highlights in both panes. */
+
+:root:has(#step-highlight-legend:not(.is-disabled) .legend-chip-hl-blue:hover)
+  :is(#input-highlight, #output-highlight)
+  .hl-blue {
+  box-shadow:
+    0 0 0 1.5px var(--hl-icon-blue),
+    0 0 8px color-mix(in srgb, var(--hl-icon-blue) 55%, transparent);
+}
+
+:root:has(#step-highlight-legend:not(.is-disabled) .legend-chip-hl-green:hover)
+  :is(#input-highlight, #output-highlight)
+  .hl-green {
+  box-shadow:
+    0 0 0 1.5px var(--hl-icon-green),
+    0 0 8px color-mix(in srgb, var(--hl-icon-green) 55%, transparent);
+}
+
+:root:has(#step-highlight-legend:not(.is-disabled) .legend-chip-hl-amber:hover)
+  :is(#input-highlight, #output-highlight)
+  .hl-amber {
+  box-shadow:
+    0 0 0 1.5px var(--hl-icon-amber),
+    0 0 8px color-mix(in srgb, var(--hl-icon-amber) 55%, transparent);
+}
+
+:root:has(#step-highlight-legend:not(.is-disabled) .legend-chip-hl-red:hover)
+  :is(#input-highlight, #output-highlight)
+  .hl-red {
+  box-shadow:
+    0 0 0 1.5px var(--hl-icon-red),
+    0 0 8px color-mix(in srgb, var(--hl-icon-red) 55%, transparent);
 }
 
 /* ---------- Mapping / about dialog extras ---------- */
