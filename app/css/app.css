@@ -59,7 +59,11 @@ main {
   padding-bottom: 2rem;
 }
 
-.toolbar-spacer {
+.toolbar-end {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
   margin-left: auto;
 }
 
@@ -212,11 +216,20 @@ main {
   min-width: 0;
 }
 
-.pane-label {
-  margin: 0;
-  font-weight: 600;
-  font-size: 0.875rem;
-  line-height: 1.4;
+.pane-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.pane-heading .section-title {
+  flex-shrink: 0;
+}
+
+.pane-heading .legend {
+  margin-left: auto;
 }
 
 .pqm-code-block {
@@ -251,20 +264,28 @@ main {
   flex-direction: column;
 }
 
-/* Mapping editor: same pane styling, sized for the modal panel */
-.pqm-mapping-code-block,
+/* Mapping editor: fill remaining modal height and scroll inside the textarea.
+   Inner min-heights from `.pqm-code-block` would otherwise grow with the JSON
+   and overflow the panel. */
+.pqm-mapping-code-block {
+  width: auto;
+  margin: 0 1.25rem;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .pqm-mapping-code-block > .code-block-body,
 .pqm-mapping-code-block .code-block-editor-stack,
 .pqm-mapping-code-block .code-block-body > pre,
 .pqm-mapping-code-block .code-block-editor-stack > pre {
-  min-height: 18rem;
+  min-height: 0;
+  height: auto;
 }
 
-.pqm-mapping-code-block {
-  /* `width: auto` (not 100%): the modal panel stretches this flex item, so a
-     percentage width would add the side margins on top of the full width. */
-  width: auto;
-  margin: 0 1.25rem;
+.pqm-mapping-code-block > .code-block-body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .pqm-code-block code.is-empty::before {
