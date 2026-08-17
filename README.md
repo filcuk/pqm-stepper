@@ -15,10 +15,10 @@ let
     Source = Excel.CurrentWorkbook(){[Name="Sheet1"]}[Content],
     #"Changed Type" = Table.TransformColumnTypes(Source,{{"Col", type text}}),
     #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Col", "Name"}}),
-    #"Filter Rows 1" = Table.SelectRows(#"Renamed Columns", each true),
-    #"Filter Rows 2" = Table.SelectRows(#"Filter Rows 1", each true)
+    #"Filtered Rows 1" = Table.SelectRows(#"Renamed Columns", each true),
+    #"Filtered Rows 2" = Table.SelectRows(#"Filtered Rows 1", each true)
 in
-    #"Filter Rows 2"
+    #"Filtered Rows 2"
 ```
 
 **After:**
@@ -53,12 +53,11 @@ Edit [`app/mapping.json`](app/mapping.json). Keys are the inner quoted step name
 {
   "Changed Type": "Type",
   "Renamed Columns": "Rename",
-  "Filter Rows": "Filter",
   "Filtered Rows": "Filter"
 }
 ```
 
-Power Query uses past-tense names (`Renamed Columns`, `Filtered Rows`) — include both variants if your queries use either. Commit and push to update the live site.
+Power Query uses past-tense names (`Renamed Columns`, `Filtered Rows`). Commit and push to update the live site.
 
 **Rename rules for quoted steps defined in the query:**
 
