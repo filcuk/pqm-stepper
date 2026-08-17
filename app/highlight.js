@@ -1,5 +1,11 @@
 import { parseSteps } from "./transform.js";
-import { QUOTED_TOKEN_RE, STEP_DECL_RE, escapeRegExp } from "./m-utils.js";
+import {
+  QUOTED_TOKEN_RE,
+  escapeRegExp,
+  buildMContextMask,
+  isProtectedLiteral,
+  M_SPAN_CODE,
+} from "./m-utils.js";
 
 function escapeHtml(text) {
   return text
@@ -48,37 +54,23 @@ function renderJsonHighlighted(text) {
 }
 
 /**
- * Collect step names for highlighting.
+ * Collect declared step names for highlighting.
  */
-function collectStepNames(mCode) {
-  const steps = parseSteps(mCode);
-  const quoted = new Set();
+function collectStepNamesFromSteps(steps) {
   const regular = new Set();
 
   for (const step of steps) {
-    if (step.isQuoted) quoted.add(step.name);
-    else regular.add(step.name);
+    if (!step.isQuoted) regular.add(step.name);
   }
 
-  for (const match of mCode.matchAll(QUOTED_TOKEN_RE)) {
-    quoted.add(match[1]);
-  }
-
-  return { quoted, regular };
+  return { regular };
 }
 
-function getDeclarationRanges(text) {
-  const ranges = [];
-
-  STEP_DECL_RE.lastIndex = 0;
-  let match;
-  while ((match = STEP_DECL_RE.exec(text)) !== null) {
-    const token = match[1] || match[3];
-    const tokenStart = match.index + match[0].indexOf(token);
-    ranges.push({ start: tokenStart, end: tokenStart + token.length });
-  }
-
-  return ranges;
+function getDeclarationRangesFromSteps(steps) {
+  return steps.map((step) => ({
+    start: step.tokenStart,
+    end: step.tokenStart + step.token.length,
+  }));
 }
 
 function overlapsDeclaration(start, end, declRanges) {
@@ -88,25 +80,7 @@ function overlapsDeclaration(start, end, declRanges) {
 const REF_BEFORE = /[(,\[\{\s=]/;
 const REF_AFTER = /[),\]\}\s,=]/;
 
-function isInsideString(text, index) {
-  let inString = false;
-  let i = 0;
-  while (i < index) {
-    if (text[i] === "#" && text[i + 1] === '"') {
-      i += 2;
-      while (i < text.length && text[i] !== '"') i++;
-      if (i < text.length) i++;
-      continue;
-    }
-    if (text[i] === '"') {
-      inString = !inString;
-    }
-    i++;
-  }
-  return inString;
-}
-
-function isStepReference(text, start, end, declRanges) {
+function isStepReference(text, start, end, declRanges, mask) {
   if (overlapsDeclaration(start, end, declRanges)) {
     return true;
   }
@@ -116,21 +90,21 @@ function isStepReference(text, start, end, declRanges) {
 
   if (before === "." || after === ".") return false;
   if (before === "#") return false;
-  if (isInsideString(text, start)) return false;
+  if (mask[start] !== M_SPAN_CODE) return false;
 
   const validBefore = start === 0 || REF_BEFORE.test(before);
   const validAfter = end === text.length || REF_AFTER.test(after);
   return validBefore && validAfter;
 }
 
-function addRegularMatches(text, name, mode, renamedTargets, declRanges, ranges) {
+function addRegularMatches(text, name, mode, renamedTargets, declRanges, ranges, mask) {
   const isRenamed = mode === "output" && renamedTargets.has(name);
   const re = new RegExp(`\\b${escapeRegExp(name)}\\b`, "g");
   let match;
   while ((match = re.exec(text)) !== null) {
     const start = match.index;
     const end = start + match[0].length;
-    if (!isStepReference(text, start, end, declRanges)) continue;
+    if (!isStepReference(text, start, end, declRanges, mask)) continue;
     ranges.push({
       start,
       end,
@@ -149,17 +123,21 @@ function classForOccurrence(start, end, mode, declRanges, isRenamed = false) {
 
 /**
  * Build highlight ranges for step names.
+ * Parses steps and builds the context mask once per call.
  * @param {"input"|"output"} mode
  */
 function buildStepRanges(text, mode, renames) {
-  const { regular } = collectStepNames(text);
-  const declRanges = getDeclarationRanges(text);
+  const steps = parseSteps(text);
+  const { regular } = collectStepNamesFromSteps(steps);
+  const declRanges = getDeclarationRangesFromSteps(steps);
+  const mask = buildMContextMask(text);
   const ranges = [];
   const renamedTargets = renames?.to ?? new Set();
 
   for (const match of text.matchAll(QUOTED_TOKEN_RE)) {
     const start = match.index;
     const end = start + match[0].length;
+    if (isProtectedLiteral(mask, start)) continue;
     ranges.push({
       start,
       end,
@@ -169,13 +147,13 @@ function buildStepRanges(text, mode, renames) {
 
   const names = [...regular].sort((a, b) => b.length - a.length);
   for (const name of names) {
-    addRegularMatches(text, name, mode, renamedTargets, declRanges, ranges);
+    addRegularMatches(text, name, mode, renamedTargets, declRanges, ranges, mask);
   }
 
   if (mode === "output") {
     for (const name of [...renamedTargets].sort((a, b) => b.length - a.length)) {
       if (regular.has(name)) continue;
-      addRegularMatches(text, name, mode, renamedTargets, declRanges, ranges);
+      addRegularMatches(text, name, mode, renamedTargets, declRanges, ranges, mask);
     }
   }
 

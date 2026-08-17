@@ -13,6 +13,7 @@ import {
   getEffectiveMapping,
   hasCustomMapping,
   isDefaultMapping,
+  isDefaultMappingReady,
   parseMappingJson,
   resetToDefaultMapping,
   saveMapping,
@@ -27,7 +28,6 @@ let isOpen = false;
 let onMappingChange = null;
 let onMappingReset = null;
 let previouslyFocused = null;
-let skipNextInput = false;
 
 const FOCUSABLE =
   'button:not([disabled]), [contenteditable="true"]:not([contenteditable="false"]), textarea:not([disabled]), [href], input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -45,6 +45,15 @@ export function syncMappingVersionLabel() {
 function syncOpenButtonState() {
   if (!openBtn) return;
 
+  if (!isDefaultMappingReady()) {
+    openBtn.disabled = true;
+    openBtn.title = "Mapping unavailable — default mapping failed to load";
+    if (versionLabelEl) versionLabelEl.textContent = "";
+    return;
+  }
+
+  openBtn.disabled = false;
+
   if (hasCustomMapping()) {
     openBtn.title = "Custom mapping active — click to edit";
   } else {
@@ -52,6 +61,14 @@ function syncOpenButtonState() {
   }
 
   syncMappingVersionLabel();
+}
+
+/** Refresh open-button state after default mapping load succeeds or fails. */
+export function refreshMappingEditorAvailability() {
+  if (!isDefaultMappingReady() && isOpen) {
+    closeDialog();
+  }
+  syncOpenButtonState();
 }
 
 function showError(message) {
@@ -114,18 +131,12 @@ function handleEscape(e) {
 }
 
 function handleEditorInput() {
-  if (skipNextInput) {
-    skipNextInput = false;
-    return;
-  }
-
   const caret = saveCaretOffset(editorEl);
   updateEditorDisplay(caret);
 }
 
 function handleEditorPaste(e) {
   e.preventDefault();
-  skipNextInput = true;
 
   const pasted = e.clipboardData.getData("text/plain");
   const { start, end } = getSelectionOffsets(editorEl);
@@ -138,6 +149,10 @@ function handleEditorPaste(e) {
 
 function openDialog() {
   if (isOpen) return;
+  if (!isDefaultMappingReady()) {
+    syncOpenButtonState();
+    return;
+  }
 
   previouslyFocused = document.activeElement;
   populateEditor(getEffectiveMapping());
@@ -163,6 +178,10 @@ function closeDialog() {
 }
 
 function applyMapping(mapping, persist) {
+  if (!isDefaultMappingReady()) {
+    throw new Error("Default mapping is not loaded; cannot apply changes.");
+  }
+
   if (persist) {
     if (isDefaultMapping(mapping)) {
       clearStoredMapping();
@@ -180,13 +199,23 @@ function applyMapping(mapping, persist) {
 }
 
 function handleApply() {
+  if (!isDefaultMappingReady()) {
+    showError("Default mapping is not loaded; cannot apply changes.");
+    return;
+  }
+
   const result = parseMappingJson(getEditorText());
   if (result.error) {
     showError(result.error);
     return;
   }
 
-  applyMapping(result.mapping, true);
+  try {
+    applyMapping(result.mapping, true);
+  } catch (err) {
+    showError(err.message);
+    return;
+  }
   closeDialog();
 }
 
