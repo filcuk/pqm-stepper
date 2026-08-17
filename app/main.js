@@ -42,7 +42,7 @@ const inputEl = inputCodeBlockEl.querySelector(".code-block-editor");
 const inputHighlightEl = document.getElementById("input-highlight");
 const outputHighlightEl = document.getElementById("output-highlight");
 const outputPreEl = outputHighlightEl.closest("pre");
-inputEl.placeholder = "let\n    Source = ...\nin\n    ...";
+inputEl.placeholder = "Insert your M code here";
 outputHighlightEl.dataset.placeholder =
   "Transformed code appears here";
 const exampleCombo = document.getElementById("example-combo");
