@@ -11,8 +11,28 @@
 }
 
 :root[data-theme="dark"] {
-  --accent: #6349da;
-  --accent-fg: #ffffff;
+  --accent: #9280e5;
+}
+
+/* Light-mode links: brighter than the button fill, which stays #3b2c83. */
+.btn-link,
+.tagline a {
+  color: #6349da;
+}
+
+.btn-link:hover:not(:disabled),
+.tagline a:hover {
+  color: color-mix(in srgb, #6349da 80%, #000000);
+}
+
+:root[data-theme="dark"] .btn-link,
+:root[data-theme="dark"] .tagline a {
+  color: var(--accent);
+}
+
+:root[data-theme="dark"] .btn-link:hover:not(:disabled),
+:root[data-theme="dark"] .tagline a:hover {
+  color: var(--accent-hover);
 }
 
 /* ---------- App tokens (step-highlight palette, code accents) ---------- */
@@ -35,10 +55,10 @@
 
 :root[data-theme="dark"] {
   --legend-text: #c3ccd5;
-  --hl-blue: rgba(56, 139, 253, 0.18);
-  --hl-green: rgba(46, 160, 67, 0.16);
-  --hl-amber: rgba(210, 153, 34, 0.22);
-  --hl-red: rgba(255, 99, 99, 0.18);
+  --hl-blue: rgba(56, 139, 253, 0.34);
+  --hl-green: rgba(46, 160, 67, 0.32);
+  --hl-amber: rgba(210, 153, 34, 0.30);
+  --hl-red: rgba(255, 99, 99, 0.26);
   --hl-icon-blue: #58a6ff;
   --hl-icon-green: #3fb950;
   --hl-icon-amber: #e3b341;
