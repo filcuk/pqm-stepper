@@ -284,28 +284,57 @@ main {
   flex-direction: column;
 }
 
-/* Mapping editor: fill remaining modal height and scroll inside the textarea.
-   Inner min-heights from `.pqm-code-block` would otherwise grow with the JSON
-   and overflow the panel. */
+/* Mapping editor: the panel must have a definite height or nested flex +
+   absolutely positioned highlight/textarea collapse to a 1px strip. */
+#mapping-dialog .modal-panel {
+  height: 85vh;
+  overflow: hidden;
+}
+
 .pqm-mapping-code-block {
   width: auto;
   margin: 0 1.25rem;
+  flex: 1 1 auto;
   min-height: 0;
   overflow: hidden;
 }
 
 .pqm-mapping-code-block > .code-block-body,
-.pqm-mapping-code-block .code-block-editor-stack,
-.pqm-mapping-code-block .code-block-body > pre,
-.pqm-mapping-code-block .code-block-editor-stack > pre {
+.pqm-mapping-code-block .code-block-editor-stack {
+  flex: 1 1 auto;
   min-height: 0;
-  height: auto;
+  overflow: hidden;
 }
 
 .pqm-mapping-code-block > .code-block-body {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+}
+
+.pqm-mapping-code-block .code-block-editor-stack {
+  position: relative;
+}
+
+.pqm-mapping-code-block .code-block-editor {
+  z-index: 1;
+}
+
+/* Viewport-sized highlight; content-sized `code` so textarea scrollTop
+   actually moves the JSON (stretch would make pre.scrollHeight === clientHeight). */
+#mapping-dialog .pqm-mapping-code-block .code-block-body pre[class*="language-"],
+#mapping-dialog .pqm-mapping-code-block .code-block-body pre[class*="language-"].line-numbers {
+  position: absolute;
+  inset: 0;
+  flex: none;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  align-items: flex-start;
+}
+
+#mapping-dialog .pqm-mapping-code-block .code-block-body pre[class*="language-"].line-numbers > code {
+  height: auto;
+  align-self: flex-start;
 }
 
 .pqm-code-block code.is-empty::before {
