@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="160"
+   height="160"
+   viewBox="0 0 160 160"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer2"
+     style="display:none">
+    <rect
+       style="fill:#171717;fill-opacity:1;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+       id="rect1"
+       width="160"
+       height="160"
+       x="0"
+       y="0" />
+  </g>
+  <g
+     id="layer1"
+     transform="translate(-152.79491,-201.00008)"
+     style="display:inline">
+    <path
+       style="display:none;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       d="m 167.843,318.50008 v -25 l 21.65064,-12.5 v -25 l 21.65063,-12.5 v -25 l 21.65064,-12.5 64.95191,37.5 v 75 l -64.95191,37.5 z"
+       id="path11"
+       mask="none" />
+    <path
+       id="path11-82"
+       style="baseline-shift:baseline;display:none;overflow:visible;opacity:1;vector-effect:none;fill:#1c1344;fill-opacity:1;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       d="m 232.79491,201.00008 a 5.0005,5.0005 0 0 0 -2.5,0.66992 l -21.65039,12.5 a 5.0005,5.0005 0 0 0 -2.5,4.33008 v 22.11328 L 186.99413,251.67 a 5.0005,5.0005 0 0 0 -2.5,4.33008 v 22.11328 L 165.34374,289.17 a 5.0005,5.0005 0 0 0 -2.5,4.33008 v 25 a 5.0005,5.0005 0 0 0 2.5,4.33008 l 64.95117,37.5 a 5.0005,5.0005 0 0 0 5,0 l 64.95117,-37.5 a 5.0005,5.0005 0 0 0 2.5,-4.33008 v -75 a 5.0005,5.0005 0 0 0 -2.5,-4.33008 l -64.95117,-37.5 a 5.0005,5.0005 0 0 0 -2.5,-0.66992 z m 0,5 64.95117,37.5 v 75 l -64.95117,37.5 -64.95117,-37.5 v -25 l 21.65039,-12.5 v -25 l 21.65039,-12.5 v -25 z" />
+    <path
+       id="path11-8"
+       style="baseline-shift:baseline;display:inline;overflow:visible;opacity:1;vector-effect:none;fill:#efefef;fill-opacity:1;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       d="m 232.79491,201.00008 a 5.0005,5.0005 0 0 0 -2.5,0.66992 l -21.65039,12.5 a 5.0005,5.0005 0 0 0 -2.5,4.33008 v 22.11328 L 186.99413,251.67 a 5.0005,5.0005 0 0 0 -2.5,4.33008 v 22.11328 L 165.34374,289.17 a 5.0005,5.0005 0 0 0 -2.5,4.33008 v 25 a 5.0005,5.0005 0 0 0 2.5,4.33008 l 64.95117,37.5 a 5.0005,5.0005 0 0 0 5,0 l 64.95117,-37.5 a 5.0005,5.0005 0 0 0 2.5,-4.33008 v -75 a 5.0005,5.0005 0 0 0 -2.5,-4.33008 l -64.95117,-37.5 a 5.0005,5.0005 0 0 0 -2.5,-0.66992 z m 0,5 64.95117,37.5 v 75 l -64.95117,37.5 -64.95117,-37.5 v -25 l 21.65039,-12.5 v -25 l 21.65039,-12.5 v -25 z" />
+    <g
+       id="g6"
+       transform="translate(20.09618,8.0000006e-5)"
+       style="display:inline">
+      <path
+         style="fill:#6349da;fill-opacity:1;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+         d="m 234.34936,318.5 -43.30127,-25 21.65064,-12.5 V 256 L 256,281 277.65064,268.5 v -25 L 212.69873,206 191.04809,218.5 v 25 L 169.39746,256 v 25 l -21.65064,12.5 v 25 l 64.95191,37.5 21.65063,-12.5 z"
+         id="path2" />
+      <path
+         id="path3"
+         style="fill:#000000;fill-opacity:0.4;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+         d="m 191.04883,218.5 v 25 L 256,281 V 256 Z M 169.39648,256 v 25 l 21.65235,12.5 v -25 z m -21.65039,37.5 v 25 l 64.95313,37.5 v -25 z" />
+    </g>
+  </g>
+</svg>

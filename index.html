@@ -7,12 +7,12 @@
     <script>
       window.__MICROAPP__ = {
         themeStorageKey: "pqm-theme",
-        appIcon: "app/res/icon/icon.svg",
-        appIconLight: "",
-        appIconDark: "",
+        appIcon: "",
+        appIconLight: "app/res/app-light.svg",
+        appIconDark: "app/res/app-dark.svg",
       };
     </script>
-    <link rel="icon" href="app/res/icon/icon.svg" type="image/svg+xml" data-brand-icon />
+    <link rel="icon" href="app/res/app-light.svg" type="image/svg+xml" data-brand-icon />
     <script src="app/theme-init.js"></script>
     <link rel="stylesheet" href="app/styles.css" />
     <link rel="stylesheet" href="app/prism.css" />
@@ -21,11 +21,19 @@
     <header>
       <div class="site-brand">
         <img
-          src="app/res/icon/icon.svg"
-          alt=""
-          class="site-logo"
+          src="app/res/app-light.svg"
+          alt="PQM Stepper"
+          class="site-logo brand-icon--light"
           width="40"
           height="40"
+        />
+        <img
+          src="app/res/app-dark.svg"
+          alt=""
+          class="site-logo brand-icon--dark"
+          width="40"
+          height="40"
+          aria-hidden="true"
         />
         <h1>Power Query M Stepper</h1>
       </div>
