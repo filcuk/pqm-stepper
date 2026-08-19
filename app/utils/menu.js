@@ -58,6 +58,10 @@ export function initPopupMenu({
     if (items.length) focusItem(items[0]);
   }
 
+  function setContainerOpen(open) {
+    containerEl?.classList.toggle("is-popup-open", open);
+  }
+
   function clearFixedPosition() {
     if (!fixed) return;
     menuEl.style.position = "";
@@ -66,6 +70,8 @@ export function initPopupMenu({
     menuEl.style.right = "";
     menuEl.style.bottom = "";
     menuEl.style.zIndex = "";
+    menuEl.style.width = "";
+    menuEl.style.minWidth = "";
     menuEl.style.maxHeight = "";
     menuEl.style.overflowY = "";
   }
@@ -80,6 +86,9 @@ export function initPopupMenu({
     menuEl.style.position = "fixed";
     menuEl.style.zIndex = "200";
     menuEl.style.bottom = "auto";
+    menuEl.style.width = "max-content";
+    // Percentage min-width is viewport-relative when position is fixed.
+    menuEl.style.minWidth = `${rect.width}px`;
     menuEl.style.maxHeight = "";
     menuEl.style.overflowY = "";
     menuEl.style.top = `${rect.bottom + gap}px`;
@@ -123,6 +132,7 @@ export function initPopupMenu({
     if (!isOpen) return;
     isOpen = false;
     unregisterOpenPopup(closeMenu);
+    setContainerOpen(false);
     setHidden(menuEl, true);
     clearFixedPosition();
     toggleEl?.setAttribute("aria-expanded", "false");
@@ -134,6 +144,7 @@ export function initPopupMenu({
   function openMenu() {
     isOpen = true;
     registerOpenPopup(closeMenu);
+    setContainerOpen(true);
     setHidden(menuEl, false);
     toggleEl?.setAttribute("aria-expanded", "true");
     positionFixedMenu();
@@ -249,6 +260,7 @@ export function initPopupMenu({
     isOpen: () => isOpen,
     destroy() {
       unregisterOpenPopup(closeMenu);
+      setContainerOpen(false);
       toggleEl?.removeEventListener("click", onToggleClick);
       menuEl.removeEventListener("click", onMenuClick);
       menuEl.removeEventListener("keydown", onMenuKeydown);

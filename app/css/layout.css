@@ -1121,6 +1121,22 @@ body > footer {
   white-space: normal;
 }
 
+.footer-also-see-item--accent-pair {
+  --accent: var(--also-see-accent-light);
+}
+
+.footer-also-see-item--accent-hover-pair {
+  --accent-hover: var(--also-see-accent-hover-light);
+}
+
+:root[data-theme="dark"] .footer-also-see-item--accent-pair {
+  --accent: var(--also-see-accent-dark);
+}
+
+:root[data-theme="dark"] .footer-also-see-item--accent-hover-pair {
+  --accent-hover: var(--also-see-accent-hover-dark);
+}
+
 /* Nested-grid fallback when `display: contents` is unavailable. */
 @supports not (display: contents) {
   .footer-also-see-topic-links {

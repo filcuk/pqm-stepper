@@ -92,7 +92,11 @@ export function normalizeSiteUrl(value) {
  *   iconSvgLight: string,
  *   iconSvgDark: string,
  *   accent: string,
+ *   accentLight: string,
+ *   accentDark: string,
  *   accentHover: string,
+ *   accentHoverLight: string,
+ *   accentHoverDark: string,
  *   order: number | null,
  * }} AlsoSeeLink
  * @typedef {{
@@ -120,6 +124,64 @@ function trimAlsoSeeString(value) {
 function normalizeAlsoSeeColor(value) {
   const color = trimAlsoSeeString(value);
   return /^#[\da-f]{3,4}(?:[\da-f]{3,4})?$/i.test(color) ? color : "";
+}
+
+/**
+ * Resolve a single hex or a light/dark pair. Pair wins when either side is set;
+ * a missing side clones the other (same as also-see icons).
+ *
+ * @param {unknown} single
+ * @param {unknown} light
+ * @param {unknown} dark
+ * @returns {{ value: string, light: string, dark: string }}
+ */
+function normalizeAlsoSeeColorChoice(single, light, dark) {
+  const pairLight = normalizeAlsoSeeColor(light);
+  const pairDark = normalizeAlsoSeeColor(dark);
+  if (pairLight || pairDark) {
+    return {
+      value: "",
+      light: pairLight || pairDark,
+      dark: pairDark || pairLight,
+    };
+  }
+  return {
+    value: normalizeAlsoSeeColor(single),
+    light: "",
+    dark: "",
+  };
+}
+
+/**
+ * @param {object} link
+ * @returns {{
+ *   accent: string,
+ *   accentLight: string,
+ *   accentDark: string,
+ *   accentHover: string,
+ *   accentHoverLight: string,
+ *   accentHoverDark: string,
+ * }}
+ */
+function normalizeAlsoSeeColors(link) {
+  const accent = normalizeAlsoSeeColorChoice(
+    /** @type {{ accent?: unknown }} */ (link).accent,
+    /** @type {{ accentLight?: unknown }} */ (link).accentLight,
+    /** @type {{ accentDark?: unknown }} */ (link).accentDark
+  );
+  const accentHover = normalizeAlsoSeeColorChoice(
+    /** @type {{ accentHover?: unknown }} */ (link).accentHover,
+    /** @type {{ accentHoverLight?: unknown }} */ (link).accentHoverLight,
+    /** @type {{ accentHoverDark?: unknown }} */ (link).accentHoverDark
+  );
+  return {
+    accent: accent.value,
+    accentLight: accent.light,
+    accentDark: accent.dark,
+    accentHover: accentHover.value,
+    accentHoverLight: accentHover.light,
+    accentHoverDark: accentHover.dark,
+  };
 }
 
 /**
@@ -204,14 +266,7 @@ function normalizeAlsoSeeLink(link, exclude) {
   const iconSvgDark = trimAlsoSeeString(
     /** @type {{ iconSvgDark?: unknown }} */ (link).iconSvgDark
   );
-  const colors = {
-    accent: normalizeAlsoSeeColor(
-      /** @type {{ accent?: unknown }} */ (link).accent
-    ),
-    accentHover: normalizeAlsoSeeColor(
-      /** @type {{ accentHover?: unknown }} */ (link).accentHover
-    ),
-  };
+  const colors = normalizeAlsoSeeColors(link);
 
   // Embedded SVG wins over URL icons (same pair / single precedence).
   if (iconSvgLight || iconSvgDark) {
@@ -589,21 +644,63 @@ function renderAlsoSeeIconMarkup(link) {
  * @param {number} index
  * @returns {string}
  */
+/**
+ * @param {AlsoSeeLink} link
+ * @returns {string[]}
+ */
+function alsoSeeColorDeclarations(link) {
+  /** @type {string[]} */
+  const decls = [];
+  if (link.accentLight || link.accentDark) {
+    decls.push(`--also-see-accent-light: ${link.accentLight}`);
+    decls.push(`--also-see-accent-dark: ${link.accentDark}`);
+  } else if (link.accent) {
+    decls.push(`--accent: ${link.accent}`);
+  }
+  if (link.accentHoverLight || link.accentHoverDark) {
+    decls.push(`--also-see-accent-hover-light: ${link.accentHoverLight}`);
+    decls.push(`--also-see-accent-hover-dark: ${link.accentHoverDark}`);
+  } else if (link.accentHover) {
+    decls.push(`--accent-hover: ${link.accentHover}`);
+  }
+  return decls;
+}
+
+/**
+ * @param {AlsoSeeLink} link
+ * @returns {string}
+ */
+function alsoSeeColorClass(link) {
+  return [
+    "dropdown-menu-item",
+    link.accentLight || link.accentDark
+      ? "footer-also-see-item--accent-pair"
+      : "",
+    link.accentHoverLight || link.accentHoverDark
+      ? "footer-also-see-item--accent-hover-pair"
+      : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+/**
+ * @param {AlsoSeeLink} link
+ * @param {number} index
+ * @returns {string}
+ */
 function renderAlsoSeeLinkItem(link, index) {
   const iconMarkup = renderAlsoSeeIconMarkup(link);
   const subtitleMarkup = link.subtitle
     ? `<span class="dropdown-menu-item-subtitle">${escapeText(link.subtitle)}</span>`
     : "";
-  const colorDeclarations = [
-    link.accent ? `--accent: ${link.accent}` : "",
-    link.accentHover ? `--accent-hover: ${link.accentHover}` : "",
-  ].filter(Boolean);
+  const colorDeclarations = alsoSeeColorDeclarations(link);
   const colorStyle = colorDeclarations.length
     ? ` style="${escapeAttr(colorDeclarations.join("; "))}"`
     : "";
 
   return `<li role="none">
-          <a href="${escapeAttr(link.url)}" class="dropdown-menu-item" role="menuitem" data-no-external-icon data-value="${index}"${colorStyle}>
+          <a href="${escapeAttr(link.url)}" class="${alsoSeeColorClass(link)}" role="menuitem" data-no-external-icon data-value="${index}"${colorStyle}>
             ${iconMarkup}
             <span class="dropdown-menu-item-text">
               <span class="dropdown-menu-item-label">${escapeText(link.label)}</span>

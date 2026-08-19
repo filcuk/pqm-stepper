@@ -289,6 +289,13 @@ li:not(:first-child) > .dropdown-menu-group {
   align-self: flex-start;
 }
 
+/* Elevate the host while open so menus paint above neighbouring stacking
+   contexts (e.g. code-block overflow + line-number gutter chrome). */
+.dropdown.is-popup-open,
+.combo-btn.is-popup-open {
+  z-index: 61;
+}
+
 .dropdown-trigger {
   display: inline-flex;
   align-items: center;
