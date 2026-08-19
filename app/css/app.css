@@ -200,20 +200,18 @@ main {
 
 /* ---------- Mapping banner ---------- */
 
-#mapping-banner .mapping-banner-body {
+.mapping-banner-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
-.mapping-banner-text {
+.mapping-banner-row .banner {
   flex: 1;
-  min-width: 12rem;
+  min-width: 0;
 }
 
-.mapping-banner-btn {
+.mapping-banner-row .btn {
   flex-shrink: 0;
 }
 

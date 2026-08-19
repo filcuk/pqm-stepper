@@ -55,7 +55,7 @@ const copyBtn = document.getElementById("copy-btn");
 const bannerEl = document.getElementById("banner");
 const bannerIconEl = document.getElementById("banner-icon");
 const bannerBodyEl = document.getElementById("banner-body");
-const mappingBannerEl = document.getElementById("mapping-banner");
+const mappingBannerEl = document.getElementById("mapping-banner-row");
 const mappingBannerTextEl = document.getElementById("mapping-banner-text");
 const mappingResetBannerBtn = document.getElementById("mapping-reset-banner-btn");
 

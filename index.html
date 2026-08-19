@@ -44,14 +44,14 @@
     </header>
 
     <main id="main">
-      <div id="mapping-banner" class="banner banner-warning hidden" role="status">
-        <span class="banner-icon" data-icon="warning" data-icon-class="banner-icon-svg"></span>
-        <div class="banner-body mapping-banner-body">
-          <span id="mapping-banner-text" class="mapping-banner-text"></span>
-          <button type="button" id="mapping-reset-banner-btn" class="btn btn-danger mapping-banner-btn">
-            Reset to default
-          </button>
+      <div id="mapping-banner-row" class="mapping-banner-row hidden">
+        <div id="mapping-banner" class="banner banner-warning" role="status">
+          <span class="banner-icon" data-icon="warning" data-icon-class="banner-icon-svg"></span>
+          <span id="mapping-banner-text" class="banner-body"></span>
         </div>
+        <button type="button" id="mapping-reset-banner-btn" class="btn btn-danger">
+          Reset to default
+        </button>
       </div>
       <div id="banner" class="banner hidden" role="status">
         <span id="banner-icon" class="banner-icon" data-icon="warning" data-icon-class="banner-icon-svg"></span>
@@ -82,8 +82,7 @@
         </button>
         <div class="toolbar-end">
           <span class="toolbar-mapping">
-            edit
-            <button type="button" id="mapping-edit-btn" class="btn btn-link">mapping</button>
+            <button type="button" id="mapping-edit-btn" class="btn btn-link">edit mapping</button>
             <span id="mapping-version-label" class="mapping-version-label" aria-hidden="true"></span>
           </span>
           <button
