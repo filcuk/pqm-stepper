@@ -14,6 +14,7 @@ import {
   pickRandomExample,
 } from "./examples.js";
 import { selectElementContents } from "./editor.js";
+import { copyText } from "./utils/clipboard.js";
 import {
   getMappingForTransform,
   loadDefaultMapping,
@@ -309,18 +310,30 @@ function setMapping(nextMapping) {
   runTransformNow(caret);
 }
 
-async function copyOutput() {
-  try {
-    await navigator.clipboard.writeText(outputText);
-    copyBtn.textContent = "Copied!";
-    setTimeout(() => {
-      copyBtn.textContent = "Copy output";
-    }, 1500);
-  } catch {
-    selectElementContents(outputHighlightEl);
-    document.execCommand("copy");
-    window.getSelection()?.removeAllRanges();
+const COPY_OUTPUT_LABEL = "Copy output";
+const COPY_FEEDBACK_MS = 2000;
+
+/** @type {number | undefined} */
+let copyFeedbackTimer;
+
+function flashCopyOutputFeedback(ok) {
+  const flash = ok ? "Copied" : "Failed";
+  const prevAria = copyBtn.getAttribute("aria-label") || COPY_OUTPUT_LABEL;
+  copyBtn.textContent = flash;
+  copyBtn.setAttribute("aria-label", flash);
+  if (copyFeedbackTimer !== undefined) {
+    window.clearTimeout(copyFeedbackTimer);
   }
+  copyFeedbackTimer = window.setTimeout(() => {
+    copyBtn.textContent = COPY_OUTPUT_LABEL;
+    copyBtn.setAttribute("aria-label", prevAria);
+    copyFeedbackTimer = undefined;
+  }, COPY_FEEDBACK_MS);
+}
+
+async function copyOutput() {
+  const ok = await copyText(outputText);
+  flashCopyOutputFeedback(ok);
 }
 
 copyBtn.addEventListener("click", copyOutput);
