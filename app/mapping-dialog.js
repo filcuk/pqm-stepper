@@ -160,9 +160,8 @@ export function resetMappingToDefault() {
   if (!defaultMapping || !Object.keys(defaultMapping).length) return null;
 
   if (isOpen()) {
-    populateEditor(defaultMapping);
     clearError();
-    editorEl.focus();
+    dialogControl.closeDialog();
   }
 
   onMappingChange?.(defaultMapping);
