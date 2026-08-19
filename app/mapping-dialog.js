@@ -47,25 +47,20 @@ function getEditorText() {
   return editorCodeBlock?.getSource() ?? "";
 }
 
-/** Nothing to reset when the default is already stored and shown unedited. */
+/** Reset only applies to a persisted custom mapping — unapplied editor edits are discarded via Cancel. */
 function canResetMapping() {
-  if (!isDefaultMappingReady()) return false;
-  if (hasCustomMapping()) return true;
-  if (!isOpen()) return false;
-
-  // Unapplied edits count as resettable, including JSON that no longer parses.
-  const result = parseMappingJson(getEditorText());
-  return result.error ? true : !isDefaultMapping(result.mapping);
+  return isDefaultMappingReady() && hasCustomMapping();
 }
 
 function syncResetButtonState() {
   if (!resetBtn) return;
 
   const canReset = canResetMapping();
+  resetBtn.classList.toggle("hidden", !canReset);
   resetBtn.disabled = !canReset;
   resetBtn.title = canReset
     ? "Discard the custom mapping and restore the default"
-    : "Already using the default mapping";
+    : "";
 }
 
 function syncOpenButtonState() {
@@ -251,7 +246,6 @@ export function initMappingDialog({
 
   applyBtn.addEventListener("click", handleApply);
   resetBtn.addEventListener("click", requestMappingReset);
-  editorEl.addEventListener("input", syncResetButtonState);
 
   syncOpenButtonState();
 }
