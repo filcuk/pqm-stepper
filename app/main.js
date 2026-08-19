@@ -560,7 +560,7 @@ initTutorial({
       position: "bottom",
     },
     {
-      target: "#example-btn",
+      target: "#example-combo",
       title: "Try it",
       body: "Load an example to see the transformation in action.",
       position: "bottom",
