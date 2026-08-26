@@ -1,12 +1,12 @@
 /**
- * Template-owned inline SVG icons. Synced / hashed with the template — do not
+ * Framework-owned inline SVG icons. Synced / hashed with the framework — do not
  * add fork-specific artwork here. Forks add icons in `icons-app.js`.
  *
  * Match `viewBox` to the source SVG (Material Icons from Icônes use `0 0 24 24`).
  * For third-party icons, set `name` to the collection id (e.g. `round-info`).
- * To reuse an existing template icon under another id, set `ref` to the target key.
+ * To reuse an existing framework icon under another id, set `ref` to the target key.
  *
- * Available: light-mode, dark-mode, auto-mode, lines, info, success, note, warning, error, important, chevron-up, chevron-down, chevron-right, chevron-left, arrow-outward, link, fullscreen, fullscreen-exit, upload, download, calendar, clock, check, minus, plus, delete, remove, type-text, type-number, type-logical, copy, paste, paste-special, clear, highlight, palette
+ * Available: light-mode, dark-mode, auto-mode, lines, info, success, note, warning, error, important, help, experiment, format-quote, tip, chevron-up, chevron-down, chevron-right, chevron-left, arrow-outward, link, fullscreen, fullscreen-exit, upload, download, calendar, clock, check, minus, plus, delete, remove, type-text, type-number, type-logical, copy, paste, paste-special, clear, highlight, palette
  */
 
 /** @typedef {{ viewBox: string, markup: string, attribution?: string, name?: string }} IconSvgDef */
@@ -22,7 +22,7 @@ export const ICON_ATTRIBUTIONS = {
 };
 
 /** @type {Record<string, IconDef>} */
-export const TEMPLATE_ICONS = {
+export const FRAMEWORK_ICONS = {
   "light-mode": {
     viewBox: "0 0 24 24",
     markup: `<path fill="currentColor" d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5s5-2.24 5-5s-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58a.996.996 0 0 0-1.41 0a.996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37a.996.996 0 0 0-1.41 0a.996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41zm1.06-10.96a.996.996 0 0 0 0-1.41a.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36a.996.996 0 0 0 0-1.41a.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0z"/>`,
@@ -77,6 +77,30 @@ export const TEMPLATE_ICONS = {
     markup: `<path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m4.3 14.3a.996.996 0 0 1-1.41 0L12 13.41L9.11 16.3a.996.996 0 1 1-1.41-1.41L10.59 12L7.7 9.11A.996.996 0 1 1 9.11 7.7L12 10.59l2.89-2.89a.996.996 0 1 1 1.41 1.41L13.41 12l2.89 2.89c.38.38.38 1.02 0 1.41"/>`,
     attribution: ICON_ATTRIBUTIONS.materialIcons,
     name: "round-cancel",
+  },
+  help: {
+    viewBox: "0 0 24 24",
+    markup: `<path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m1 17h-2v-2h2zm2.07-7.75l-.9.92c-.5.51-.86.97-1.04 1.69c-.08.32-.13.68-.13 1.14h-2v-.5a4 4 0 0 1 1.17-2.83l1.24-1.26c.46-.44.68-1.1.55-1.8a1.99 1.99 0 0 0-1.39-1.53c-1.11-.31-2.14.32-2.47 1.27c-.12.37-.43.65-.82.65h-.3C8.4 9 8 8.44 8.16 7.88a4.01 4.01 0 0 1 3.23-2.83c1.52-.24 2.97.55 3.87 1.8c1.18 1.63.83 3.38-.19 4.4"/>`,
+    attribution: ICON_ATTRIBUTIONS.materialIcons,
+    name: "round-help",
+  },
+  experiment: {
+    viewBox: "0 0 24 24",
+    markup: `<path fill="currentColor" d="M5 21q-1.275 0-1.812-1.137t.262-2.113L9 11V5H8q-.425 0-.712-.288T7 4t.288-.712T8 3h8q.425 0 .713.288T17 4t-.288.713T16 5h-1v6l5.55 6.75q.8.975.263 2.113T19 21zm2-3h10l-3.4-4h-3.2z"/>`,
+    attribution: ICON_ATTRIBUTIONS.materialSymbols,
+    name: "experiment",
+  },
+  "format-quote": {
+    viewBox: "0 0 24 24",
+    markup: `<path fill="currentColor" d="M6.55 16.5L8 14q-1.65 0-2.825-1.175T4 10t1.175-2.825T8 6t2.825 1.175T12 10q0 .575-.137 1.063T11.45 12l-3.175 5.5q-.125.225-.35.363t-.5.137q-.575 0-.862-.5t-.013-1m9 0L17 14q-1.65 0-2.825-1.175T13 10t1.175-2.825T17 6t2.825 1.175T21 10q0 .575-.137 1.063T20.45 12l-3.175 5.5q-.125.225-.35.363t-.5.137q-.575 0-.862-.5t-.013-1"/>`,
+    attribution: ICON_ATTRIBUTIONS.materialSymbols,
+    name: "format-quote-rounded",
+  },
+  tip: {
+    viewBox: "0 0 24 24",
+    markup: `<path fill="currentColor" d="m12 12.9l-2.03 2c-.46.46-.82 1.03-.93 1.67C8.74 18.41 10.18 20 12 20s3.26-1.59 2.96-3.42c-.11-.64-.46-1.22-.93-1.67z"/><path fill="currentColor" d="M15.56 6.55C14.38 8.02 12 7.19 12 5.3V3.77c0-.8-.89-1.28-1.55-.84C8.12 4.49 4 7.97 4 13c0 2.92 1.56 5.47 3.89 6.86a4.86 4.86 0 0 1-.81-3.68c.19-1.04.75-1.98 1.51-2.72l2.71-2.67c.39-.38 1.01-.38 1.4 0l2.73 2.69c.74.73 1.3 1.65 1.48 2.68c.25 1.36-.07 2.64-.77 3.66c1.89-1.15 3.29-3.06 3.71-5.3c.61-3.27-.81-6.37-3.22-8.1c-.33-.25-.8-.2-1.07.13"/>`,
+    attribution: ICON_ATTRIBUTIONS.materialIcons,
+    name: "round-local-fire-department",
   },
   "chevron-up": {
     viewBox: "0 0 24 24",

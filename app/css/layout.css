@@ -461,7 +461,6 @@ main {
   align-items: center;
   gap: 0.35rem;
   color: var(--muted);
-  font-size: 0.875rem;
 }
 
 .content-tier {
@@ -1021,96 +1020,49 @@ body > footer {
 
 .footer-also-see-trigger:hover,
 .footer-also-see-trigger:focus-visible {
-  text-decoration: underline;
+  color: var(--accent-hover);
   outline: none;
 }
 
-/* Column count is chosen per menu in render-shell.js to minimise trailing gaps. */
+/* Opens upward; column layout uses shared `.dropdown-menu--grid` (alsoSeeMenuColumns). */
 .footer-also-see .footer-also-see-menu {
   --also-see-column-width: 18rem;
-  /* Text inset lives on the items so topic separators can still run edge to edge. */
   --also-see-item-inset: 1rem;
 
   top: auto;
   bottom: calc(100% + 4px);
-  display: grid;
-  grid-template-columns: repeat(var(--also-see-columns, 1), minmax(0, 1fr));
-  align-content: start;
-  gap: 0.35rem 0.5rem;
   box-sizing: border-box;
-  width: min(
-    100vw - 2rem,
-    calc(var(--also-see-columns, 1) * var(--also-see-column-width))
-  );
   /* `.dropdown-menu` sets `min-width: 100%`, which is the viewport once fixed. */
   min-width: 0;
   max-width: min(100vw - 2rem, 40rem);
-  /* No inline padding so topic separators run edge to edge; items pad their own text. */
+  width: min(100vw - 2rem, var(--also-see-column-width));
+  /* No inline padding so group separators run edge to edge; items pad their own text. */
   padding: 0.5rem 0;
 }
 
-.footer-also-see-topic {
-  display: grid;
-  /* Same columns as the menu; upgraded to subgrid when supported. */
-  grid-template-columns: repeat(var(--also-see-columns, 1), minmax(0, 1fr));
+.footer-also-see .footer-also-see-menu.dropdown-menu--grid {
+  gap: 0.35rem 0.5rem;
+  width: min(
+    100vw - 2rem,
+    calc(var(--dropdown-menu-grid-cols, 2) * var(--also-see-column-width))
+  );
+}
+
+.footer-also-see-menu .dropdown-menu-group {
+  padding-inline: var(--also-see-item-inset);
+}
+
+.footer-also-see-menu > li.footer-also-see-section-break {
   grid-column: 1 / -1;
-  align-content: start;
-  gap: 0;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-@supports (grid-template-columns: subgrid) {
-  .footer-also-see-topic {
-    grid-template-columns: subgrid;
-  }
-}
-
-.footer-also-see-topic-label {
-  grid-column: 1 / -1;
-  padding: 0.35rem var(--also-see-item-inset) 0.25rem;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-  text-transform: uppercase;
-  white-space: normal;
-  user-select: none;
-  pointer-events: none;
-}
-
-.footer-also-see-topic:not(:first-child) > .footer-also-see-topic-label {
-  margin-top: 0.15rem;
-  padding-top: 0.5rem;
+  height: 0;
+  margin: 0.15rem 0 0;
+  padding: 0.35rem 0 0;
+  border: none;
   border-top: 1px solid var(--border);
-}
-
-.footer-also-see-topic--ungrouped:not(:first-child) {
-  margin-top: 0.15rem;
-  padding-top: 0.35rem;
-  border-top: 1px solid var(--border);
-}
-
-.footer-also-see-topic-links {
-  display: contents;
-  margin: 0;
-  padding: 0;
   list-style: none;
 }
 
-/* Stretch each cell so links sharing a row match the tallest one. */
-.footer-also-see-topic-links > li {
-  display: flex;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.footer-also-see-topic-links .dropdown-menu-item {
+.footer-also-see-menu .dropdown-menu-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -1137,21 +1089,11 @@ body > footer {
   --accent-hover: var(--also-see-accent-hover-dark);
 }
 
-/* Nested-grid fallback when `display: contents` is unavailable. */
-@supports not (display: contents) {
-  .footer-also-see-topic-links {
-    display: grid;
-    grid-template-columns: repeat(var(--also-see-columns, 1), minmax(0, 1fr));
-    grid-column: 1 / -1;
-  }
-}
-
-/* Too narrow for side-by-side cells: stack every link in one column. */
 @media (max-width: 25rem) {
-  .footer-also-see .footer-also-see-menu,
-  .footer-also-see-topic,
-  .footer-also-see-topic-links {
-    grid-template-columns: minmax(0, 1fr);
+  .footer-also-see .footer-also-see-menu.dropdown-menu--grid[data-grid-cols] {
+    /* Beat `.dropdown-menu--grid[data-grid-cols="N"]` so narrow viewports stay one column. */
+    --dropdown-menu-grid-cols: 1;
+    width: min(100vw - 2rem, var(--also-see-column-width));
   }
 }
 
@@ -1203,9 +1145,20 @@ body > footer a {
   background: var(--code-bg);
 }
 
+.theme-toggle-btn:active:not(:disabled) {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) var(--control-selected-mix), var(--code-bg));
+  transition-duration: 0s;
+}
+
 .theme-toggle-btn[aria-pressed="true"] {
   color: var(--text);
   background: var(--code-bg);
+}
+
+.theme-toggle-btn[aria-pressed="true"]:active:not(:disabled) {
+  background: color-mix(in srgb, var(--text) var(--control-press-mix), var(--code-bg));
+  transition-duration: 0s;
 }
 
 .theme-toggle-btn:focus-visible {

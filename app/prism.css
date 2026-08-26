@@ -85,7 +85,8 @@ pre[class*="language-"].line-numbers {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  padding-left: 0;
+  /* Padding moves onto `code` / rows so the horizontal bar is flush with the block */
+  padding: 0;
   counter-reset: linenumber;
   overflow: hidden;
 }
@@ -108,10 +109,13 @@ pre[class*="language-"].line-numbers > code {
   position: relative;
   display: block;
   flex: 1 1 auto;
+  align-self: stretch;
   min-width: 0;
+  min-height: 100%;
+  box-sizing: border-box;
   margin: 0;
-  /* Gap between gutter border and first glyph (was 3.8em − 3em band) */
-  padding: 0 0 0 0.8em;
+  /* Vertical + end padding live here (scrollport); 0.8em = former 3.8em − 3em band */
+  padding: 1rem 1.5rem 1rem 0.8em;
   white-space: inherit;
   overflow-x: auto;
   overflow-y: hidden;
@@ -124,10 +128,11 @@ pre[class*="language-"].line-numbers > code {
 pre.line-numbers > .line-numbers-rows {
   position: relative;
   flex: 0 0 3em;
+  align-self: stretch;
   box-sizing: border-box;
   width: 3em;
   margin: 0;
-  padding: 0;
+  padding: 1rem 0;
   font-size: 100%;
   letter-spacing: -1px;
   background: var(--code-bg);

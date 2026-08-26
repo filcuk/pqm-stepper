@@ -70,10 +70,10 @@
   gap: 0.625rem;
   box-sizing: border-box;
   min-height: var(--control-height);
-  padding: 0 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: inherit;
-  line-height: 1.5;
+  line-height: 1.25;
   border: 1px solid var(--border);
   overflow: hidden;
 }
@@ -141,10 +141,13 @@
   z-index: 1;
   flex: 1;
   min-width: 0;
-  line-height: 1.5;
+  line-height: 1.25;
+  /* Optical centre with the icon — Latin caps sit low at taller line-heights. */
+  transform: translateY(-0.0625rem);
 }
 
-.banner-warning {
+.banner-warning,
+.banner-question {
   background: var(--banner-warn-bg);
   color: var(--banner-warn-text);
   border-color: var(--banner-warn-border);
@@ -162,22 +165,29 @@
   border-color: var(--banner-info-border);
 }
 
-.banner-success {
+.banner-success,
+.banner-tip {
   background: var(--banner-success-bg);
   color: var(--banner-success-text);
   border-color: var(--banner-success-border);
 }
 
-.banner-note {
+.banner-note,
+.banner-quote {
   background: var(--banner-note-bg);
   color: var(--banner-note-text);
   border-color: var(--banner-note-border);
 }
 
-.banner-important {
+.banner-important,
+.banner-example {
   background: var(--banner-important-bg);
   color: var(--banner-important-text);
   border-color: var(--banner-important-border);
+}
+
+.banner-variation-source {
+  display: none;
 }
 
 /* Tooltips */

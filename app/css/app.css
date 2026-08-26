@@ -95,6 +95,12 @@ main {
   font-size: 0.875rem;
 }
 
+.toolbar-highlight-toggles {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .mapping-version-label {
   color: var(--muted);
   font-size: inherit;
@@ -399,13 +405,12 @@ main {
   background: var(--hl-red);
 }
 
-/* Legend hover: ring + glow the matching step highlights in both panes. */
-
+/* Legend hover: ring + glow matching step highlights (1px ring — even edges). */
 :root:has(#step-highlight-legend:not(.is-disabled) .legend-chip-hl-blue:hover)
   :is(#input-highlight, #output-highlight)
   .hl-blue {
   box-shadow:
-    0 0 0 1.5px var(--hl-icon-blue),
+    0 0 0 1px var(--hl-icon-blue),
     0 0 8px color-mix(in srgb, var(--hl-icon-blue) 55%, transparent);
 }
 
@@ -413,7 +418,7 @@ main {
   :is(#input-highlight, #output-highlight)
   .hl-green {
   box-shadow:
-    0 0 0 1.5px var(--hl-icon-green),
+    0 0 0 1px var(--hl-icon-green),
     0 0 8px color-mix(in srgb, var(--hl-icon-green) 55%, transparent);
 }
 
@@ -421,7 +426,7 @@ main {
   :is(#input-highlight, #output-highlight)
   .hl-amber {
   box-shadow:
-    0 0 0 1.5px var(--hl-icon-amber),
+    0 0 0 1px var(--hl-icon-amber),
     0 0 8px color-mix(in srgb, var(--hl-icon-amber) 55%, transparent);
 }
 
@@ -429,7 +434,7 @@ main {
   :is(#input-highlight, #output-highlight)
   .hl-red {
   box-shadow:
-    0 0 0 1.5px var(--hl-icon-red),
+    0 0 0 1px var(--hl-icon-red),
     0 0 8px color-mix(in srgb, var(--hl-icon-red) 55%, transparent);
 }
 

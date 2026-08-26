@@ -1,7 +1,7 @@
 /**
  * Merged icon registry and render helpers.
  *
- * Template definitions live in `icons-template.js` (hashed / synced).
+ * Framework definitions live in `icons-framework.js` (hashed / synced).
  * Fork definitions live in `icons-app.js` (never overwritten; win on key clash).
  *
  * Use in HTML:
@@ -15,10 +15,10 @@
  * definition (see ICON_ATTRIBUTIONS). It is inserted as an SVG comment in the
  * rendered markup, e.g. <!-- Icon from … -->.
  *
- * Available (template): see `icons-template.js`. Available (app): see `icons-app.js`.
+ * Available (framework): see `icons-framework.js`. Available (app): see `icons-app.js`.
  */
 
-import { ICON_ATTRIBUTIONS, TEMPLATE_ICONS } from "./icons-template.js";
+import { ICON_ATTRIBUTIONS, FRAMEWORK_ICONS } from "./icons-framework.js";
 import { APP_ICONS } from "./icons-app.js";
 
 export { ICON_ATTRIBUTIONS };
@@ -29,9 +29,9 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 /** @typedef {{ ref: string }} IconRefDef */
 /** @typedef {IconSvgDef | IconRefDef} IconDef */
 
-/** Merged registry: template first, then app (app wins on duplicate keys). */
+/** Merged registry: framework first, then app (app wins on duplicate keys). */
 /** @type {Record<string, IconDef>} */
-export const ICONS = { ...TEMPLATE_ICONS, ...APP_ICONS };
+export const ICONS = { ...FRAMEWORK_ICONS, ...APP_ICONS };
 
 /**
  * @param {string} name

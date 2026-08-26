@@ -96,6 +96,7 @@ function normalizePosition(value) {
  *   left: number,
  *   side: PopoverSide | null,
  *   notchOffset: number,
+ *   visible: boolean,
  * }}
  */
 export function computePopoverPlacement(options) {
@@ -115,6 +116,7 @@ export function computePopoverPlacement(options) {
       left: Math.max(padding, (viewport.width - bubble.width) / 2),
       side: null,
       notchOffset: 0,
+      visible: true,
     };
   }
 
@@ -126,6 +128,18 @@ export function computePopoverPlacement(options) {
     right: anchorRect.right ?? anchorRect.left + anchorRect.width,
     bottom: anchorRect.bottom ?? anchorRect.top + anchorRect.height,
   };
+
+  /* Clamp keeps an on-screen anchor’s bubble in view. When the anchor itself
+     is fully off-screen, hide instead of pinning the bubble to an edge. */
+  if (!rectIntersectsViewport(rect, viewport.width, viewport.height)) {
+    return {
+      top: 0,
+      left: 0,
+      side: null,
+      notchOffset: 0,
+      visible: false,
+    };
+  }
 
   /**
    * @param {PopoverSide} side
@@ -218,7 +232,26 @@ export function computePopoverPlacement(options) {
     );
   }
 
-  return { top, left, side, notchOffset };
+  return { top, left, side, notchOffset, visible: true };
+}
+
+/**
+ * True when `rect` overlaps the viewport at all (any positive area).
+ * @param {{ top: number, left: number, right: number, bottom: number, width?: number, height?: number }} rect
+ * @param {number} vw
+ * @param {number} vh
+ */
+export function rectIntersectsViewport(rect, vw, vh) {
+  const width = rect.width ?? rect.right - rect.left;
+  const height = rect.height ?? rect.bottom - rect.top;
+  return (
+    width > 0 &&
+    height > 0 &&
+    rect.bottom > 0 &&
+    rect.right > 0 &&
+    rect.top < vh &&
+    rect.left < vw
+  );
 }
 
 /**
@@ -335,6 +368,8 @@ export function initPopover(options = {}) {
   document.body.append(el);
 
   let isOpen = false;
+  /** Last measured bubble size — used when the card is hidden off-screen. */
+  let lastBubbleSize = { width: 0, height: 0 };
   /** Ignore the document click that opened us (same event bubbles to `document`). */
   let ignoreOutsideClick = false;
   /** @type {Element | null} */
@@ -370,12 +405,22 @@ export function initPopover(options = {}) {
   renderActions();
 
   function applyPlacement() {
-    const bubbleRect = el.getBoundingClientRect();
+    let bubbleWidth = lastBubbleSize.width;
+    let bubbleHeight = lastBubbleSize.height;
+    if (!el.hidden) {
+      const bubbleRect = el.getBoundingClientRect();
+      if (bubbleRect.width > 0 && bubbleRect.height > 0) {
+        bubbleWidth = bubbleRect.width;
+        bubbleHeight = bubbleRect.height;
+        lastBubbleSize = { width: bubbleWidth, height: bubbleHeight };
+      }
+    }
+
     const placed = computePopoverPlacement({
       anchorRect: anchorEl?.isConnected
         ? anchorEl.getBoundingClientRect()
         : null,
-      bubble: { width: bubbleRect.width, height: bubbleRect.height },
+      bubble: { width: bubbleWidth, height: bubbleHeight },
       viewport: {
         width: document.documentElement.clientWidth,
         height: window.innerHeight,
@@ -384,6 +429,11 @@ export function initPopover(options = {}) {
       gap,
       notchSize,
     });
+
+    if (!placed.visible) {
+      setHidden(el, true);
+      return;
+    }
 
     el.style.top = `${placed.top}px`;
     el.style.left = `${placed.left}px`;
@@ -396,6 +446,8 @@ export function initPopover(options = {}) {
       delete el.dataset.popoverSide;
       notch.hidden = true;
     }
+
+    if (isOpen) setHidden(el, false);
   }
 
   function onKeyDown(event) {

@@ -1,10 +1,10 @@
 /**
  * Fork-owned stylesheet entry (linked from HTML).
- * Keep this file: sync may regenerate `css/template.css` but will not
+ * Keep this file: sync may regenerate `css/framework.css` but will not
  * overwrite `styles.css` or `css/app.css`.
  *
- * Order: design tokens → template partials → app overrides.
+ * Order: design tokens → framework partials → app overrides.
  */
 @import url("tokens.css");
-@import url("css/template.css");
+@import url("css/framework.css");
 @import url("css/app.css");

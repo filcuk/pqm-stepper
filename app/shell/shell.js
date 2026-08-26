@@ -5,7 +5,10 @@ import { initTheme, initThemeToggle } from "./theme.js";
 import { initPageNavPanel } from "./page-nav.js";
 import { initTooltips } from "../components/tooltip.js";
 import { initExternalLinks } from "./external-link.js";
-import { initHeadingLinks } from "./heading-link.js";
+import {
+  initHeadingLinks,
+  resolveHeadingLinksEnabled,
+} from "./heading-link.js";
 import { initTitleNumbering } from "./title-numbering.js";
 import { initStickyChrome } from "./sticky.js";
 import { showBanner } from "../components/banner.js";
@@ -47,14 +50,20 @@ function bindGlobalErrorHandlers(onError) {
  *   When true, include local `alsoSee` in full (alone or merged with remote).
  *   When false, local is never shown.
  * @param {string} [options.appVersion] Override app SemVer (default from `app/version.js`)
- * @param {string} [options.templateVersion] Override template SemVer (default from `app/version.js`)
+ * @param {string} [options.frameworkVersion] Override framework SemVer (default from `app/version.js`)
  * @param {import("./page-nav.js").PageNavOptions} [options.pageNav] Passed to `initPageNavPanel()`
+ * @param {boolean | { selector?: string, enabled?: boolean }} [options.headingLinks]
+ *   Copy-link buttons on outline headings. Default on. `false` disables.
+ *   An object is passed through to {@link initHeadingLinks}. Page-level HTML
+ *   opt-out: `data-no-heading-links` on `<html>`. Per heading: `data-no-heading-link`.
+ *   Explicit `true` (or `{ enabled: true }`) overrides the HTML opt-out.
  * @param {boolean} [options.showErrors=true] Show `.banner[data-app-error]` on uncaught errors
  * @param {(detail: object) => void} [options.onError] Called before the error banner is shown
  */
 export function initShell(options = {}) {
   const {
     pageNav,
+    headingLinks,
     showErrors = true,
     onError,
     alsoSeeUrl,
@@ -78,7 +87,14 @@ export function initShell(options = {}) {
   renderPageShell({ ...shellOptions, ...alsoSeeOptions });
   initIcons();
   initExternalLinks(document);
-  initHeadingLinks(document);
+  const noHeadingLinks = document.documentElement.hasAttribute(
+    "data-no-heading-links"
+  );
+  if (resolveHeadingLinksEnabled(headingLinks, { noHeadingLinks })) {
+    const linkOptions =
+      headingLinks && typeof headingLinks === "object" ? headingLinks : {};
+    initHeadingLinks(document, { ...linkOptions, enabled: true });
+  }
   initTitleNumbering();
   void initAlsoSee(document, alsoSeeOptions);
   initTheme();

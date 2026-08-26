@@ -9,7 +9,7 @@
  *   node fetch-icon.mjs <icon-id> --collection material-symbols
  *
  * Resolution (when collection not forced):
- *   1. ic (Material Icons Round) — template core
+ *   1. ic (Material Icons Round) — framework core
  *   2. material-symbols (Rounded) — fallback
  *   3. Fail with hints (other collections need an explicit prefix)
  */

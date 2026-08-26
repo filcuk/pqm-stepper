@@ -5,9 +5,9 @@
   "scripts": {
     "test": "node --test test/**/*.test.js",
     "lint": "eslint app test",
-    "manifest:template": "node scripts/generate-template-manifest.mjs",
-    "sync:template": "node scripts/sync-template.mjs",
-    "verify:template": "node scripts/verify-template.mjs"
+    "manifest:framework": "node scripts/generate-framework-manifest.mjs",
+    "sync:framework": "node scripts/sync-framework.mjs",
+    "verify:framework": "node scripts/verify-framework.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.28.0",

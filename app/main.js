@@ -4,6 +4,7 @@ import { mountIcon } from "./utils/icons.js";
 import { initCombo } from "./components/combo.js";
 import { initToggleButton } from "./components/toggle-button.js";
 import { initAboutDialog } from "./components/about-dialog.js";
+import { initPopover } from "./components/popover.js";
 import { initCodeBlock } from "./components/code-block.js";
 import { initTutorial } from "./components/tutorial.js";
 import { transform } from "./transform.js";
@@ -515,10 +516,71 @@ initMappingDialog({
 loadMapping().then(() => {
   refreshMappingEditorAvailability();
 });
+const ABOUT_HINT_STORAGE_KEY = "pqm-about-hint-seen";
+const aboutOpenBtn = document.getElementById("about-open-btn");
+
+/** @type {ReturnType<typeof initPopover> | null} */
+let aboutHintPopover = null;
+
+function hasSeenAboutHint() {
+  try {
+    return localStorage.getItem(ABOUT_HINT_STORAGE_KEY) === "1";
+  } catch {
+    return true;
+  }
+}
+
+function markAboutHintSeen() {
+  try {
+    localStorage.setItem(ABOUT_HINT_STORAGE_KEY, "1");
+  } catch {
+    /* ignore quota / private mode */
+  }
+}
+
+function dismissAboutHint() {
+  if (!aboutHintPopover) return;
+  const popover = aboutHintPopover;
+  aboutHintPopover = null;
+  markAboutHintSeen();
+  popover.destroy();
+}
+
 initAboutDialog({
   dialogEl: document.getElementById("about-dialog"),
-  openTriggers: [document.getElementById("about-open-btn")],
+  openTriggers: [aboutOpenBtn],
+  onOpen: () => dismissAboutHint(),
 });
+
+if (aboutOpenBtn instanceof HTMLElement && !hasSeenAboutHint()) {
+  aboutHintPopover = initPopover({
+    anchor: aboutOpenBtn,
+    body: "Check here for more info and a guided tour!",
+    position: "right",
+    dismissible: false,
+    trapFocus: false,
+    actions: [
+      {
+        label: "Got it",
+        className: "btn btn-primary",
+        closeOnClick: false,
+        onClick: () => dismissAboutHint(),
+      },
+    ],
+    onClose: () => {
+      if (!aboutHintPopover) return;
+      const popover = aboutHintPopover;
+      aboutHintPopover = null;
+      markAboutHintSeen();
+      queueMicrotask(() => popover.destroy());
+    },
+  });
+  // Let shell / layout settle before measuring the anchor.
+  window.requestAnimationFrame(() => {
+    aboutHintPopover?.open();
+  });
+}
+
 initTutorial({
   id: "pqm-overview",
   startTriggers: [document.getElementById("start-tour-btn")],
@@ -548,21 +610,15 @@ initTutorial({
       position: "bottom",
     },
     {
-      target: "#syntax-highlight-toggle",
-      title: "Syntax highlighting",
-      body: "Turn syntax highlighting on or off.",
-      position: "bottom",
-    },
-    {
-      target: "#step-highlight-toggle",
-      title: "Step highlighting",
-      body: "Show or hide legend definition. The legend helps visually identify the transformations.",
+      target: "#highlight-toggles",
+      title: "Highlighting",
+      body: "Toggle syntax highlighting and step highlighting. Step highlighting uses the legend to visually identify transformations.",
       position: "bottom",
     },
     {
       target: "#example-combo",
-      title: "Try it",
-      body: "Load an example to see the transformation in action.",
+      title: "Try it out",
+      body: "Press the button now to see the transformation in action!",
       position: "bottom",
       interactive: true,
       advanceOn: "click",

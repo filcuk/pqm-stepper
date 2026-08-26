@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "templateVersion": "0.12.3",
-  "generatedAt": "2026-08-19T21:38:16.674Z",
+  "frameworkVersion": "0.13.2",
+  "generatedAt": "2026-08-26T12:43:51.918Z",
   "source": "filcuk/sma1-framework",
   "appOwned": [
     "app/main.js",
@@ -20,9 +20,9 @@
     ]
   },
   "derived": {
-    "app/css/template.css": {
+    "app/css/framework.css": {
       "generator": "css-index",
-      "sha256": "4556ce24199200e40a16d6780a44fad0440733e6f8656611be28f6a0809aba5a"
+      "sha256": "c7eae0e7e9b189c73cd4c513af9fafb1bef39745646f4b7dace47c6d9db088e4"
     }
   },
   "files": {
@@ -36,7 +36,7 @@
       "sha256": "ddbde42721c3f3f439c0e80493eb2857211c918249dd971149d8d10d3aea01d7"
     },
     "app/components/banner.js": {
-      "sha256": "715504dbfb0448c1a88d3752ef922ef8d818c0e722138d1a146b3ce85863dadc"
+      "sha256": "3454af7afa7d48ddd83fafed8c81b3832ab7c0001ad6fe46bc3c6966871f748a"
     },
     "app/components/charts.js": {
       "sha256": "f0b5a1d826940dbbf6ffa14bbd9c6c606b9e5835349c59d81f19f9082db936cc"
@@ -48,7 +48,7 @@
       "sha256": "ea5960e31a19da5a29c99a93d8d8659e4d1b6f41dbc1b44159ccdb19b02c56fe"
     },
     "app/components/code-block.js": {
-      "sha256": "007526ca24962ac1c5d71efef266b93841ce91b1e235b2bb6207d71637c1e024"
+      "sha256": "5c591ec25fcff0c048c1157393864cb5355621b9ea4bfab1f4cb5c94c20df4c5"
     },
     "app/components/color-input.js": {
       "sha256": "3ac48a3018c93a7d069967caee75d1fc5186f839e42dd14d22be05c582ca6e92"
@@ -96,7 +96,7 @@
       "sha256": "a0a43f7e59f6f8e13ec4f6e89e1f96d02cfd1283dbaa868fcd511140b9bdb04f"
     },
     "app/components/combobox.js": {
-      "sha256": "d012718f4374c3af6b03f6399a244733278951b6668617ed888dc5618813f64e"
+      "sha256": "9aa006a5b596715005bdb8e28bcd1399056f851bc2c888c1de4c04a8c4a4426d"
     },
     "app/components/date-picker/calendar.js": {
       "sha256": "97363b28d82da42733d867150fba07d7d55bb9d4b663f3057362b901194877be"
@@ -114,19 +114,19 @@
       "sha256": "81103e0d8b908fc495a21f3a503a92c1f01f06a45460fcd4e9f0efe9519a4a33"
     },
     "app/components/dropdown-toggle.js": {
-      "sha256": "83a1c4bb73cbe958b2db9f13a4913f4fe62a2449fb8a0f673b31303e78d44e94"
+      "sha256": "d29ba7b3daabbaa8e32ffa2fcfb4acae75f770e40012ffbcebb9d35d65352abb"
     },
     "app/components/dropdown.js": {
-      "sha256": "10ea68596439e5598ed2b5a328f70709aa2c29c2442b49fd1829414cb3ff480f"
+      "sha256": "28f9eb981818c9f55261e0993173aab3b7a0f6b855dd06d5e069ec6b0bd2e86f"
     },
     "app/components/duration-input.js": {
-      "sha256": "0e3fdf08e6ead7f544db175162e49a6cb504a93302d1cee55e77a86278cbc9d9"
+      "sha256": "82aa6b6f9ece892a21cfbce0bceacf7bb7c0528b0cd01dbd24c8769f0eb93653"
     },
     "app/components/expand.js": {
       "sha256": "9b3f0ac0631f11ea21fd3b998de9bd1d33115e437860f3456171a3a070bde437"
     },
     "app/components/expandable-surface.js": {
-      "sha256": "3959fb2b66ade2f81fed6ab7e90713b929242a54239e66c8577b3cf6eb3f7660"
+      "sha256": "568a84db76db965ffbd092f6ee6706969302d140e8a82f939cf14977e07182f2"
     },
     "app/components/file-download.js": {
       "sha256": "a059ed3f44f61a53fd7035688f0cac0796050e240645caeca6d65a8232d32b81"
@@ -144,7 +144,7 @@
       "sha256": "be41f293004dcbc0f15111d3b15b9ee35609bd314e7180f1d8938e4618611a75"
     },
     "app/components/popover.js": {
-      "sha256": "07c77e9b2b72282dd9e594c55bd32c0e5ac09e16456c01639cc9370643e13aa2"
+      "sha256": "b6f91b1db68ec32887bd74bd997b18b4d80b889eb6160b811cd519e5c7132601"
     },
     "app/components/progress-bar.js": {
       "sha256": "59666e299ef56baa1a1e51eeea7e430b32b514e46717cee2bc422837600233fb"
@@ -153,10 +153,10 @@
       "sha256": "d757d5234d16110d89136612ae8c51078500fdb60d67bc98386e2677f32172b5"
     },
     "app/components/rich-text-editor.js": {
-      "sha256": "f742ee2cf6c7bd0c662646c15f08d09089c85ea2fbfe8b0ee74c28813576c5a1"
+      "sha256": "8f6c491c0dc9bd7257761cc8c796271ae6d441a994e14d210b76317206d1de76"
     },
     "app/components/segmented-control.js": {
-      "sha256": "da46f5c892bb605f92e385cd7037281b70d9c4323876c4ff725007172d2151ef"
+      "sha256": "a47c40e4063c9e60ed6b0db6eccb77954bb11557cfbbc0e2a70548edcae41af6"
     },
     "app/components/slider.js": {
       "sha256": "d33e0abe0f79cd9ccd1498bb17e2a1fd4cf7c361f33c565996beb2bb90a14941"
@@ -174,7 +174,7 @@
       "sha256": "43709468cd60d208a356de53347d85b6dbb2ca3caa9d2f7cfb75659f52c984e4"
     },
     "app/components/tabular-input.js": {
-      "sha256": "22b10c8e3546f0d905cb37e3ebad8cc19b8a01c7f14d03d14011e57315065f4a"
+      "sha256": "d064c5dc8efb6c9b3a71b8a46573d34e1239c08493b730b8a3a013abc8458952"
     },
     "app/components/time-picker.js": {
       "sha256": "9711eaa4ac76d29244d0f5a77c303a48837ce7eb9813ea4fb05a5338d3a5d547"
@@ -192,94 +192,94 @@
       "sha256": "42c834104fde855b9f4f08bcebcc5768b2ff27fdbef3884469d8cde007de37f9"
     },
     "app/components/toggle.js": {
-      "sha256": "aee44b761098d8f7b779b954a4275cca4dea95f95c8a475006f111a0f32b0598"
+      "sha256": "c787ce6b1eae3f5f7dc8d52c0c055bbc26e14928a7d4e97ef4467eed673b0f08"
     },
     "app/components/tooltip.js": {
       "sha256": "7a518b16783da12b9868b9dfe7e7bc939abdc96367555d7ee7fde27f96de22f2"
     },
     "app/components/tutorial.js": {
-      "sha256": "41ef40f0f6c4dcb2616881f142fd04c905904256999f99568896b858600c352f"
+      "sha256": "0ad1c22cc4bf19cc69e66a557f53f4fd2e53f9daaef7903c536f02e38d3e8d2b"
     },
     "app/css/code-block.css": {
-      "sha256": "f8d9d8f49cc5cca8f72e6d0c5a55208d7b1a20da36afb92fa44763db13363594"
+      "sha256": "29a7ff47260c53323d808268f479a629696df3da53ad34bc4d013e83c124e022"
     },
     "app/css/controls-badges.css": {
       "sha256": "74d52ca34230dc95f2f7557eb863e02df07651585bdec3d0632951a77d5ec928"
     },
     "app/css/controls-buttons.css": {
-      "sha256": "820177992b2110044e6d9c29ca73a517796b8cc91528625fb28dc9c8ef317b72"
+      "sha256": "4083a1213934b023064b6d82ce03b8bfd13e9f979d13fa1f7bdedc980b68c130"
     },
     "app/css/controls-charts.css": {
-      "sha256": "6b491aaf5adc9c75310b63ed3acb962db791460ab86261625d8a91146965f286"
+      "sha256": "a4d28adb3794666a0cf34928c5adc1809cd780ff102a5245ed5813faf70e2189"
     },
     "app/css/controls-chips.css": {
-      "sha256": "4a5a685a02775527a9d7263270b457b8994e39838e0501a1fce567f9cc29ff92"
+      "sha256": "7aaef2f7a07832520dd88c98476c8e732aa8a21f530defba1942806e8545f15d"
     },
     "app/css/controls-color.css": {
-      "sha256": "150bbb11447e82597dfc9225286ea5cbfeb52cc9f0208265423934a61926b5b9"
+      "sha256": "4ae99fbe7af7bece1d242f5193c8ea5188a23b1e678a6bd6d27e2b975ec8bcb3"
     },
     "app/css/controls-diagram.css": {
       "sha256": "fab5be1880d5ec4004035474183a4b461ae72232819d67f9aaa7c14f504efa1d"
     },
     "app/css/controls-disclosure.css": {
-      "sha256": "2853382c0386badb73f3090132f35fd744d9ee57995174e4ff4372c634c57f69"
+      "sha256": "98a961b3a44750c9b7492c0e73b36c82a979aefd437fe0b5f1271d1e3f9d9a96"
     },
     "app/css/controls-fields.css": {
-      "sha256": "f179e6eee1b9b61952eff1b52a12e2f0de3a14d6ad8090ef2e5fdea7c5c8c74f"
+      "sha256": "7fa37f92dc2c15d949b5d9b04fc7e594d96aca86335b5eae386d3adc65b910c7"
     },
     "app/css/controls-file.css": {
-      "sha256": "2dd93b29594da190aaa6b6a12f019e1a99fbce834ea928970106a9e83a0b4df3"
+      "sha256": "f5d134acfc7b0553ccbd9a643768d7623ea5983b56b819d5dd21ac65255bad33"
     },
     "app/css/controls-image.css": {
       "sha256": "5588c5e7d60b18d21a5350d90f8e6a7e07b76e746ae831e4891b38fe51df48d1"
     },
     "app/css/controls-menus.css": {
-      "sha256": "415fda08c0eb7442b9375d6c42097906b6ae11523cc3a218a8a9d7e4e2940414"
+      "sha256": "2329c0da2f25d38cbaffac36bf93a7ca58976db8841339dc10cdafeae5566413"
     },
     "app/css/controls-section-panel.css": {
-      "sha256": "e3d7ee5ff1cc095f894b04eee22f28ac577b0840b3d84b8a6098c34c80ed06f2"
+      "sha256": "cd7bc1274a5c8a06b2b50024104038a43add7b960aa34a38335aec06e676baef"
     },
     "app/css/controls-tabular-input.css": {
       "sha256": "d4b0ccfdf46e566813bfcd1fa4e2b5a060a3d18e4f8abcc975753bd79dc5b2bd"
     },
     "app/css/controls-widgets.css": {
-      "sha256": "37cd4a0203dd05919821e873eae87cb4873022196cfe97572b47826bb5ed9b3b"
+      "sha256": "5f2a25c2804af97ec4227bb4bc48ed59cdd63e7f5820a288eec44b3923415488"
     },
     "app/css/layout.css": {
-      "sha256": "2ca533dc2b7d390f49af8e5243c0abc60cad97fa9eeadff98ed7529570dfe66d"
+      "sha256": "6d1a934ee76f4572ea3dbb62b13ad1c2948205f9ff75658d9855ca76f6869c51"
     },
     "app/css/overlays.css": {
-      "sha256": "f5e690965a7ee2569e85bcdcb31f86c872930a8ebbff9ccecb55cd67837530c2"
+      "sha256": "4996f03cf5b44330d2509cb52f16d718389f639ba25bfb4ec23569766a015f2b"
     },
     "app/css/rich-text-editor.css": {
-      "sha256": "4d84f29a1bf8293bab17152f535c189b419677af04be7e66cde3b135ef292693"
+      "sha256": "d111287589509fc59852cbf4f7d4d249a39a49b03424bc6e40d1813adbfeaabc"
     },
     "app/css/table.css": {
-      "sha256": "04407220ba3f862db96741bd82f8f0d4f479ab5a6a2fa5d7e92b104e43a0f50c"
+      "sha256": "8363d269b7160d02f0e973c44f86dc5935cfa947b1f8a7ee76d2f893e640a9ae"
     },
     "app/css/tutorial.css": {
       "sha256": "c5386d468d0dd1af74448d977e6e9d2c8bc9d41a41ec7fe5e84e72e5cc397042"
     },
     "app/prism.css": {
-      "sha256": "310795b886280e2cbd427bb727db90f2bd111f7197229e6a9880c98d8274929e"
+      "sha256": "e947fada873def524d44466c3ccd4ad55280be4455cbd728a4c34d7937963b5b"
     },
     "app/shell/also-see.js": {
-      "sha256": "931ce20360fdc71b1c59a603409626f6ea24787df7d23865732e058fdab2a6c0"
+      "sha256": "e0035e39329ed2ace5b85e754ca8c02db77a3d607bdf8465a219e4c718bd9a4e"
     },
     "app/shell/external-link.js": {
       "sha256": "6a1e0d52b04d6f115419de2bac85b2e5581a7e0212fa6d6a32c64a8d0bb45fdc"
     },
     "app/shell/heading-link.js": {
-      "sha256": "656dd0292c1e551dded5afc6c93855ec332f3be49955c20db007954e1e453985"
+      "sha256": "1f33f28a432f15e60d9d75393fc6cc3d8818a6565830f6408a2d0b70bcff41e5"
     },
     "app/shell/page-nav.js": {
       "sha256": "aef37fd63efd4589457bdbd1e859e980c73835dadcb4af752c99c4a8ea004ee9"
     },
     "app/shell/render-shell.js": {
-      "sha256": "fc2ee3d7fd12a094df436603fc988697c63e6ee5d28031b965286ba8e39b2e0a"
+      "sha256": "f6807e386dd5765d30120f39b0ef3cd043b2b2b2845f7eac7a5aae1e8f0deaa7"
     },
     "app/shell/shell.js": {
-      "sha256": "7bc59c18faeecf7bcce15d586547c00c76fdc908a832c1206d9b4e4fdc2f165a"
+      "sha256": "7f6e8eef71649319640edc5ff09d2ef1a35cd54a42c182b0ef63d1b8e58b2a92"
     },
     "app/shell/sticky.js": {
       "sha256": "4fbe8284625f6a7865bae63153aeced7ed46221f498875dc9e18e7e054bbe77a"
@@ -297,13 +297,16 @@
       "sha256": "3f9f55c503dec155b391c71c7a3ab3ed5c659de5df5695084831155e51e95f0b"
     },
     "app/tokens.css": {
-      "sha256": "b2ddd5b1c927cad0320725052d404df62f05d041d56844ab0a4e29b6a2bc58f2"
+      "sha256": "37a8e35b27aaaa9d6be550df5e0b01c7d24e503ad23595fa70e77e336976465c"
     },
     "app/utils/also-see-svg.js": {
       "sha256": "af1ff194fde0ba9ffe09edf885fde4562bac5f14592fd2f348c366296447e854"
     },
     "app/utils/brand-icon.js": {
       "sha256": "8d639a2da4e1538534dedc42305150a0158d7d12703f017b7d568a8a73d70c13"
+    },
+    "app/utils/button-label.js": {
+      "sha256": "f85c2d36168a4d3f6cf4cd3449b02b337dae05b5b6608047bbca535fe59e82fe"
     },
     "app/utils/clipboard.js": {
       "sha256": "b8821da634ea9c1eb85771e1f2d3fd54f3085cf64116040adc449cd342f12def"
@@ -317,14 +320,14 @@
     "app/utils/dom.js": {
       "sha256": "634496f84e49d4691f091de0effa74653d5c6f972532977d0e3adbee3975cc9b"
     },
-    "app/utils/icons-template.js": {
-      "sha256": "3c5435bee06cc42dacd6dfa09231b4bf8dac66fa7829501d870a24cd23a9e930"
+    "app/utils/icons-framework.js": {
+      "sha256": "b5e72f86da466f6436df7d90b3a33aecca97921bd4db87e02193a8962e000be3"
     },
     "app/utils/icons.js": {
-      "sha256": "219ca86cb4b8a7bd91033a3cb229d6c031357a2de039fe9f09311238ba9b6ebd"
+      "sha256": "47b5c773b043995bfd5a2b08c26e0f18453aed5051bba3f9546b70e32a708195"
     },
     "app/utils/menu.js": {
-      "sha256": "db3ff47802e2dd140f6d6616443687f042f2b79675f578ed813cb7d151a368b4"
+      "sha256": "8fdc2de3712fa3f22b5bb5e44f4b383683954259c859a755847e8e50224d9fd8"
     },
     "app/utils/sanitize-svg.js": {
       "sha256": "433ca97df4ed3a0ad45c227448d0606a019a4be70215f3a0648eca0ab2b1f0ce"
@@ -1164,64 +1167,64 @@
       "sha256": "c70e24c68fefc205e8e504edc07fd6a5efd3044a623b4be7e3ac16cc8a736ed9"
     },
     "app/version.js": {
-      "sha256": "5bb39841afbdf794775d0b2341712913407ca07789e0ca69866bb5ded4a2709e"
+      "sha256": "9ddab70f99bf3f7199eb905d29daeeb2ba17449c7601af97cf1d8ff13641936b"
     },
     ".cursor/rules/demo-isolation.mdc": {
       "sha256": "c04c50223d9417ac372fa394ffc84e84b602b5414b77f3c99b399e9b44906929"
     },
     ".cursor/rules/icons.mdc": {
-      "sha256": "62b3855317cc749c6082073602d4395767d0c8dc578ec28971c6c09775fcf077"
+      "sha256": "30696dbd6562a8b00a088a14afcf8254a08bda4748dc8544f2d305e2edd5d667"
     },
     ".cursor/rules/usage-docs.mdc": {
-      "sha256": "7bf8d6c2ce63462b929d50e6c7646748e4a7232c5c68ce790a8778a9697ccd82"
+      "sha256": "b21e49bc4da399ca84e69e7efab13a1afa15fa1c79dc2490d737286cfbeea6ac"
     },
     ".cursor/rules/vendor.mdc": {
-      "sha256": "fdd604c1062cfb03da9aca9ee9d2609d5924d40192798bda3950dc192f410697"
+      "sha256": "6df4c2368c82441e11302d599a274de6812c9eed1c16e3d0e7785e54a319040f"
     },
     ".cursor/skills/_shared/component-map.md": {
-      "sha256": "770d033f6be0bb9d8f0ca3e1660966785a1d7cdeb0644c4ac1297715597abf02"
+      "sha256": "8157bf539a4c304345e81bed36cbbbc5c4f6fd33a48fb38194853c28a88f6a50"
     },
     ".cursor/skills/_shared/invariants.md": {
-      "sha256": "c5894ee77f4505215424fc0ac51e8e3fecbeb500c3869f783958a719fb51164b"
+      "sha256": "d188cd61541bc03e0379145755b2244f14633287b70f357403e734ee86acc150"
     },
     ".cursor/skills/add-icon/SKILL.md": {
-      "sha256": "7393b8d72b4d5e78a7e2a0666b4695797b13a1eea6a8cfa03289c84fd6302789"
+      "sha256": "c0446c94badf9983b52f10c0fd3f3fc0eb83e911f918360973920b30845edd23"
     },
     ".cursor/skills/add-icon/scripts/fetch-icon.mjs": {
-      "sha256": "622f1d12f32b7f19100d6a94298a4808960b5f029512131594e15ffc3582542e"
+      "sha256": "316b5083a1638d0f5ab3689f83c2155e67e111a26aef27c297417eaf8e8360c3"
     },
     ".cursor/skills/author-component/SKILL.md": {
-      "sha256": "b39a43799ebf81a7f48f492969c112a9c5c7f8f2640798c3170d5753c6c2f4ac"
+      "sha256": "9abc20e53ce7dbe999b5ab8993ecf362b57ed4cadc888bc202cd19d661f3f5b9"
     },
     ".cursor/skills/finalize-app/SKILL.md": {
-      "sha256": "1fa503b27e65b0f5b901112af92e85cf7bb1de9b093543c50a99b72c11c1d892"
+      "sha256": "f1f1295637714e38ab2e0f9969104093744bea9fea04edd127e3c273cc54229f"
     },
     ".cursor/skills/handle-assets/SKILL.md": {
-      "sha256": "074c69598d57bc4d82a691b73f99f885d4e300941c46ddaa531f16c08b7d93ff"
+      "sha256": "3ec92bb78776fd2a883c189a820b7a4566187fd012bd5ce9352a5a79c0894f84"
     },
     ".cursor/skills/health-check/SKILL.md": {
-      "sha256": "96bdf88f0f9818d73eb7ee3803e3a52b535140a2edbefa5ba4892e40c8b11df3"
+      "sha256": "f3c4ec46e4607241e21db405a0d05e081911f868a2be20b3c00a6e402aba8243"
     },
     ".cursor/skills/init-app/SKILL.md": {
-      "sha256": "5128bad42684fd911e05dfa957cd2926403815cb407bb1a1102103e22dfa8902"
+      "sha256": "34409554fea51d78574986f87dad28f2dfa530e7d3e9f40c7c56b93d249892e1"
     },
     ".cursor/skills/manage-color/SKILL.md": {
-      "sha256": "992c829286618a8cfa484d5cf4b60da070d55051e07292dfb0293096cf8b4a7c"
+      "sha256": "f995fff5ddfe92ac6c41d7afbb5d02e9a99e36eb103739fa67afac04931910e4"
     },
     ".cursor/skills/manage-color/scripts/contrast.mjs": {
       "sha256": "348c94a4ca9fda3dbac1f1ed02f631f3d8d0a04bfc78398503830fc805db7098"
     },
-    ".cursor/skills/migrate-template/SKILL.md": {
-      "sha256": "ac1cb2d88c5cdb9dcf6a843677ce64c657f2cbc85419e63579baa9d4397f2a35"
+    ".cursor/skills/migrate-framework/SKILL.md": {
+      "sha256": "b43fc003bb8701cea380b21c6450d92ebe2e19816fb21ac3567c0e79048fce02"
     },
-    ".cursor/skills/release-template/SKILL.md": {
-      "sha256": "3e0e1abe13c51b125444a6cd15955b1d58849f1aabb559221c1071b713519758"
+    ".cursor/skills/release-framework/SKILL.md": {
+      "sha256": "3e7904d9161006cf6ce7e6519893415ba9c4b5e0a6299b0a2b473346a0e5763e"
     },
     ".cursor/skills/restore-component/SKILL.md": {
-      "sha256": "1658123fe04979895d5aab3e6e6794146f0ff718f191340e6228c7b331193cfc"
+      "sha256": "6f2df9010820410a9c5a130fbb9d15dae8cac892a2cd6399a0f37bc963adf871"
     },
     ".cursor/skills/sync-shell/SKILL.md": {
-      "sha256": "73090dee5ca403c5e99d980e5493a454ade2713950b39e23e4a4912aca7968f5"
+      "sha256": "4a9cdc1ede990be1f2bc5084673fcd59c26bb9dc0f7d66ff2cb6b015911c2fd1"
     }
   },
   "core": {
@@ -1241,8 +1244,9 @@
       "app/utils/dom.js",
       "app/utils/document-listeners.js",
       "app/utils/clipboard.js",
+      "app/utils/button-label.js",
       "app/utils/icons.js",
-      "app/utils/icons-template.js",
+      "app/utils/icons-framework.js",
       "app/utils/brand-icon.js",
       "app/utils/also-see-svg.js",
       "app/utils/menu.js",
@@ -1274,12 +1278,15 @@
     "clipboard": [
       "app/utils/clipboard.js"
     ],
+    "button-label": [
+      "app/utils/button-label.js"
+    ],
     "color": [
       "app/utils/color.js"
     ],
     "icons": [
       "app/utils/icons.js",
-      "app/utils/icons-template.js"
+      "app/utils/icons-framework.js"
     ],
     "menu": [
       "app/utils/menu.js"
@@ -1326,10 +1333,15 @@
         "success",
         "important",
         "warning",
-        "error"
+        "error",
+        "help",
+        "experiment",
+        "format-quote",
+        "tip"
       ],
       "infra": [
-        "dom"
+        "dom",
+        "icons"
       ],
       "always": true
     },
@@ -1928,6 +1940,7 @@
       "infra": [
         "dom",
         "clipboard",
+        "button-label",
         "icons"
       ]
     },
@@ -1991,7 +2004,8 @@
         "document-listeners",
         "menu",
         "icons",
-        "clipboard"
+        "clipboard",
+        "button-label"
       ]
     },
     "rich-text-editor": {
@@ -2349,9 +2363,9 @@
         ],
         "forkFacing": true
       },
-      "migrate-template": {
+      "migrate-framework": {
         "files": [
-          ".cursor/skills/migrate-template/SKILL.md"
+          ".cursor/skills/migrate-framework/SKILL.md"
         ],
         "forkFacing": true
       },
@@ -2405,9 +2419,9 @@
         ],
         "forkFacing": false
       },
-      "release-template": {
+      "release-framework": {
         "files": [
-          ".cursor/skills/release-template/SKILL.md"
+          ".cursor/skills/release-framework/SKILL.md"
         ],
         "forkFacing": false
       }

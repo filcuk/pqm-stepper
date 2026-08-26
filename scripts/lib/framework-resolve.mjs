@@ -1,12 +1,12 @@
 /**
- * Shared resolve / verify helpers for template lock + manifest.
+ * Shared resolve / verify helpers for framework lock + manifest.
  */
 
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 
-import { DERIVED_FILES, renderTemplateCssIndex } from "./template-catalogue.mjs";
+import { DERIVED_FILES, renderFrameworkCssIndex } from "./framework-catalogue.mjs";
 
 /**
  * @param {string} posixPath
@@ -78,7 +78,7 @@ export function isAgentPath(relativePosix) {
 export function resolveSelectedComponentIds(lock, manifest) {
   const requested = lock.components;
   if (!Array.isArray(requested) || requested.length === 0) {
-    throw new Error("template.lock.json must include a non-empty components array");
+    throw new Error("framework.lock.json must include a non-empty components array");
   }
 
   const allIds = Object.keys(manifest.components);
@@ -254,7 +254,7 @@ export function isPathReferencedInAppOwned(root, relativePosix, appOwned) {
 }
 
 /**
- * Concrete template-owned paths required for the lock selection.
+ * Concrete framework-owned paths required for the lock selection.
  * @param {object} lock
  * @param {object} manifest
  * @returns {{ components: string[], skills: string[], files: string[], agentFiles: string[], css: string[] }}
@@ -303,7 +303,7 @@ export function resolveSelection(lock, manifest) {
   }
 
   // Manifest itself is part of a synced tree so verify can run offline
-  files.add("template-manifest.json");
+  files.add("framework-manifest.json");
 
   return {
     components,
@@ -315,15 +315,15 @@ export function resolveSelection(lock, manifest) {
 }
 
 /**
- * Preserve APP_VERSION while updating TEMPLATE_VERSION.
+ * Preserve APP_VERSION while updating FRAMEWORK_VERSION.
  * @param {string} existingSource
  * @param {string} upstreamSource
  */
 export function mergeVersionJs(existingSource, upstreamSource) {
   const appMatch = /export const APP_VERSION = "([^"]+)"/.exec(existingSource);
-  const templateMatch = /export const TEMPLATE_VERSION = "([^"]+)"/.exec(upstreamSource);
-  if (!templateMatch) {
-    throw new Error("Upstream version.js missing TEMPLATE_VERSION");
+  const frameworkMatch = /export const FRAMEWORK_VERSION = "([^"]+)"/.exec(upstreamSource);
+  if (!frameworkMatch) {
+    throw new Error("Upstream version.js missing FRAMEWORK_VERSION");
   }
 
   let next = upstreamSource;
@@ -343,7 +343,7 @@ export function mergeVersionJs(existingSource, upstreamSource) {
  * @param {object} lock
  * @param {object} manifest
  */
-export function verifyTemplateTree(root, lock, manifest) {
+export function verifyFrameworkTree(root, lock, manifest) {
   const selection = resolveSelection(lock, manifest);
   const appOwned = manifest.appOwned || [];
   const agentFileSet = new Set(selection.agentFiles || []);
@@ -388,7 +388,7 @@ export function verifyTemplateTree(root, lock, manifest) {
   for (const rel of selection.files) {
     const soft = agentFileSet.has(rel);
 
-    if (rel === "template-manifest.json") {
+    if (rel === "framework-manifest.json") {
       const abs = resolveUnder(root, rel);
       if (!fs.existsSync(abs)) {
         results.push({ path: rel, status: "missing" });
@@ -400,7 +400,7 @@ export function verifyTemplateTree(root, lock, manifest) {
 
     if (isAppOwnedPath(rel, appOwned)) continue;
 
-    // version.js: only TEMPLATE_VERSION must match; APP_VERSION is fork-owned
+    // version.js: only FRAMEWORK_VERSION must match; APP_VERSION is fork-owned
     if (rel === "app/version.js") {
       const abs = resolveUnder(root, rel);
       if (!fs.existsSync(abs)) {
@@ -408,14 +408,14 @@ export function verifyTemplateTree(root, lock, manifest) {
         continue;
       }
       const src = fs.readFileSync(abs, "utf8");
-      const match = /export const TEMPLATE_VERSION = "([^"]+)"/.exec(src);
-      if (match?.[1] === manifest.templateVersion) {
+      const match = /export const FRAMEWORK_VERSION = "([^"]+)"/.exec(src);
+      if (match?.[1] === manifest.frameworkVersion) {
         results.push({ path: rel, status: "identical" });
       } else {
         results.push({
           path: rel,
           status: "modified",
-          expected: manifest.templateVersion,
+          expected: manifest.frameworkVersion,
           actual: match?.[1],
         });
       }
@@ -456,9 +456,9 @@ export function verifyTemplateTree(root, lock, manifest) {
     }
   }
 
-  // Derived template.css
-  const expectedCss = renderTemplateCssIndex(selection.css);
-  const derivedPath = "app/css/template.css";
+  // Derived framework.css
+  const expectedCss = renderFrameworkCssIndex(selection.css);
+  const derivedPath = "app/css/framework.css";
   const derivedAbs = resolveUnder(root, derivedPath);
   if (!fs.existsSync(derivedAbs)) {
     results.push({ path: derivedPath, status: "missing" });
@@ -481,7 +481,7 @@ export function verifyTemplateTree(root, lock, manifest) {
     }
   }
 
-  // Unexpected: known template files present but not selected (app catalogue only)
+  // Unexpected: known framework files present but not selected (app catalogue only)
   const expectedSet = new Set(selection.files);
   expectedSet.add(derivedPath);
   for (const rel of Object.keys(manifest.files)) {
@@ -509,7 +509,7 @@ export function verifyTemplateTree(root, lock, manifest) {
 
   return {
     ok,
-    templateVersion: lock.templateVersion,
+    frameworkVersion: lock.frameworkVersion,
     components: selection.components,
     skills: selection.skills,
     css: selection.css,

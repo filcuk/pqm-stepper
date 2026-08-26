@@ -1,9 +1,9 @@
 /**
- * Verify the working tree against template.lock.json + template-manifest.json.
+ * Verify the working tree against framework.lock.json + framework-manifest.json.
  *
  * Usage:
- *   node scripts/verify-template.mjs
- *   node scripts/verify-template.mjs --root . --json
+ *   node scripts/verify-framework.mjs
+ *   node scripts/verify-framework.mjs --root . --json
  *
  * Exit 0 when every selected catalogue file is identical and no unexpected
  * catalogue files remain. Agent skill/rule drift is reported softly and does
@@ -17,8 +17,8 @@ import { fileURLToPath } from "node:url";
 import {
   parseArgs,
   resolveUnder,
-  verifyTemplateTree,
-} from "./lib/template-resolve.mjs";
+  verifyFrameworkTree,
+} from "./lib/framework-resolve.mjs";
 
 const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -40,27 +40,27 @@ function readJson(root, relative) {
 export function runVerify(argv = process.argv.slice(2)) {
   const args = parseArgs(argv);
   const root = path.resolve(args.root || DEFAULT_ROOT);
-  const lockPath = args.lock || "template.lock.json";
-  const manifestPath = args.manifest || "template-manifest.json";
+  const lockPath = args.lock || "framework.lock.json";
+  const manifestPath = args.manifest || "framework-manifest.json";
 
   const lock = readJson(root, lockPath);
   const manifest = readJson(root, manifestPath);
 
-  if (lock.templateVersion && manifest.templateVersion && lock.templateVersion !== manifest.templateVersion) {
+  if (lock.frameworkVersion && manifest.frameworkVersion && lock.frameworkVersion !== manifest.frameworkVersion) {
     console.warn(
-      `Warning: lock templateVersion ${lock.templateVersion} != manifest ${manifest.templateVersion}`
+      `Warning: lock frameworkVersion ${lock.frameworkVersion} != manifest ${manifest.frameworkVersion}`
     );
   }
 
-  const report = verifyTemplateTree(root, lock, manifest);
+  const report = verifyFrameworkTree(root, lock, manifest);
 
   if (args.json === "true") {
     console.log(JSON.stringify(report, null, 2));
   } else {
     const skillCount = report.skills?.length || 0;
     console.log(
-      `Template verify ${report.ok ? "OK" : "FAILED"} ` +
-        `(v${report.templateVersion}, ${report.components.length} components` +
+      `Framework verify ${report.ok ? "OK" : "FAILED"} ` +
+        `(v${report.frameworkVersion}, ${report.components.length} components` +
         (skillCount ? `, ${skillCount} skills` : "") +
         `)`
     );

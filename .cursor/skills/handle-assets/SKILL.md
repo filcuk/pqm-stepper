@@ -30,7 +30,7 @@ Aligns with `.cursor/rules/icons.mdc` and [../_shared/invariants.md](../_shared/
 | Brand pair (default) | `app/res/app-light.svg`, `app/res/app-dark.svg` | `APP_ICON_SRC.light` / `.dark`; header two `<img class="brand-icon--light\|dark">`; `__MICROAPP__.appIconLight` / `appIconDark` |
 | Brand single | `app/res/app.svg` | `APP_ICON_SRC.icon`; clear light/dark; one `<img>` without `brand-icon--*` |
 | Favicon | same as brand resolve | `<link rel="icon" … data-brand-icon>` + `__MICROAPP__` before theme-init |
-| Inline UI icon | `app/utils/icons-app.js` `APP_ICONS` (forks) or `icons-template.js` `TEMPLATE_ICONS` (catalogue) | `data-icon="id"` or `createIcon("id")` via merged `icons.js` |
+| Inline UI icon | `app/utils/icons-app.js` `APP_ICONS` (forks) or `icons-framework.js` `FRAMEWORK_ICONS` (catalogue) | `data-icon="id"` or `createIcon("id")` via merged `icons.js` |
 | Other res | `app/res/…` | Reference from HTML/CSS/JS only after file exists or user commits to add it |
 
 Prefer [`add-icon`](../add-icon/SKILL.md) to pull UI icons from [Icônes — Material Icons Round](https://icones.js.org/collection/ic?s=info&variant=Round) (`viewBox: "0 0 24 24"`). Use this skill’s stub flow only when the user will supply custom artwork or a blank placeholder is enough for wiring.
@@ -56,7 +56,7 @@ List each missing or replacement asset: kind, target path or `ICONS` id, pair vs
 },
 ```
 
-Update the `Available:` comment at the top of `icons-app.js` or `icons-template.js` when adding an id.
+Update the `Available:` comment at the top of `icons-app.js` or `icons-framework.js` when adding an id.
 
 - Wire `data-icon` / imports so the app builds around the stub.
 

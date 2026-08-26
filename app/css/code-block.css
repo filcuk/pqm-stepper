@@ -47,18 +47,10 @@
   border-top: 1px solid var(--border);
 }
 
-.code-block-toolbar__btn--labeled {
-  gap: 0.4rem;
-}
-
 .code-block-toolbar__btn--labeled .btn-icon-svg {
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
-}
-
-.code-block-toolbar__label {
-  line-height: 1;
 }
 
 .code-block-body {
@@ -95,11 +87,17 @@
   background: var(--input-bg);
 }
 
+/*
+ * Line numbers: horizontal scroll lives on `code` (gutter stays fixed). Zero
+ * `pre` padding so that scrollport fills the block — otherwise bottom/side
+ * padding on `pre` leaves the scrollbar floating mid-block (edit mode is fine
+ * because the textarea is `inset: 0` and carries its own padding).
+ */
 .code-block .code-block-body pre[class*="language-"].line-numbers {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  padding-left: 0;
+  padding: 0;
   overflow: hidden;
 }
 
@@ -127,15 +125,22 @@
 .code-block .code-block-body pre[class*="language-"].line-numbers > code {
   position: relative;
   flex: 1 1 auto;
+  align-self: stretch;
   min-width: 0;
-  padding-left: calc(var(--code-gutter-width) - var(--code-gutter-band));
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: var(--code-pad-block) var(--code-pad-inline-end) var(--code-pad-block)
+    calc(var(--code-gutter-width) - var(--code-gutter-band));
   overflow-x: auto;
   overflow-y: hidden;
 }
 
 .code-block .code-block-body pre[class*="language-"].line-numbers > .line-numbers-rows {
   flex: 0 0 var(--code-gutter-band);
+  align-self: stretch;
+  box-sizing: border-box;
   width: var(--code-gutter-band);
+  padding: var(--code-pad-block) 0;
 }
 
 .code-block .code-block-body pre[class*="language-"].line-numbers::before {

@@ -33,6 +33,12 @@
 
 import { setHidden } from "../utils/dom.js";
 import { copyText, readText, armPasteCapture } from "../utils/clipboard.js";
+import {
+  prepareButtonLabelFlash,
+  setButtonLabelFlash,
+  flashButtonLabel,
+  BUTTON_LABEL_FLASH_LABEL_CLASS,
+} from "../utils/button-label.js";
 import { createIcon } from "../utils/icons.js";
 import { flashTooltip } from "./tooltip.js";
 
@@ -203,7 +209,7 @@ function createToolbarButton(action, meta) {
   btn.type = "button";
   const withText = Boolean(meta.textLabel);
   btn.className = withText
-    ? "btn code-block-toolbar__btn code-block-toolbar__btn--labeled"
+    ? "btn btn-label-flash code-block-toolbar__btn code-block-toolbar__btn--labeled"
     : "btn btn-slim btn-icon code-block-toolbar__btn";
   btn.dataset.codeToolbarAction = action;
   btn.setAttribute("aria-label", meta.label);
@@ -223,20 +229,26 @@ function createToolbarButton(action, meta) {
   btn.append(createIcon(meta.icon, { className: "btn-icon-svg" }));
   if (withText) {
     const labelEl = document.createElement("span");
-    labelEl.className = "code-block-toolbar__label";
+    labelEl.className = BUTTON_LABEL_FLASH_LABEL_CLASS;
     labelEl.textContent = meta.textLabel;
     btn.append(labelEl);
   }
   return btn;
 }
 
+/** @type {Readonly<Record<string, Parameters<typeof prepareButtonLabelFlash>[1]>>} */
+const LABELED_TOOLBAR_FLASH = {
+  copy: { idle: "Copy" },
+  paste: { idle: "Paste", measureLabels: ["Ctrl+V"] },
+};
+
 /**
+ * @param {string} action
  * @param {HTMLButtonElement} btn
- * @param {string} text
  */
-function setToolbarButtonText(btn, text) {
-  const labelEl = btn.querySelector(".code-block-toolbar__label");
-  if (labelEl) labelEl.textContent = text;
+function prepareLabeledToolbarFlash(action, btn) {
+  const options = LABELED_TOOLBAR_FLASH[action];
+  if (options) prepareButtonLabelFlash(btn, options);
 }
 
 /**
@@ -533,20 +545,19 @@ export function initCodeBlock(container, options = {}) {
    * @param {boolean} ok
    */
   function flashCopyFeedback(btn, ok) {
-    const flash = ok ? "Copied" : "Failed";
-    const labelEl = btn.querySelector(".code-block-toolbar__label");
+    const labelEl = btn.querySelector(`.${BUTTON_LABEL_FLASH_LABEL_CLASS}`);
     if (labelEl) {
-      const prevAria = btn.getAttribute("aria-label") || "Copy code";
-      const idleText = "Copy";
-      btn.setAttribute("aria-label", flash);
-      setToolbarButtonText(btn, flash);
-      window.setTimeout(() => {
-        btn.setAttribute("aria-label", prevAria);
-        setToolbarButtonText(btn, idleText);
-      }, 2000);
+      flashButtonLabel(btn, ok, {
+        durationMs: 2000,
+        reset: () => {
+          btn.setAttribute("aria-label", "Copy code");
+          setButtonLabelFlash(btn, "Copy");
+        },
+      });
       return;
     }
 
+    const flash = ok ? "Copied" : "Failed";
     flashTooltip(btn, {
       text: flash,
       tone: ok ? "success" : "error",
@@ -571,7 +582,7 @@ export function initCodeBlock(container, options = {}) {
         btn.dataset.tooltip = "Paste";
         delete btn.dataset.tooltipTone;
       }
-      setToolbarButtonText(btn, "Paste");
+      setButtonLabelFlash(btn, "Paste");
       return;
     }
 
@@ -582,7 +593,7 @@ export function initCodeBlock(container, options = {}) {
         btn.dataset.tooltip = "Press Ctrl+V to paste";
         btn.dataset.tooltipTone = "error";
       }
-      setToolbarButtonText(btn, "Ctrl+V");
+      setButtonLabelFlash(btn, "Ctrl+V");
       pasteCapture = armPasteCapture({ timeoutMs: 15000 });
       text = await pasteCapture.promise;
       pasteCapture = null;
@@ -591,7 +602,7 @@ export function initCodeBlock(container, options = {}) {
         btn.dataset.tooltip = "Paste";
         delete btn.dataset.tooltipTone;
       }
-      setToolbarButtonText(btn, "Paste");
+      setButtonLabelFlash(btn, "Paste");
       if (text === null) return;
     }
 
@@ -698,6 +709,7 @@ export function initCodeBlock(container, options = {}) {
     for (const action of TOOLBAR_ACTION_IDS) {
       if (!toolbarActions.has(action)) continue;
       const btn = createToolbarButton(action, specs[action]);
+      prepareLabeledToolbarFlash(action, btn);
       const side = resolveToolbarAlign(action, toolbarAlign);
       btn.dataset.codeToolbarAlign = side;
       (side === "right" ? endGroup : startGroup).appendChild(btn);
