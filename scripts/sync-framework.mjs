@@ -1,14 +1,14 @@
 /**
- * Sync template-owned files from an upstream revision into this app tree.
+ * Sync framework-owned files from an upstream revision into this app tree.
  *
  * Usage:
- *   node scripts/sync-template.mjs --from ../sma1-framework
- *   node scripts/sync-template.mjs --version 0.9.0
- *   node scripts/sync-template.mjs --from . --dry-run
- *   node scripts/sync-template.mjs --from . --prune
+ *   node scripts/sync-framework.mjs --from ../sma1-framework
+ *   node scripts/sync-framework.mjs --version 0.9.0
+ *   node scripts/sync-framework.mjs --from . --dry-run
+ *   node scripts/sync-framework.mjs --from . --prune
  *
- * Reads `template.lock.json` for version + component/skill selection. Never
- * overwrites app-owned paths. Regenerates `app/css/template.css`. Merges
+ * Reads `framework.lock.json` for version + component/skill selection. Never
+ * overwrites app-owned paths. Regenerates `app/css/framework.css`. Merges
  * `APP_VERSION` when updating `app/version.js`. With `--prune`, deletes
  * `previousFiles` / retired paths when safe.
  */
@@ -19,7 +19,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { renderTemplateCssIndex } from "./lib/template-catalogue.mjs";
+import { renderFrameworkCssIndex } from "./lib/framework-catalogue.mjs";
 import {
   collectPrunePaths,
   isAppOwnedPath,
@@ -29,7 +29,7 @@ import {
   resolveSelection,
   resolveUnder,
   toPosix,
-} from "./lib/template-resolve.mjs";
+} from "./lib/framework-resolve.mjs";
 
 const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -70,7 +70,7 @@ export function buildUpdatedLock(lock, manifest, source) {
   const next = {
     ...lock,
     schemaVersion,
-    templateVersion: lock.templateVersion,
+    frameworkVersion: lock.frameworkVersion,
     source,
     components: lock.components,
   };
@@ -176,12 +176,12 @@ export async function runSync(argv = process.argv.slice(2)) {
   const root = path.resolve(args.root || DEFAULT_ROOT);
   const dryRun = args["dry-run"] === "true";
   const prune = args.prune === "true";
-  const lockPath = args.lock || "template.lock.json";
+  const lockPath = args.lock || "framework.lock.json";
 
   /** @type {object} */
   let lock = readJson(root, lockPath);
   if (args.version) {
-    lock = { ...lock, templateVersion: args.version.replace(/^v/, "") };
+    lock = { ...lock, frameworkVersion: args.version.replace(/^v/, "") };
   }
 
   const source = lock.source || "filcuk/sma1-framework";
@@ -194,15 +194,15 @@ export async function runSync(argv = process.argv.slice(2)) {
       upstreamRoot = path.resolve(args.from);
     } else {
       tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sma1-framework-sync-"));
-      console.log(`Fetching ${source}@v${lock.templateVersion}…`);
-      upstreamRoot = await fetchTaggedTree(source, lock.templateVersion, tempDir);
+      console.log(`Fetching ${source}@v${lock.frameworkVersion}…`);
+      upstreamRoot = await fetchTaggedTree(source, lock.frameworkVersion, tempDir);
     }
 
-    const manifestPath = resolveUnder(upstreamRoot, "template-manifest.json");
+    const manifestPath = resolveUnder(upstreamRoot, "framework-manifest.json");
     if (!fs.existsSync(manifestPath)) {
       throw new Error(
-        `Upstream tree has no template-manifest.json (${toPosix(upstreamRoot)}). ` +
-          `Use a template revision that includes the manifest, or pass --from a local checkout.`
+        `Upstream tree has no framework-manifest.json (${toPosix(upstreamRoot)}). ` +
+          `Use a framework revision that includes the manifest, or pass --from a local checkout.`
       );
     }
 
@@ -234,7 +234,7 @@ export async function runSync(argv = process.argv.slice(2)) {
         continue;
       }
 
-      if (rel === "template-manifest.json") {
+      if (rel === "framework-manifest.json") {
         copyFileRelative(upstreamRoot, root, rel, { dryRun });
         copied.push(rel);
         continue;
@@ -244,8 +244,8 @@ export async function runSync(argv = process.argv.slice(2)) {
       copied.push(rel);
     }
 
-    const cssBody = renderTemplateCssIndex(selection.css);
-    const cssAbs = resolveUnder(root, "app/css/template.css");
+    const cssBody = renderFrameworkCssIndex(selection.css);
+    const cssAbs = resolveUnder(root, "app/css/framework.css");
     if (!dryRun) {
       fs.mkdirSync(path.dirname(cssAbs), { recursive: true });
       fs.writeFileSync(cssAbs, cssBody, "utf8");
@@ -262,8 +262,8 @@ export async function runSync(argv = process.argv.slice(2)) {
     }
 
     console.log(
-      `Template sync ${dryRun ? "(dry-run) " : ""}` +
-        `v${lock.templateVersion}: ${copied.length} files, ` +
+      `Framework sync ${dryRun ? "(dry-run) " : ""}` +
+        `v${lock.frameworkVersion}: ${copied.length} files, ` +
         `${selection.css.length} css partials, skipped app-owned=${skipped.length}` +
         (prune
           ? `, pruned=${pruneResult.pruned.length}, prune-skipped=${pruneResult.skipped.length}`
@@ -278,7 +278,7 @@ export async function runSync(argv = process.argv.slice(2)) {
       ok: true,
       dryRun,
       prune,
-      templateVersion: lock.templateVersion,
+      frameworkVersion: lock.frameworkVersion,
       copied,
       skipped,
       pruned: pruneResult.pruned,

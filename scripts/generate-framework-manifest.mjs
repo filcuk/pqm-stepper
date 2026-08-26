@@ -1,7 +1,7 @@
 /**
- * Generate `template-manifest.json` from the live tree + catalogue.
+ * Generate `framework-manifest.json` from the live tree + catalogue.
  *
- * Usage: node scripts/generate-template-manifest.mjs
+ * Usage: node scripts/generate-framework-manifest.mjs
  */
 
 import crypto from "node:crypto";
@@ -25,13 +25,13 @@ import {
   INFRA,
   RETIRED,
   collectLivePaths,
-  renderTemplateCssIndex,
+  renderFrameworkCssIndex,
   validateLifecycleCatalogue,
-} from "./lib/template-catalogue.mjs";
-import { canonicalizeNewlines } from "./lib/template-resolve.mjs";
+} from "./lib/framework-catalogue.mjs";
+import { canonicalizeNewlines } from "./lib/framework-resolve.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const MANIFEST_PATH = path.join(ROOT, "template-manifest.json");
+const MANIFEST_PATH = path.join(ROOT, "framework-manifest.json");
 const VERSION_PATH = path.join(ROOT, "app", "version.js");
 
 /**
@@ -114,11 +114,11 @@ export function expandPathEntry(entry) {
 /**
  * @returns {string}
  */
-export function readTemplateVersion() {
+export function readFrameworkVersion() {
   const src = fs.readFileSync(VERSION_PATH, "utf8");
-  const match = /export const TEMPLATE_VERSION = "([^"]+)"/.exec(src);
+  const match = /export const FRAMEWORK_VERSION = "([^"]+)"/.exec(src);
   if (!match) {
-    throw new Error("Could not parse TEMPLATE_VERSION from app/version.js");
+    throw new Error("Could not parse FRAMEWORK_VERSION from app/version.js");
   }
   return match[1];
 }
@@ -160,13 +160,13 @@ function serializeLifecycleEntry(def) {
   };
 }
 
-export { renderTemplateCssIndex };
+export { renderFrameworkCssIndex };
 
 /**
  * @returns {object}
  */
 export function buildManifest() {
-  const templateVersion = readTemplateVersion();
+  const frameworkVersion = readFrameworkVersion();
 
   // Expand vendor dirs so path-reuse checks see concrete files too
   /** @type {Set<string>} */
@@ -271,7 +271,7 @@ export function buildManifest() {
 
   return {
     schemaVersion: 2,
-    templateVersion,
+    frameworkVersion,
     generatedAt: new Date().toISOString(),
     source: DEFAULT_SOURCE,
     appOwned: [...APP_OWNED],
@@ -318,7 +318,7 @@ if (isMain) {
   const agentRuleCount = (manifest.agent?.rules || []).length;
   console.log(
     `Wrote ${toPosix(path.relative(ROOT, MANIFEST_PATH))} ` +
-      `(${manifest.templateVersion}, schema v${manifest.schemaVersion}, ` +
+      `(${manifest.frameworkVersion}, schema v${manifest.schemaVersion}, ` +
       `${fileCount} files, ${derivedCount} derived, ` +
       `${agentSkillCount} skills, ${agentRuleCount} rules)`
   );

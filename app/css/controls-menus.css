@@ -134,8 +134,21 @@ svg.dropdown-menu-item-icon {
 .dropdown-menu-item:hover,
 .dropdown-menu-item:focus-visible {
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  background: color-mix(in srgb, var(--accent) var(--control-hover-mix), var(--surface));
   /* Beat `a:hover` / footer link accent so highlighted text stays --text. */
+  color: var(--text);
+  outline: none;
+  transition-duration: 0s;
+}
+
+.combo-menu-item:active:not(:disabled):not([aria-disabled="true"]),
+.dropdown-menu-item:active:not(:disabled):not([aria-disabled="true"]) {
+  border-color: var(--accent);
+  background: color-mix(
+    in srgb,
+    var(--accent) var(--control-selected-mix),
+    var(--surface)
+  );
   color: var(--text);
   outline: none;
   transition-duration: 0s;
@@ -144,7 +157,7 @@ svg.dropdown-menu-item-icon {
 .dropdown-menu-item.is-selected,
 .dropdown-menu-item[aria-checked="true"],
 .combo-menu-item.is-selected {
-  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  background: color-mix(in srgb, var(--accent) var(--control-selected-mix), var(--surface));
   border-color: var(--accent);
   border-radius: 0;
   color: var(--text);
@@ -161,15 +174,29 @@ svg.dropdown-menu-item-icon {
 .dropdown-menu-item[aria-checked="true"]:focus-visible,
 .combo-menu-item.is-selected:hover,
 .combo-menu-item.is-selected:focus-visible {
-  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  background: color-mix(in srgb, var(--accent) var(--control-selected-mix), var(--surface));
+  border-color: var(--accent);
+  color: var(--text);
+  transition-duration: 0s;
+}
+
+.dropdown-menu-item.is-selected:active:not(:disabled):not([aria-disabled="true"]),
+.dropdown-menu-item[aria-checked="true"]:active:not(:disabled):not([aria-disabled="true"]),
+.combo-menu-item.is-selected:active:not(:disabled):not([aria-disabled="true"]) {
+  background: color-mix(
+    in srgb,
+    var(--accent) var(--control-press-mix),
+    var(--surface)
+  );
   border-color: var(--accent);
   color: var(--text);
   transition-duration: 0s;
 }
 
 /* Contiguous selected runs share one outer border (no edge between neighbours).
-   Drop shared border width (not just colour) so side borders meet with no 1px gap. */
-li:has(
+   Drop shared border width (not just colour) so side borders meet with no 1px gap.
+   Single-column lists only — multi-column grids use `syncListGridSelectionJoins`. */
+:is(.dropdown-menu:not(.dropdown-menu--grid), .combo-menu) li:has(
     > :is(
       .dropdown-menu-item.is-selected,
       .dropdown-menu-item[aria-checked="true"],
@@ -192,7 +219,7 @@ li:has(
   padding-bottom: 0.5rem;
 }
 
-li:has(
+:is(.dropdown-menu:not(.dropdown-menu--grid), .combo-menu) li:has(
     > :is(
       .dropdown-menu-item.is-selected,
       .dropdown-menu-item[aria-checked="true"],
@@ -210,13 +237,13 @@ li:has(
 }
 
 /* Round only the outer corners of each contiguous selection run. */
-li:first-child
+:is(.dropdown-menu:not(.dropdown-menu--grid), .combo-menu) li:first-child
   > :is(
     .dropdown-menu-item.is-selected,
     .dropdown-menu-item[aria-checked="true"],
     .combo-menu-item.is-selected
   ),
-li:not(
+:is(.dropdown-menu:not(.dropdown-menu--grid), .combo-menu) li:not(
     :has(
       > :is(
         .dropdown-menu-item.is-selected,
@@ -235,7 +262,7 @@ li:not(
   border-top-right-radius: 6px;
 }
 
-li:not(
+:is(.dropdown-menu:not(.dropdown-menu--grid), .combo-menu) li:not(
     :has(
       + li
         > :is(
@@ -281,6 +308,229 @@ li:not(:first-child) > .dropdown-menu-group {
   pointer-events: none;
 }
 
+/* Multi-column layout when a dropdown has many items (`data-dropdown-grid*`). */
+.dropdown-menu.dropdown-menu--grid {
+  --dropdown-menu-grid-cols: 2;
+  display: grid;
+  grid-template-columns: repeat(var(--dropdown-menu-grid-cols, 2), minmax(0, 1fr));
+  gap: 0;
+  max-width: min(100vw - 3rem, 28rem);
+}
+
+.dropdown-menu.dropdown-menu--grid[data-grid-cols="1"] {
+  --dropdown-menu-grid-cols: 1;
+}
+.dropdown-menu.dropdown-menu--grid[data-grid-cols="2"] {
+  --dropdown-menu-grid-cols: 2;
+}
+.dropdown-menu.dropdown-menu--grid[data-grid-cols="3"] {
+  --dropdown-menu-grid-cols: 3;
+}
+.dropdown-menu.dropdown-menu--grid[data-grid-cols="4"] {
+  --dropdown-menu-grid-cols: 4;
+}
+.dropdown-menu.dropdown-menu--grid[data-grid-cols="5"] {
+  --dropdown-menu-grid-cols: 5;
+}
+.dropdown-menu.dropdown-menu--grid[data-grid-cols="6"] {
+  --dropdown-menu-grid-cols: 6;
+}
+
+.dropdown-menu.dropdown-menu--grid > li:has(.dropdown-menu-group),
+.dropdown-menu.dropdown-menu--grid > li:has(.dropdown-menu-separator) {
+  grid-column: 1 / -1;
+}
+
+.dropdown-menu.dropdown-menu--grid .dropdown-menu-item {
+  white-space: normal;
+}
+
+/* Equal row height: stretch each link cell to the tallest item in the row. */
+.dropdown-menu.dropdown-menu--grid > li:has(> .dropdown-menu-item),
+.combobox-list.combobox-list--grid > li:has(> .combobox-option) {
+  display: flex;
+  min-width: 0;
+  overflow: visible;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid) {
+  overflow: visible;
+}
+
+.dropdown-menu.dropdown-menu--grid > li:has(> .dropdown-menu-item) > .dropdown-menu-item,
+.combobox-list.combobox-list--grid > li:has(> .combobox-option) > .combobox-option {
+  flex: 1;
+  align-self: stretch;
+}
+
+.dropdown-menu.dropdown-menu--grid
+  > li:has(> .dropdown-menu-item:is(a, button))
+  > .dropdown-menu-item:has(.dropdown-menu-item-icon-wrap),
+.combobox-list.combobox-list--grid > li:has(> .combobox-option) > .combobox-option {
+  align-items: center;
+}
+
+/* Continuous selection in grid mode (`syncListGridSelectionJoins` join / corner classes).
+   Combo menus never use `--grid` — omit `.combo-menu-item` here. */
+:is(.dropdown-menu--grid, .combobox-list--grid)
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ) {
+  position: relative;
+  border-radius: 0;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid)
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-selection-join-top {
+  border-top-width: 0;
+  padding-top: 0.5rem;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid)
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-selection-join-bottom {
+  border-bottom-width: 0;
+  padding-bottom: 0.5rem;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid)
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-selection-join-left {
+  border-left-width: 0;
+  padding-left: 1rem;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid)
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-selection-join-right {
+  border-right-width: 0;
+  padding-right: 1rem;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid)
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-selection-corner-tl {
+  border-top-left-radius: 6px;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid)
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-selection-corner-tr {
+  border-top-right-radius: 6px;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid)
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-selection-corner-bl {
+  border-bottom-left-radius: 6px;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid)
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-selection-corner-br {
+  border-bottom-right-radius: 6px;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid) > li {
+  position: relative;
+  z-index: 1;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid) > .list-grid-selection-outline {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid) > .list-grid-selection-outline path {
+  fill: color-mix(in srgb, var(--accent) var(--control-selected-mix), var(--surface));
+  fill-rule: evenodd;
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+:is(.dropdown-menu--grid, .combobox-list--grid).is-selection-outlined
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ),
+:is(.dropdown-menu--grid, .combobox-list--grid).is-selection-outlined
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ):hover,
+:is(.dropdown-menu--grid, .combobox-list--grid).is-selection-outlined
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ):focus-visible,
+:is(.dropdown-menu--grid, .combobox-list--grid).is-selection-outlined
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-active {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Press fills this cell only (SVG outline stays). Combobox uses `.is-pressed`
+   because option mousedown preventDefault suppresses :active. */
+:is(.dropdown-menu--grid, .combobox-list--grid).is-selection-outlined
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ):active,
+:is(.dropdown-menu--grid, .combobox-list--grid).is-selection-outlined
+  :is(
+    .dropdown-menu-item.is-selected,
+    .dropdown-menu-item[aria-checked="true"],
+    .combobox-option.is-selected
+  ).is-pressed {
+  background: color-mix(
+    in srgb,
+    var(--accent) var(--control-press-mix),
+    var(--surface)
+  );
+  border-color: transparent;
+}
+
 /* Dropdown */
 
 .dropdown {
@@ -292,7 +542,8 @@ li:not(:first-child) > .dropdown-menu-group {
 /* Elevate the host while open so menus paint above neighbouring stacking
    contexts (e.g. code-block overflow + line-number gutter chrome). */
 .dropdown.is-popup-open,
-.combo-btn.is-popup-open {
+.combo-btn.is-popup-open,
+.combobox.is-popup-open {
   z-index: 61;
 }
 

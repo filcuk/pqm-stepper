@@ -1,5 +1,5 @@
 import { APP_CONFIG } from "../config.js";
-import { APP_VERSION, TEMPLATE_VERSION } from "../version.js";
+import { APP_VERSION, FRAMEWORK_VERSION } from "../version.js";
 import { sanitizeAlsoSeeSvg } from "../utils/also-see-svg.js";
 
 const DEFAULTS = {
@@ -10,7 +10,7 @@ const DEFAULTS = {
   alsoSeeTopics: APP_CONFIG.alsoSeeTopics,
   alsoSeeIncludeLocal: APP_CONFIG.alsoSeeIncludeLocal,
   appVersion: APP_VERSION,
-  templateVersion: TEMPLATE_VERSION,
+  frameworkVersion: FRAMEWORK_VERSION,
 };
 
 /** Required markup for {@link initPageNav} — also injected by {@link renderPageShell}. */
@@ -751,28 +751,29 @@ export function alsoSeeMenuColumns(sections) {
 /**
  * @param {AlsoSeeSection} section
  * @param {number} startIndex
+ * @param {{ isFirstSection?: boolean }} [options]
  * @returns {{ markup: string, nextIndex: number }}
  */
-function renderAlsoSeeTopic(section, startIndex) {
+function renderAlsoSeeTopic(section, startIndex, { isFirstSection = false } = {}) {
   let index = startIndex;
   const linksMarkup = section.items
     .map((link) => renderAlsoSeeLinkItem(link, index++))
     .join("");
 
   if (!section.topic) {
+    const breakMarkup = isFirstSection
+      ? ""
+      : `<li role="presentation" class="footer-also-see-section-break" aria-hidden="true"></li>`;
     return {
-      markup: `<li class="footer-also-see-topic footer-also-see-topic--ungrouped" role="presentation">
-          <ul class="footer-also-see-topic-links">${linksMarkup}</ul>
-        </li>`,
+      markup: `${breakMarkup}${linksMarkup}`,
       nextIndex: index,
     };
   }
 
   return {
-    markup: `<li class="footer-also-see-topic" role="group" aria-label="${escapeAttr(section.topic)}">
-          <div class="footer-also-see-topic-label">${escapeText(section.topic)}</div>
-          <ul class="footer-also-see-topic-links">${linksMarkup}</ul>
-        </li>`,
+    markup: `<li role="presentation">
+          <div class="dropdown-menu-group">${escapeText(section.topic)}</div>
+        </li>${linksMarkup}`,
     nextIndex: index,
   };
 }
@@ -788,8 +789,10 @@ export function renderAlsoSeeMarkup(sections) {
   const filled = sections.filter((section) => section.items.length > 0);
   const columns = alsoSeeMenuColumns(filled);
   const topicsMarkup = filled
-    .map((section) => {
-      const rendered = renderAlsoSeeTopic(section, index);
+    .map((section, sectionIndex) => {
+      const rendered = renderAlsoSeeTopic(section, index, {
+        isFirstSection: sectionIndex === 0,
+      });
       index = rendered.nextIndex;
       return rendered.markup;
     })
@@ -799,7 +802,7 @@ export function renderAlsoSeeMarkup(sections) {
         <span>find
           <span class="footer-also-see dropdown" id="footer-also-see">
             <button type="button" class="footer-also-see-trigger" id="footer-also-see-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="footer-also-see-menu" data-tooltip="other apps and tools" data-tooltip-position="top">more stuff</button>
-            <ul id="footer-also-see-menu" class="dropdown-menu footer-also-see-menu hidden" role="menu" hidden data-also-see-columns="${columns}" style="--also-see-columns: ${columns}">
+            <ul id="footer-also-see-menu" class="dropdown-menu footer-also-see-menu hidden" role="menu" hidden data-also-see-columns="${columns}">
               ${topicsMarkup}
             </ul>
           </span></span>`;
@@ -844,7 +847,7 @@ export function renderPageShell(options = {}) {
     alsoSeeIncludeLocal,
     appUrl,
     appVersion,
-    templateVersion,
+    frameworkVersion,
   } = {
     ...DEFAULTS,
     ...overrides,
@@ -860,7 +863,7 @@ export function renderPageShell(options = {}) {
     `<footer id="app-page-footer">
       <div class="footer-meta">
         <div class="footer-meta-copy">
-          <span class="footer-version" data-tooltip="based on SMA1 framework v${templateVersion}" data-tooltip-position="top" tabindex="0">v${appVersion}</span>
+          <span class="footer-version" data-tooltip="based on SMA1 framework v${frameworkVersion}" data-tooltip-position="top" tabindex="0">v${appVersion}</span>
           <span class="footer-meta-sep" aria-hidden="true">·</span>
           <span data-tooltip="or suggest a feature" data-tooltip-position="top" tabindex="0">report an
           <a href="${issuesUrl}" target="_blank" rel="noopener noreferrer">issue</a></span>

@@ -69,6 +69,9 @@ function wireAlsoSeeMenu(root = document) {
 
   bindAlsoSeeIconFallback(menuEl);
 
+  const columns = Number.parseInt(menuEl.dataset.alsoSeeColumns ?? "1", 10);
+  const gridCols = Number.isFinite(columns) && columns >= 1 ? columns : 1;
+
   return initPopupMenu({
     containerEl,
     menuEl,
@@ -76,6 +79,9 @@ function wireAlsoSeeMenu(root = document) {
     itemSelector: ".dropdown-menu-item",
     // Fixed so the upward menu is not covered by main content (editors, etc.).
     fixed: true,
+    // Shared dropdown grid: one column count for the whole menu (alsoSeeMenuColumns).
+    gridMin: gridCols > 1 ? 0 : false,
+    gridCols,
     onSelect: ({ item }) => {
       // Plain left-click / keyboard: same window. Middle-click and Ctrl/Cmd-click
       // use the native <a> behaviour (menu.js skips onSelect for those).

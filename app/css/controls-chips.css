@@ -35,7 +35,18 @@ button.chip {
 
 button.chip:hover:not(:disabled) {
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  background: color-mix(in srgb, var(--accent) var(--control-hover-mix), var(--surface));
+  transition-duration: 0s;
+}
+
+button.chip:active:not(:disabled) {
+  border-color: var(--accent);
+  background: color-mix(
+    in srgb,
+    var(--accent) var(--control-selected-mix),
+    var(--surface)
+  );
+  color: var(--text);
   transition-duration: 0s;
 }
 
@@ -51,7 +62,7 @@ button.chip:disabled {
 
 .chip[aria-pressed="true"],
 .chip.is-selected {
-  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  background: color-mix(in srgb, var(--accent) var(--control-selected-mix), var(--surface));
   border-color: var(--accent);
   color: var(--text);
 }
@@ -65,8 +76,20 @@ button.chip:disabled {
 .chip.is-selected:hover:not(:disabled),
 button.chip.chip--removable:hover:not(:disabled) {
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  background: color-mix(in srgb, var(--accent) var(--control-selected-mix), var(--surface));
   color: var(--text);
+}
+
+.chip[aria-pressed="true"]:active:not(:disabled),
+.chip.is-selected:active:not(:disabled) {
+  border-color: var(--accent);
+  background: color-mix(
+    in srgb,
+    var(--accent) var(--control-press-mix),
+    var(--surface)
+  );
+  color: var(--text);
+  transition-duration: 0s;
 }
 
 .chip-input {
@@ -191,6 +214,12 @@ button.legend-chip {
 button.legend-chip:hover:not(:disabled) {
   border-color: color-mix(in srgb, var(--legend-border, var(--border)) 70%, #FFFFFF);
   background: color-mix(in srgb, var(--legend-color, var(--surface)) 90%, #FFFFFF);
+  transition-duration: 0s;
+}
+
+button.legend-chip:active:not(:disabled) {
+  border-color: color-mix(in srgb, var(--legend-border, var(--border)) 85%, #000000);
+  background: color-mix(in srgb, var(--legend-color, var(--surface)) 88%, #000000);
   transition-duration: 0s;
 }
 

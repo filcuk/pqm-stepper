@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Keep USAGE.md up to date
 
-[`USAGE.md`](USAGE.md) is the **authoritative** guide for forking the template, deployment, the component catalogue, and markup/JS examples. [`README.md`](README.md) stays sparse — link to USAGE.md; do not move long component docs back into README.
+[`USAGE.md`](USAGE.md) is the **authoritative** guide for forking the framework, deployment, the component catalogue, and markup/JS examples. [`README.md`](README.md) stays sparse — link to USAGE.md; do not move long component docs back into README.
 
 When you add or materially change a **reusable** feature, update USAGE.md in the same task (unless the user explicitly asks for docs-only or no-docs work).
 
@@ -40,4 +40,4 @@ Mirror existing entries (e.g. Dropdown, Toggle dropdown, Banners).
 
 - Bug fixes with no API/markup change
 - Internal refactors with no user-visible contract change
-- App-specific logic in `main.js` on a fork (template `main.js` stays minimal)
+- App-specific logic in `main.js` on a fork (framework `main.js` stays minimal)

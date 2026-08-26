@@ -20,7 +20,7 @@ Configure fork brand accents without editing synced [`app/tokens.css`](../../../
 | `--accent-hover` | Hover / pressed | Derived in `tokens.css` via `color-mix` — do not write unless the user insists on a custom hover |
 | `--accent-fg` | Text and icons on accent fills | Auto-picked for AA, or user override |
 
-Template defaults (GitHub blues) already pass AA. Candidates for `--accent-fg`: `#ffffff` and `#0d1117` only (match the design system).
+Framework defaults (GitHub blues) already pass AA. Candidates for `--accent-fg`: `#ffffff` and `#0d1117` only (match the design system).
 
 **Never** put brand colour overrides in `tokens.css` on a fork — sync/migrate can overwrite it. Write to [`app/css/app.css`](../../../app/css/app.css).
 
@@ -28,11 +28,11 @@ Template defaults (GitHub blues) already pass AA. Candidates for `--accent-fg`: 
 
 | Input | Required? |
 | ----- | --------- |
-| Light `--accent` hex | Yes (or “keep template default”) |
-| Dark `--accent` hex | Yes (or “keep template default”) |
+| Light `--accent` hex | Yes (or “keep framework default”) |
+| Dark `--accent` hex | Yes (or “keep framework default”) |
 | Explicit `--accent-fg` per theme | Optional — otherwise pick via contrast |
 
-If either theme keeps the template default, skip writing that theme’s block (leave tokens as shipped).
+If either theme keeps the framework default, skip writing that theme’s block (leave tokens as shipped).
 
 ## Workflow
 
@@ -68,7 +68,7 @@ Merge into the existing file; preserve unrelated rules. Typical result:
 
 ```css
 /**
- * Fork-owned styles. Never overwritten by template sync.
+ * Fork-owned styles. Never overwritten by framework sync.
  * Add app-specific rules here (or pull in additional local sheets).
  */
 

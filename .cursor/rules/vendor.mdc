@@ -23,7 +23,7 @@ alwaysApply: false
 ## Do not
 
 - Add a per-vendor seam file under `app/components/` (e.g. `toastui-editor.js`, `prism.js`, `tanstack-charts.js`) when only one component uses that vendor
-- Put template-owned adapter code inside `app/vendor/`
+- Put framework-owned adapter code inside `app/vendor/`
 - Invent a second access pattern for a new vendor — follow the owning component
 
 ## When a shared seam is justified

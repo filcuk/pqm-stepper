@@ -18,14 +18,19 @@
   --control-height-slim: 2.25rem;
   --control-height-micro: 1.3125rem;
   --accent: #0969da;
-  --accent-hover: color-mix(in srgb, var(--accent) 80%, #000000);
+  --accent-hover: color-mix(in srgb, var(--accent) 80%, #ffffff);
   --accent-fg: #ffffff;
+  --accent-border-hover: color-mix(in srgb, var(--accent) 55%, #000000);
   --banner-warn-bg: #fff8c5;
   --banner-warn-text: #7d4e00;
   --banner-warn-border: #c37500;
   --banner-error-bg: #ffebe9;
   --banner-error-text: #82071e;
   --banner-error-border: #cf222e;
+  --danger: var(--banner-error-border);
+  --danger-hover: color-mix(in srgb, var(--danger) 80%, #ffffff);
+  --danger-fg: #ffffff;
+  --danger-border-hover: color-mix(in srgb, var(--danger) 55%, #000000);
   --banner-info-bg: #ddf4ff;
   --banner-info-text: #0550ae;
   --banner-info-border: #157dff;
@@ -73,6 +78,16 @@
   --sticky-shadow: rgb(0 0 0 / 0.2);
   --banner-fade-ms: 200ms;
   --control-hover-ms: 80ms;
+  /* Action feedback mix ladder.
+     Hover uses `--control-hover-mix` (existing 6% recipe). Click previews the
+     selected look at `--control-selected-mix` (12%). Selected / pressed uses
+     a stronger tint at `--control-press-mix` (18%). */
+  --control-hover-mix: 6%;
+  --control-selected-mix: 12%;
+  --control-press-mix: 18%;
+  /* Filled buttons press darken the accent fill (primary / danger). */
+  --accent-active: color-mix(in srgb, var(--accent) 85%, #000000);
+  --danger-active: color-mix(in srgb, var(--danger) 85%, #000000);
   --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
     sans-serif;
   --mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
@@ -92,12 +107,17 @@
   --accent: #58a6ff;
   --accent-hover: color-mix(in srgb, var(--accent) 80%, #ffffff);
   --accent-fg: #0d1117;
+  --accent-border-hover: color-mix(in srgb, var(--accent) 55%, #ffffff);
   --banner-warn-bg: #3d2e00;
   --banner-warn-text: #f0c040;
   --banner-warn-border: #896800;
   --banner-error-bg: #3d1418;
   --banner-error-text: #ff7b72;
   --banner-error-border: #8b2e34;
+  --danger: var(--banner-error-border);
+  --danger-hover: color-mix(in srgb, var(--danger) 80%, #ffffff);
+  --danger-fg: #ffffff;
+  --danger-border-hover: color-mix(in srgb, var(--danger) 55%, #ffffff);
   --banner-info-bg: #051d4d;
   --banner-info-text: #79c0ff;
   --banner-info-border: #39658b;
