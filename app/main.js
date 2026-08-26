@@ -623,8 +623,8 @@ initTutorial({
     },
     {
       target: "#example-combo",
-      title: "Try it",
-      body: "Load an example to see the transformation in action.",
+      title: "Try it out",
+      body: "Press the button now to see the transformation in action!",
       position: "bottom",
       interactive: true,
       advanceOn: "click",
