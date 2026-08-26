@@ -610,15 +610,9 @@ initTutorial({
       position: "bottom",
     },
     {
-      target: "#syntax-highlight-toggle",
-      title: "Syntax highlighting",
-      body: "Turn syntax highlighting on or off.",
-      position: "bottom",
-    },
-    {
-      target: "#step-highlight-toggle",
-      title: "Step highlighting",
-      body: "Show or hide legend definition. The legend helps visually identify the transformations.",
+      target: "#highlight-toggles",
+      title: "Highlighting",
+      body: "Toggle syntax highlighting and step highlighting. Step highlighting uses the legend to visually identify transformations.",
       position: "bottom",
     },
     {
